@@ -1,0 +1,44 @@
+# Dependencies
+node_modules/
+
+# React Native
+.expo/
+*.jsbundle
+
+# iOS
+ios/Pods/
+ios/build/
+ios/*.xcworkspace
+ios/*.xcodeproj/xcuserdata
+ios/*.xcodeproj/project.xcworkspace
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+local.properties
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Misc
+.DS_Store
+*.log
+npm-debug.log*
+yarn-error.log*
+
+# Testing
+coverage/
+
+# Temporary
+*.tmp
+*.temp
