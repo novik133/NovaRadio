@@ -133,5 +133,5 @@ function closePopup(){document.getElementById('notification-popup').style.displa
 </script>
 <?php endif; ?>
 
-<script src="assets/js/app.js"></script>
+<script src="assets/js/app.js" defer></script>
 <?= getSetting('custom_footer_code') ?>

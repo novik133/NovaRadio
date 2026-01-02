@@ -24,9 +24,13 @@ switch ($action) {
     case 'history':
         $limit = min((int)($_GET['limit'] ?? 20), 100);
         if ($station) {
-            $history = fetchAll("SELECT * FROM song_history WHERE station_id = ? ORDER BY played_at DESC LIMIT ?", [$station['id'], $limit]);
-            if (empty($history)) $history = getHistory($station, $limit);
-            echo json_encode($history);
+            try {
+                $history = fetchAll("SELECT * FROM song_history WHERE station_id = ? ORDER BY played_at DESC LIMIT ?", [$station['id'], $limit]);
+                if (empty($history)) $history = getHistory($station, $limit) ?: [];
+                echo json_encode($history);
+            } catch (Exception $e) {
+                echo json_encode(getHistory($station, $limit) ?: []);
+            }
         } else {
             echo json_encode([]);
         }

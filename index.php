@@ -34,13 +34,15 @@ trackPageView('home');
     <meta name="description" content="<?= e(getSetting('site_description')) ?>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preload" href="assets/css/style.css" as="style">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"></noscript>
     <?= getSetting('custom_head_code') ?>
 </head>
 <body>
     <?php include 'includes/header.php'; ?>
-
+    <main>
     <?php if (!empty($sliders)): ?>
     <!-- Hero Slider -->
     <section class="slider">
@@ -306,6 +308,7 @@ trackPageView('home');
         </div>
     </section>
 
+    </main>
     <?php include 'includes/footer.php'; ?>
 
     <script>

@@ -36,7 +36,7 @@ $live = fetch("SELECT * FROM live_status WHERE station_id = ? AND is_live = 1", 
         
         <div class="nav-actions">
             <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-            <a href="request.php" class="nav-btn">
+            <a href="request.php" class="nav-btn" aria-label="Request a song">
                 <span>🎵</span>
                 <span>Request</span>
             </a>
