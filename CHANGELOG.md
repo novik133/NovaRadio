@@ -447,7 +447,7 @@ All notable changes to NovaRadio CMS will be documented in this file.
 
 ---
 
-**NovaRadio CMS** © 2025-2026 Kamil 'Nova' Nowicki  
+**NovaRadio CMS** © 2025-2026 Kamil 'Novik' Nowicki  
 Website: [noviktech.com](https://noviktech.com)  
 GitHub: [github.com/novik133](https://github.com/novik133)  
 Email: novik@noviktech.com

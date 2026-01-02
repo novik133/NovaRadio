@@ -3,7 +3,7 @@
 A professional Content Management System for internet radio stations with AzuraCast integration.
 
 **Version:** 0.1.0  
-**Author:** Kamil 'Nova' Nowicki  
+**Author:** Kamil 'Novik' Nowicki  
 **Email:** novik@noviktech.com  
 **Website:** [noviktech.com](https://noviktech.com)  
 **GitHub:** [github.com/novik133](https://github.com/novik133)  
@@ -1106,7 +1106,7 @@ See [LICENSE](LICENSE) file for full text.
 
 ## Credits
 
-**NovaRadio CMS** © 2025-2026 Kamil 'Nova' Nowicki
+**NovaRadio CMS** © 2025-2026 Kamil 'Novik' Nowicki
 
 - Website: [noviktech.com](https://noviktech.com)
 - GitHub: [github.com/novik133](https://github.com/novik133)

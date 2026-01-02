@@ -123,7 +123,7 @@ conditions are met.
 
 END OF TERMS AND CONDITIONS
 
-NovaRadio CMS - Copyright (C) 2025-2026 Kamil 'Nova' Nowicki
+NovaRadio CMS - Copyright (C) 2025-2026 Kamil 'Novik' Nowicki
 Website: noviktech.com | Email: novik@noviktech.com
 
 This program is free software under GNU GPL v3.0.
