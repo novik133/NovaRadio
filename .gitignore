@@ -1,0 +1,48 @@
+# NovaRadio CMS - .gitignore
+
+# Configuration (contains credentials)
+config.php
+
+# Uploads directory (user content)
+uploads/*
+!uploads/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Cache
+cache/
+*.cache
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Dependencies (if any added later)
+vendor/
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Backups
+*.sql
+*.zip
+*.tar.gz
+backups/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
