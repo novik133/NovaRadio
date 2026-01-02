@@ -46,3 +46,6 @@ backups/
 .Spotlight-V100
 .Trashes
 ehthumbs.db
+
+# Mobile app (excluded from repo)
+mobileapp/
