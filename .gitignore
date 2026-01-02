@@ -34,7 +34,7 @@ node_modules/
 .env.*.local
 
 # Backups
-*.sql
+# *.sql
 *.zip
 *.tar.gz
 backups/
