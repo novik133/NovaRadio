@@ -1,0 +1,79 @@
+NOVARADIO FREEWARE LICENSE
+Version 1.0
+March 4, 2026
+
+Copyright (c) 2026 NovaRadio
+
+This license governs the use of NovaRadio CMS software.
+
+GRANT OF LICENSE
+================
+
+NovaRadio CMS is provided as freeware. You are granted a non-exclusive, 
+non-transferable, royalty-free license to use this software for any purpose,
+including commercial use, subject to the following conditions:
+
+PERMITTED USES
+==============
+
+- You may install and use NovaRadio CMS on any number of websites
+- You may use NovaRadio CMS for personal, educational, or commercial projects
+- You may modify the theme files located in:
+  * /resources/views/themes/
+  * /public/themes/
+  * /storage/app/public/themes/
+- You may create and distribute custom themes for NovaRadio CMS
+- You may purchase and use official NovaRadio add-ons and plugins
+
+RESTRICTIONS
+============
+
+- You may NOT modify the core application code outside of theme directories
+- You may NOT remove or alter copyright notices, branding, or attribution
+- You may NOT redistribute the original or modified core code
+- You may NOT sublicense, sell, or transfer the license to third parties
+- You may NOT reverse engineer, decompile, or disassemble the core software
+
+PAID ADD-ONS
+============
+
+NovaRadio reserves the right to create and distribute paid add-ons, plugins,
+and extensions. These paid components are not covered by this freeware license
+and are subject to separate commercial terms.
+
+DISCLAIMER OF WARRANTY
+=====================
+
+THIS SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF 
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+LIMITATION OF LIABILITY
+======================
+
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR 
+OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE 
+USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+SUPPORT
+=======
+
+Free community support may be available through official channels.
+Premium support packages may be offered separately.
+
+TERMINATION
+===========
+
+This license is effective until terminated. Your rights under this license
+will terminate automatically if you fail to comply with any of its terms.
+
+CONTACT
+=======
+
+For questions about this license or to inquire about commercial licensing,
+please contact:
+Website: https://github.com/novik133/NovaRadio
+Email: contact@novikradio.com
+
+This license is governed by the laws of Poland.
