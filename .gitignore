@@ -1,51 +1,76 @@
-# NovaRadio CMS - .gitignore
-
-# Configuration (contains credentials)
-config.php
-
-# Uploads directory (user content)
-uploads/*
-!uploads/.gitkeep
-
-# Logs
+/vendor/
+/node_modules/
+/public/build/
+/public/hot/
+/public/storage/
+/storage/*.key
+/storage/app/public/
+/storage/framework/cache/data/
+/storage/framework/sessions/
+/storage/framework/testing/
+/storage/framework/views/
+/storage/logs/
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+/.fleet
+/.idea
+/.vscode
+/.zed
+.DS_Store
+Thumbs.db
 *.log
-logs/
-
-# Cache
-cache/
 *.cache
-
-# IDE / Editor
-.idea/
-.vscode/
 *.swp
 *.swo
 *~
-.DS_Store
-Thumbs.db
+.vagrant/
+Vagrantfile
+.php_cs.cache
+.styleci.yml
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
 
-# Dependencies (if any added later)
-vendor/
-node_modules/
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# Backups
-# *.sql
+# NovaRadio specific
+/public/images/uploads/
+/public/images/team/
+/public/images/events/
+/public/images/articles/
+/public/themes/*/cache/
 *.zip
 *.tar.gz
-backups/
+backup/
+old/
+temp/
 
-# OS files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
+# Database
+*.sqlite
+*.sqlite3
 
-# Mobile app (excluded from repo)
-mobileapp/
+# Composer
+composer.phar
+
+# Laravel IDE helper
+_ide_helper.php
+_ide_helper_models.php
+.phpstorm.meta.php
+
+# Coverage reports
+/coverage/
+.phpunit.cache/
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Local development
+.vscode/
+.idea/
+*.code-workspace
