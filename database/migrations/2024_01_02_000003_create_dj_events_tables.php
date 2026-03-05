@@ -12,7 +12,6 @@ return new class extends Migration
         Schema::table('schedule_shows', function (Blueprint $table) {
             $table->foreignId('dj_id')->nullable()->after('description')->constrained('team_members')->nullOnDelete();
             $table->boolean('is_live')->default(false)->after('dj_id');
-            $table->string('image')->nullable()->after('is_live');
         });
         
         // DJ extended profiles
@@ -70,7 +69,7 @@ return new class extends Migration
         
         Schema::table('schedule_shows', function (Blueprint $table) {
             $table->dropForeign(['dj_id']);
-            $table->dropColumn(['dj_id', 'is_live', 'image']);
+            $table->dropColumn(['dj_id', 'is_live']);
         });
     }
 };

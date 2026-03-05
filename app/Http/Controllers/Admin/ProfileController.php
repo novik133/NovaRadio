@@ -57,21 +57,54 @@ class ProfileController extends Controller
     
     public function uploadAvatar(Request $request)
     {
-        $user = Auth::user();
-        
-        $request->validate([
-            'avatar' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
-        ]);
-        
-        $file = $request->file('avatar');
-        $filename = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
-        $path = $file->storeAs('public/images/avatars', $filename);
-        
-        $user->update(['avatar' => str_replace('public/', 'storage/', $path)]);
-        
-        return response()->json([
-            'success' => true,
-            'url' => asset(str_replace('public/', 'storage/', $path))
-        ]);
+        try {
+            $user = Auth::user();
+            
+            $request->validate([
+                'avatar' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048'
+            ]);
+            
+            $file = $request->file('avatar');
+            $filename = 'user_' . $user->id . '_' . time() . '.' . $file->getClientOriginalExtension();
+            
+            // Get file info before moving
+            $originalName = $file->getClientOriginalName();
+            $mimeType = $file->getMimeType();
+            $fileSize = $file->getSize();
+            
+            // Save to public/images/avatars
+            $destinationPath = public_path('images/avatars');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+            
+            $file->move($destinationPath, $filename);
+            
+            $avatarPath = 'images/avatars/' . $filename;
+            
+            // Register in media library
+            \App\Models\Media::create([
+                'filename' => $filename,
+                'original_filename' => $originalName,
+                'path' => $avatarPath,
+                'mime_type' => $mimeType,
+                'file_size' => $fileSize,
+                'folder' => 'avatars',
+                'alt_text' => $user->name . ' avatar',
+            ]);
+            
+            $user->update(['avatar' => $avatarPath]);
+            
+            return response()->json([
+                'success' => true,
+                'url' => asset($avatarPath)
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Avatar upload failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error uploading avatar: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

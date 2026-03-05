@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Header scroll effect
+    const header = document.querySelector('.site-header');
+    
+    function updateHeader() {
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    }
+    
+    window.addEventListener('scroll', updateHeader);
+    updateHeader();
+
     // Mobile menu toggle
     const menuToggle = document.querySelector('.mobile-menu-toggle');
     const navDesktop = document.querySelector('.nav-desktop');
@@ -154,20 +168,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (artist) artist.textContent = data.now_playing.song.artist || 'Unknown Artist';
                     if (listeners) listeners.textContent = data.listeners?.total || 0;
 
+                    // Update live status
+                    const liveDot = document.querySelector('.live-dot');
+                    const heroBadge = document.querySelector('.hero-badge');
+                    const isLive = data.now_playing && data.now_playing.song;
+                    
+                    if (liveDot) {
+                        if (isLive) {
+                            liveDot.classList.remove('offline');
+                        } else {
+                            liveDot.classList.add('offline');
+                        }
+                    }
+                    
+                    if (heroBadge) {
+                        const badgeText = heroBadge.childNodes[heroBadge.childNodes.length - 1];
+                        if (badgeText && badgeText.nodeType === 3) {
+                            badgeText.textContent = isLive ? 'Live Broadcasting' : 'Radio Offline';
+                        }
+                    }
+
                     // Update hero background with album art
                     const heroSection = document.querySelector('.hero');
                     const heroBackground = heroSection?.querySelector('[style*="background-image"]');
                     const nowPlayingCard = document.querySelector('.hero [style*="backdrop-filter"]');
                     
                     if (data.now_playing.song.art && heroBackground) {
-                        // Smoothly transition to new album art
-                        heroBackground.style.transition = 'opacity 1s ease-in-out';
-                        heroBackground.style.opacity = '0';
+                        const currentBg = heroBackground.style.backgroundImage;
+                        const newBg = `url('${data.now_playing.song.art}')`;
                         
-                        setTimeout(() => {
-                            heroBackground.style.backgroundImage = `url('${data.now_playing.song.art}')`;
-                            heroBackground.style.opacity = '1';
-                        }, 1000);
+                        // Only update if different
+                        if (currentBg !== newBg) {
+                            heroBackground.style.transition = 'opacity 1s ease-in-out';
+                            heroBackground.style.opacity = '0';
+                            
+                            setTimeout(() => {
+                                heroBackground.style.backgroundImage = newBg;
+                                heroBackground.style.opacity = '1';
+                            }, 1000);
+                        }
                     }
 
                     // Update now playing card in hero

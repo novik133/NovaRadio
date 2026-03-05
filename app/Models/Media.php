@@ -15,28 +15,23 @@ class Media extends Model
         'original_filename',
         'path',
         'mime_type',
-        'size',
+        'file_size',
         'folder',
         'alt_text',
-        'description',
-        'uploaded_by',
+        'caption',
+        'title',
     ];
 
     protected $appends = ['url', 'size_formatted'];
 
-    public function uploader()
-    {
-        return $this->belongsTo(User::class, 'uploaded_by');
-    }
-
     public function getUrlAttribute(): string
     {
-        return Storage::url($this->path);
+        return asset($this->path);
     }
 
     public function getSizeFormattedAttribute(): string
     {
-        $bytes = $this->size;
+        $bytes = $this->file_size;
         $units = ['B', 'KB', 'MB', 'GB'];
         
         for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {

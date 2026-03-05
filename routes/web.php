@@ -99,6 +99,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
         Route::post('/media/folder', [MediaController::class, 'createFolder'])->name('media.create-folder');
         Route::post('/media/rename', [MediaController::class, 'rename'])->name('media.rename');
+        Route::put('/media/{id}', [MediaController::class, 'update'])->name('media.update');
         Route::delete('/media', [MediaController::class, 'delete'])->name('media.delete');
         Route::get('/media/browse', [MediaController::class, 'browse'])->name('media.browse');
         // Articles

@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'About Us',
                 'slug' => 'about',
                 'content' => '<div style="text-align: center; margin-bottom: 40px;">
-    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1200&q=80" alt="Radio Studio" style="width: 100%; max-width: 800px; border-radius: 16px;">
+    <img src="' . $this->downloadImage('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=1200&q=80', 'images/pages/about-studio.jpg') . '" alt="Radio Studio" style="width: 100%; max-width: 800px; border-radius: 16px;">
 </div>
 <h2>Our Story</h2>
 <p>Founded in 2019, NovaRadio emerged from a simple yet powerful vision: to create a digital space where music lovers could discover, connect, and experience the transformative power of sound.</p>
@@ -61,8 +61,8 @@ class DatabaseSeeder extends Seeder
 <h2>Our Mission</h2>
 <p>We believe in the universal language of music. Our mission is to curate exceptional listening experiences that inspire, entertain, and bring people together.</p>
 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0;">
-    <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80" alt="Studio" style="width: 100%; border-radius: 12px;">
-    <img src="https://images.unsplash.com/photo-1519508234439-4f23643125c1?w=600&q=80" alt="DJ" style="width: 100%; border-radius: 12px;">
+    <img src="' . $this->downloadImage('https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=600&q=80', 'images/pages/about-equipment.jpg') . '" alt="Studio" style="width: 100%; border-radius: 12px;">
+    <img src="' . $this->downloadImage('https://images.unsplash.com/photo-1519508234439-4f23643125c1?w=600&q=80', 'images/pages/about-dj.jpg') . '" alt="DJ" style="width: 100%; border-radius: 12px;">
 </div>',
                 'meta_title' => 'About Us - NovaRadio',
                 'meta_description' => 'Learn about NovaRadio, our mission, and our team of passionate music enthusiasts.',
@@ -74,7 +74,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Contact',
                 'slug' => 'contact',
                 'content' => '<div style="text-align: center; margin-bottom: 40px;">
-    <img src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&q=80" alt="Contact" style="width: 100%; max-width: 800px; border-radius: 16px;">
+    <img src="' . $this->downloadImage('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1200&q=80', 'images/pages/contact.jpg') . '" alt="Contact" style="width: 100%; max-width: 800px; border-radius: 16px;">
 </div>
 <h2>Get in Touch</h2>
 <p>We love hearing from our listeners. Whether you have a song request, feedback, or want to collaborate, reach out to us.</p>
@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Privacy Policy',
                 'slug' => 'privacy-policy',
                 'content' => '<div style="text-align: center; margin-bottom: 40px;">
-    <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=80" alt="Privacy" style="width: 100%; max-width: 800px; border-radius: 16px;">
+    <img src="' . $this->downloadImage('https://images.unsplash.com/photo-1563986768609-322da13575f3?w=1200&q=80', 'images/pages/privacy.jpg') . '" alt="Privacy" style="width: 100%; max-width: 800px; border-radius: 16px;">
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
@@ -183,7 +183,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Terms of Service',
                 'slug' => 'terms-of-service',
                 'content' => '<div style="text-align: center; margin-bottom: 40px;">
-    <img src="images/pages/terms.jpg" alt="Legal" style="width: 100%; max-width: 800px; border-radius: 16px;">
+    <img src="' . $this->downloadImage('https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200&q=80', 'images/pages/terms.jpg') . '" alt="Legal" style="width: 100%; max-width: 800px; border-radius: 16px;">
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
@@ -265,7 +265,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Cookie Policy',
                 'slug' => 'cookie-policy',
                 'content' => '<div style="text-align: center; margin-bottom: 40px;">
-    <img src="images/pages/cookies.jpg" alt="Cookies" style="width: 100%; max-width: 800px; border-radius: 16px;">
+    <img src="' . $this->downloadImage('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1200&q=80', 'images/pages/cookies.jpg') . '" alt="Cookies" style="width: 100%; max-width: 800px; border-radius: 16px;">
 </div>
 
 <div style="max-width: 800px; margin: 0 auto;">
@@ -399,7 +399,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'alex-chen',
                 'role' => 'Station Manager',
                 'bio' => 'With 15 years in broadcasting, Alex brings energy and expertise to every show.',
-                'photo' => 'images/team/alex.jpg',
+                'photo' => 'images/team/alex-chen.jpg',
                 'email' => 'alex@novikradio.com',
                 'status' => 'active',
             ],
@@ -408,7 +408,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'sarah-mitchell',
                 'role' => 'Head of Programming',
                 'bio' => 'Sarah curates our main playlist with an ear for emerging artists.',
-                'photo' => 'images/team/sarah.jpg',
+                'photo' => 'images/team/sarah-mitchell.jpg',
                 'email' => 'sarah@novikradio.com',
                 'status' => 'active',
             ],
@@ -417,7 +417,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'marcus-johnson',
                 'role' => 'Evening Host',
                 'bio' => 'A trained saxophonist and jazz historian, Marcus brings smooth sophistication.',
-                'photo' => 'images/team/marcus.jpg',
+                'photo' => 'images/team/marcus-johnson.jpg',
                 'email' => 'marcus@novikradio.com',
                 'status' => 'active',
             ],
@@ -426,7 +426,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'emma-rodriguez',
                 'role' => 'Electronic Music Director',
                 'bio' => 'Emma keeps our pulse on the global electronic scene.',
-                'photo' => 'images/team/emma.jpg',
+                'photo' => 'images/team/emma-rodriguez.jpg',
                 'email' => 'emma@novikradio.com',
                 'status' => 'active',
             ],
@@ -485,7 +485,7 @@ class DatabaseSeeder extends Seeder
                 'slug' => 'welcome-to-novaradio',
                 'excerpt' => 'Discover a world of curated music, from jazz to electronic, indie to classical.',
                 'content' => '<p>Welcome to NovaRadio, your premier destination for curated music streaming. We bring you the finest selection of tracks from around the world, carefully selected by our team of passionate DJs and music enthusiasts.</p><p>Whether you are into jazz, electronic, indie, or classical music, we have something for everyone. Tune in and discover your next favorite song!</p>',
-                'featured_image' => 'images/articles/welcome.jpg',
+                'featured_image' => $this->downloadImage('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=800&q=80', 'images/articles/welcome.jpg'),
                 'category_id' => 3,
                 'author_id' => 1,
                 'status' => 'published',
@@ -581,33 +581,33 @@ class DatabaseSeeder extends Seeder
     }
     
     /**
-     * Download image from URL and save to storage
+     * Download image from URL and save to public directory
      */
     private function downloadImage(string $url, string $path): string
     {
         try {
-            $fullPath = 'public/' . $path;
+            $fullPath = public_path($path);
             
             // Check if already exists
-            if (Storage::exists($fullPath)) {
+            if (file_exists($fullPath)) {
                 return $path;
             }
             
             // Create directory
             $directory = dirname($fullPath);
-            if (!Storage::exists($directory)) {
-                Storage::makeDirectory($directory);
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
             }
             
             // Download image
             $response = Http::timeout(30)->get($url);
             
             if ($response->successful()) {
-                Storage::put($fullPath, $response->body());
+                file_put_contents($fullPath, $response->body());
                 return $path;
             }
         } catch (\Exception $e) {
-            // Silently fail and return original path
+            \Log::error('Failed to download image: ' . $url . ' - ' . $e->getMessage());
         }
         
         return $path;

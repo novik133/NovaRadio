@@ -26,7 +26,7 @@
                 <tr>
                     <td>
                         @if($member->photo)
-                            <img src="{{ $member->photo }}" alt="{{ $member->name }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
+                            <img src="{{ asset($member->photo) }}" alt="{{ $member->name }}" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover;">
                         @else
                             <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%); display: flex; align-items: center; justify-content: center; color: white;">
                                 <i class="fas fa-user"></i>

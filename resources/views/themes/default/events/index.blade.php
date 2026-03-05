@@ -30,7 +30,7 @@
                         @if($event->featuredDj)
                         <div style="text-align: center;">
                             @if($event->featuredDj->photo)
-                                <img src="{{ $event->featuredDj->photo }}" alt="{{ $event->featuredDj->name }}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                                <img src="{{ asset($event->featuredDj->photo) }}" alt="{{ $event->featuredDj->name }}" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
                             @endif
                             <div style="font-size: 12px; margin-top: 4px;">{{ $event->featuredDj->name }}</div>
                         </div>

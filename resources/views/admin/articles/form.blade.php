@@ -75,7 +75,7 @@
                        value="{{ old('featured_image', $article->featured_image) }}">
                 <div class="image-preview" id="image-preview" onclick="openMediaPickerForImage()">
                     @if($article->featured_image)
-                        <img src="{{ $article->featured_image }}" alt="Featured">
+                        <img src="{{ asset($article->featured_image) }}" alt="Featured">
                     @else
                         <div class="no-image"><i class="fas fa-image"></i> Click to select image</div>
                     @endif

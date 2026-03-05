@@ -14,7 +14,7 @@
             @forelse($members as $member)
                 <div style="background: white; border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); text-align: center; padding: 40px 32px;">
                     @if($member->photo)
-                        <img src="{{ $member->photo }}" alt="{{ $member->name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 24px;">
+                        <img src="{{ asset($member->photo) }}" alt="{{ $member->name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 24px;">
                     @else
                         <div style="width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: white; font-size: 48px;">
                             <i class="fas fa-user"></i>

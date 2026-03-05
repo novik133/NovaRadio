@@ -15,7 +15,7 @@ return new class extends Migration
             $table->text('excerpt')->nullable();
             $table->longText('content');
             $table->string('featured_image')->nullable();
-            $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('category_id')->nullable()->constrained('categories')->nullOnDelete();
             $table->foreignId('author_id')->constrained('users');
             $table->enum('status', ['draft', 'published', 'archived'])->default('draft');
             $table->boolean('is_featured')->default(false);
@@ -25,37 +25,17 @@ return new class extends Migration
             $table->softDeletes();
         });
         
-        Schema::create('categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->string('color', 7)->default('#6366f1');
-            $table->text('description')->nullable();
-            $table->integer('order')->default(0);
-            $table->timestamps();
-            $table->softDeletes();
-        });
-        
+        // Article-Tag pivot
         Schema::create('article_tag', function (Blueprint $table) {
-            $table->foreignId('article_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('tag_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('article_id')->constrained('articles')->cascadeOnDelete();
+            $table->foreignId('tag_id')->constrained('tags')->cascadeOnDelete();
             $table->primary(['article_id', 'tag_id']);
-        });
-        
-        Schema::create('tags', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('slug')->unique();
-            $table->timestamps();
-            $table->softDeletes();
         });
     }
 
     public function down(): void
     {
         Schema::dropIfExists('article_tag');
-        Schema::dropIfExists('tags');
         Schema::dropIfExists('articles');
-        Schema::dropIfExists('categories');
     }
 };

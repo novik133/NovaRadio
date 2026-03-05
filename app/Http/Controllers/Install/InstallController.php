@@ -157,7 +157,7 @@ AZURACAST_BASE_URL={$data['azuracast_url']}
 AZURACAST_API_KEY={$data['azuracast_api_key']}
 AZURACAST_STATION_ID=1
 
-GITHUB_REPO=novik133/NovaRadia
+GITHUB_REPO=novik133/NovaRadio
 
 VITE_APP_NAME=NovaRadio
 ENV;

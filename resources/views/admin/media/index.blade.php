@@ -52,10 +52,10 @@
     
     {{-- Files --}}
     @forelse($files as $file)
-    <div class="media-item file-item" data-path="{{ $file['path'] }}" data-url="{{ $file['url'] }}">
-        <div class="item-preview" onclick="selectFile('{{ $file['url'] }}', '{{ $file['name'] }}')">
+    <div class="media-item file-item" data-id="{{ $file['id'] }}" data-path="{{ $file['path'] }}" data-url="{{ $file['url'] }}">
+        <div class="item-preview" onclick="selectFile('{{ $file['url'] }}', '{{ $file['name'] }}', {{ $file['id'] }})">
             @if($file['is_image'])
-                <img src="{{ $file['url'] }}" alt="{{ $file['name'] }}" loading="lazy">
+                <img src="{{ $file['url'] }}" alt="{{ $file['alt_text'] ?? $file['name'] }}" loading="lazy">
             @else
                 <div class="file-icon-ext">
                     <i class="fas fa-file"></i>
@@ -67,7 +67,7 @@
             <div class="item-name" title="{{ $file['name'] }}">{{ $file['name'] }}</div>
             <div class="item-meta">{{ $file['size'] }} • {{ $file['modified'] }}</div>
         </div>
-        <button class="item-actions-btn" onclick="showFileActions('{{ $file['path'] }}', '{{ $file['name'] }}', event)">
+        <button class="item-actions-btn" onclick="showFileActions({{ $file['id'] }}, '{{ $file['path'] }}', '{{ $file['name'] }}', event)">
             <i class="fas fa-ellipsis-v"></i>
         </button>
         <button class="item-select" onclick="copyUrl('{{ $file['url'] }}')">
@@ -386,6 +386,7 @@
 
 @push('scripts')
 <script>
+let currentItemId = null;
 let currentItemPath = null;
 let currentItemName = null;
 
@@ -458,13 +459,15 @@ function createFolder() {
 
 function showFolderActions(path, event) {
     event.preventDefault();
+    currentItemId = null;
     currentItemPath = path;
     currentItemName = path.split('/').pop();
     showContextMenu(event);
 }
 
-function showFileActions(path, name, event) {
+function showFileActions(id, path, name, event) {
     event.stopPropagation();
+    currentItemId = id;
     currentItemPath = path;
     currentItemName = name;
     showContextMenu(event);
@@ -484,6 +487,13 @@ function hideContextMenu() {
 }
 
 function renameItem() {
+    // For now, renaming is not supported for files in database
+    // Only folders can be renamed
+    if (currentItemId) {
+        alert('File renaming is not supported. Please delete and re-upload with new name.');
+        return;
+    }
+    
     const newName = prompt('Enter new name:', currentItemName);
     if (!newName || newName === currentItemName) return;
     
@@ -511,13 +521,18 @@ function renameItem() {
 function deleteItem() {
     if (!confirm('Are you sure you want to delete "' + currentItemName + '"?')) return;
     
+    if (!currentItemId) {
+        alert('Cannot delete folders yet');
+        return;
+    }
+    
     fetch('{{ route("admin.media.delete") }}', {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
         },
-        body: JSON.stringify({ path: currentItemPath })
+        body: JSON.stringify({ id: currentItemId })
     })
     .then(r => r.json())
     .then(data => {
@@ -530,7 +545,7 @@ function deleteItem() {
 }
 
 function copyItemUrl() {
-    const item = document.querySelector('[data-path="' + currentItemPath + '"]');
+    const item = document.querySelector('[data-id="' + currentItemId + '"]');
     const url = item?.dataset?.url;
     if (url) {
         copyUrl(url);
@@ -548,7 +563,7 @@ function copyUrl(url) {
     });
 }
 
-function selectFile(url, name) {
+function selectFile(url, name, id) {
     // This function can be called from TinyMCE media picker
     if (window.opener && window.opener.mediaPickerCallback) {
         window.opener.mediaPickerCallback(url, name);

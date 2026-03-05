@@ -32,7 +32,7 @@
                 <td>
                     <div style="display: flex; align-items: center; gap: 12px;">
                         @if($article->featured_image)
-                            <img src="{{ $article->featured_image }}" alt="" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px;">
+                            <img src="{{ asset($article->featured_image) }}" alt="" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px;">
                         @else
                             <div style="width: 48px; height: 48px; background: var(--bg-light); border-radius: 6px; display: flex; align-items: center; justify-content: center;">
                                 <i class="fas fa-image" style="color: var(--text-muted);"></i>

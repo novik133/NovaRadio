@@ -2,6 +2,61 @@
 
 All notable changes to NovaRadio project.
 
+## [2.0.3] - 2026-03-05
+
+### New Features
+- **Enhanced Media Library**: Complete media management system with database integration
+  - All images now stored in `public/images` and tracked in database
+  - Media Library panel in admin with upload, browse, and delete functionality
+  - Support for folders and file organization
+  - Image metadata (alt text, title, caption) stored in database
+  - Copy URL functionality for easy image insertion
+  
+### Improvements
+- **Local Image Storage**: All Unsplash images now downloaded and stored locally
+  - About page images (studio, equipment, DJ)
+  - Contact page image
+  - Privacy Policy page image
+  - Terms of Service page image
+  - Cookie Policy page image
+  - Event images (jazz night, summer festival)
+  - Article welcome image
+  - All images automatically registered in media library during seeding
+  
+- **Database Integration**: MediaController now uses `media` table instead of filesystem only
+  - Files tracked with metadata (filename, path, size, mime type)
+  - Proper foreign key relationships
+  - Soft deletes support
+
+- **Admin Panel UI Consistency**: Unified styling across all admin views
+  - Schedule views redesigned to match other admin panels
+  - Events views redesigned with image preview and better layout
+  - Articles views updated with consistent styling
+  - All views now use same card, table, and button styles
+  
+- **Image Display Fixes**: Added `asset()` helper to all image paths
+  - Team member photos now display correctly on all pages
+  - DJ profile photos fixed on individual DJ pages
+  - Event images display properly in listings
+  - Article featured images show correctly
+  
+### Bug Fixes
+- Fixed migration order issues with foreign key constraints
+- Fixed `articles` table migration to explicitly reference `categories` and `tags` tables
+- Fixed DatabaseSeeder to download images to `public/images` instead of storage
+- Fixed team member photo paths in DatabaseSeeder (alex-chen.jpg instead of alex.jpg)
+- Fixed article welcome image download from Unsplash
+- Fixed avatar upload to save in `public/images/avatars` and register in media library
+- Fixed installer to use correct GitHub repository name `novik133/NovaRadio` instead of `NovaRadia`
+
+### Technical Changes
+- Updated MediaController to work with `public/images` directory
+- Enhanced MediaSeeder to register all existing images including page images
+- Added `downloadImage()` method to DatabaseSeeder for automatic image downloads
+- Updated media routes to include update endpoint for metadata editing
+- ProfileController now registers uploaded avatars in media library
+- All view templates updated to use `asset()` for image URLs
+
 ## [2.0.2] - 2026-03-05
 
 ### New Features

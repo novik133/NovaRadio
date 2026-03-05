@@ -5,9 +5,11 @@
 <section class="hero" style="position: relative; overflow: hidden;">
     @php
         $heroImage = null;
+        $isLive = false;
         // Try to get album art from now playing
         if ($nowPlaying && isset($nowPlaying['now_playing']['song']['art'])) {
             $heroImage = $nowPlaying['now_playing']['song']['art'];
+            $isLive = true;
         }
         // Fallback to default hero image from settings
         if (!$heroImage) {
@@ -17,23 +19,23 @@
     
     <!-- Background Image with Overlay -->
     <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;">
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('{{ $heroImage }}'); background-size: cover; background-position: center; filter: blur(20px); transform: scale(1.1);"></div>
-        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.85) 100%);"></div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('{{ $heroImage }}'); background-size: cover; background-position: center;"></div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(30, 41, 59, 0.75) 100%);"></div>
     </div>
     
     <div class="container" style="position: relative; z-index: 1;">
         <div class="hero-badge">
-            <span class="live-dot"></span>
-            Live Broadcasting
+            <span class="live-dot {{ $isLive ? '' : 'offline' }}"></span>
+            {{ $isLive ? 'Live Broadcasting' : 'Radio Offline' }}
         </div>
         <h1>Your Soundtrack to Life</h1>
         <p class="hero-description">Experience the best music curated just for you. Listen live 24/7 and discover your next favorite song.</p>
         
         @if($nowPlaying && isset($nowPlaying['now_playing']['song']))
-            <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 12px; padding: 16px 24px; margin: 24px auto; max-width: 500px; border: 1px solid rgba(255, 255, 255, 0.2);">
+            <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 12px; padding: 16px 24px; margin: 24px auto; max-width: 500px; border: 1px solid rgba(255, 255, 255, 0.25);">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     @if(isset($nowPlaying['now_playing']['song']['art']))
-                        <img src="{{ $nowPlaying['now_playing']['song']['art'] }}" alt="Album Art" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover;">
+                        <img src="{{ $nowPlaying['now_playing']['song']['art'] }}" alt="Album Art" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);">
                     @else
                         <div style="width: 60px; height: 60px; border-radius: 8px; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center;">
                             <i class="fas fa-music" style="color: rgba(255, 255, 255, 0.5);"></i>
@@ -220,7 +222,7 @@
             @foreach($featuredDjs as $dj)
                 <a href="{{ route('dj.show', $dj->slug) }}" style="text-align: center; text-decoration: none; color: inherit; padding: 24px; background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='translateY(0)'">
                     @if($dj->photo)
-                        <img src="{{ $dj->photo }}" alt="{{ $dj->name }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 16px; border: 3px solid var(--color-primary);">
+                        <img src="{{ asset($dj->photo) }}" alt="{{ $dj->name }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 16px; border: 3px solid var(--color-primary);">
                     @else
                         <div style="width: 100px; height: 100px; border-radius: 50%; background: var(--color-primary); margin: 0 auto 16px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px;">
                             <i class="fas fa-user"></i>

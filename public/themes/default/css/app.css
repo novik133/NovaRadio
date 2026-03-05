@@ -42,13 +42,18 @@ body {
 
 /* Header */
 .site-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    background: transparent;
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     z-index: 1000;
+    transition: background 0.3s ease;
+}
+
+.site-header.scrolled {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--color-border);
 }
 
@@ -66,8 +71,15 @@ body {
     gap: 12px;
     font-size: 24px;
     font-weight: 700;
-    color: var(--color-text);
+    color: white;
     text-decoration: none;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease;
+}
+
+.site-header.scrolled .logo {
+    color: var(--color-text);
+    text-shadow: none;
 }
 
 .logo-icon {
@@ -88,15 +100,26 @@ body {
 }
 
 .nav-desktop a {
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-weight: 500;
     font-size: 15px;
     transition: color 0.2s;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.site-header.scrolled .nav-desktop a {
+    color: var(--color-text-muted);
+    text-shadow: none;
 }
 
 .nav-desktop a:hover,
 .nav-desktop a.active {
+    color: white;
+}
+
+.site-header.scrolled .nav-desktop a:hover,
+.site-header.scrolled .nav-desktop a.active {
     color: var(--color-primary);
 }
 
@@ -105,8 +128,14 @@ body {
     background: none;
     border: none;
     font-size: 24px;
-    color: var(--color-text);
+    color: white;
     cursor: pointer;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.site-header.scrolled .mobile-menu-toggle {
+    color: var(--color-text);
+    text-shadow: none;
 }
 
 /* Hero Section */
@@ -114,32 +143,61 @@ body {
     padding: 140px 0 80px;
     background: linear-gradient(135deg, #e0e7ff 0%, #f8fafc 50%, #fce7f3 100%);
     text-align: center;
+    min-height: 600px;
+    display: flex;
+    align-items: center;
 }
 
 .hero-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--color-primary);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    color: white;
     padding: 8px 16px;
     border-radius: 50px;
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .live-dot {
     width: 8px;
     height: 8px;
-    background: #ef4444;
+    background: #22c55e;
     border-radius: 50%;
-    animation: pulse 2s infinite;
+    animation: pulse-green 2s infinite;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
+.live-dot.offline {
+    background: #ef4444;
+    animation: pulse-red 2s infinite;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+}
+
+@keyframes pulse-green {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+@keyframes pulse-red {
+    0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
 }
 
 .hero h1 {
@@ -147,7 +205,8 @@ body {
     font-weight: 800;
     line-height: 1.1;
     margin-bottom: 24px;
-    background: linear-gradient(135deg, var(--color-text) 0%, var(--color-primary) 100%);
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -155,7 +214,8 @@ body {
 
 .hero-description {
     font-size: 20px;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
     max-width: 600px;
     margin: 0 auto 40px;
 }

@@ -12,14 +12,15 @@ return new class extends Migration
             $table->id();
             $table->string('filename');
             $table->string('original_filename');
-            $table->string('path');
+            $table->string('path')->unique();
             $table->string('mime_type');
-            $table->integer('size'); // in bytes
-            $table->string('folder')->default('uncategorized');
+            $table->unsignedBigInteger('file_size'); // in bytes
+            $table->string('folder')->nullable();
             $table->string('alt_text')->nullable();
-            $table->text('description')->nullable();
-            $table->foreignId('uploaded_by')->nullable()->constrained('users')->onDelete('set null');
+            $table->text('caption')->nullable();
+            $table->string('title')->nullable();
             $table->timestamps();
+            $table->softDeletes();
             
             $table->index('folder');
             $table->index('mime_type');

@@ -3,20 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Media;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class MediaController extends Controller
 {
     private $mediaPath;
-    private $publicPath;
     
     public function __construct()
     {
-        $this->mediaPath = storage_path('app/public/media');
-        $this->publicPath = public_path('storage/media');
+        $this->mediaPath = public_path('images');
     }
     
     public function index(Request $request)
@@ -44,30 +42,32 @@ class MediaController extends Controller
             ];
         }
         
-        // Get files
+        // Get files from database
         $files = [];
-        $allFiles = File::files($currentPath);
-        foreach ($allFiles as $file) {
-            $extension = strtolower($file->getExtension());
-            $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp']);
-            
-            $filePath = $folder ? $folder . '/' . $file->getFilename() : $file->getFilename();
-            
-            $files[] = [
-                'name' => $file->getFilename(),
-                'path' => $filePath,
-                'url' => asset('storage/media/' . $filePath),
-                'size' => $this->formatSize($file->getSize()),
-                'extension' => $extension,
-                'is_image' => $isImage,
-                'modified' => date('Y-m-d H:i', $file->getMTime())
-            ];
+        $mediaQuery = Media::query();
+        
+        if ($folder) {
+            $mediaQuery->where('folder', $folder);
+        } else {
+            $mediaQuery->whereNull('folder');
         }
         
-        // Sort: folders first, then files
-        usort($files, function($a, $b) {
-            return strcmp($a['name'], $b['name']);
-        });
+        $mediaFiles = $mediaQuery->orderBy('filename')->get();
+        
+        foreach ($mediaFiles as $media) {
+            $files[] = [
+                'id' => $media->id,
+                'name' => $media->filename,
+                'path' => $media->path,
+                'url' => asset($media->path),
+                'size' => $this->formatSize($media->file_size),
+                'extension' => $media->mime_type,
+                'is_image' => str_starts_with($media->mime_type, 'image/'),
+                'modified' => $media->updated_at->format('Y-m-d H:i'),
+                'alt_text' => $media->alt_text,
+                'title' => $media->title
+            ];
+        }
         
         // Breadcrumb
         $breadcrumb = [['name' => 'Media', 'path' => '']];
@@ -87,7 +87,7 @@ class MediaController extends Controller
     {
         $request->validate([
             'files' => 'required',
-            'files.*' => 'file|max:10240' // 10MB max per file
+            'files.*' => 'file|mimes:jpg,jpeg,png,gif,svg,webp,pdf,doc,docx|max:10240' // 10MB max
         ]);
         
         $folder = $this->sanitizePath($request->get('folder', ''));
@@ -103,6 +103,8 @@ class MediaController extends Controller
             foreach ($request->file('files') as $file) {
                 $originalName = $file->getClientOriginalName();
                 $extension = $file->getClientOriginalExtension();
+                $mimeType = $file->getMimeType();
+                $fileSize = $file->getSize();
                 
                 // Generate unique filename
                 $filename = Str::slug(pathinfo($originalName, PATHINFO_FILENAME)) . '_' . time() . '.' . $extension;
@@ -110,12 +112,24 @@ class MediaController extends Controller
                 // Move file
                 $file->move($uploadPath, $filename);
                 
-                $filePath = $folder ? $folder . '/' . $filename : $filename;
+                $relativePath = 'images/' . ($folder ? $folder . '/' : '') . $filename;
+                
+                // Save to database
+                $media = Media::create([
+                    'filename' => $filename,
+                    'original_filename' => $originalName,
+                    'path' => $relativePath,
+                    'folder' => $folder ?: null,
+                    'mime_type' => $mimeType,
+                    'file_size' => $fileSize,
+                    'alt_text' => pathinfo($originalName, PATHINFO_FILENAME),
+                ]);
                 
                 $uploadedFiles[] = [
+                    'id' => $media->id,
                     'name' => $filename,
-                    'url' => asset('storage/media/' . $filePath),
-                    'path' => $filePath
+                    'url' => asset($relativePath),
+                    'path' => $relativePath
                 ];
             }
         }
@@ -156,39 +170,19 @@ class MediaController extends Controller
     public function delete(Request $request)
     {
         $request->validate([
-            'path' => 'required|string'
+            'id' => 'required|integer'
         ]);
         
-        $path = $this->sanitizePath($request->get('path'));
-        $fullPath = $this->mediaPath . '/' . $path;
+        $media = Media::findOrFail($request->get('id'));
+        $fullPath = public_path($media->path);
         
-        if (!File::exists($fullPath)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File or folder not found'
-            ], 404);
-        }
-        
-        // Check if trying to delete root
-        if (dirname($path) === '.') {
-            // It's in root, check if it's a folder or file
-            if (is_dir($fullPath)) {
-                // Count items
-                $items = count(File::allFiles($fullPath, false));
-                if ($items > 0) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Folder is not empty. Delete all contents first.'
-                    ], 422);
-                }
-            }
-        }
-        
-        if (is_dir($fullPath)) {
-            File::deleteDirectory($fullPath);
-        } else {
+        // Delete file
+        if (File::exists($fullPath)) {
             File::delete($fullPath);
         }
+        
+        // Delete from database
+        $media->delete();
         
         return response()->json([
             'success' => true,
@@ -196,38 +190,21 @@ class MediaController extends Controller
         ]);
     }
     
-    public function rename(Request $request)
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'path' => 'required|string',
-            'new_name' => 'required|string|max:50|regex:/^[a-zA-Z0-9\-_\.]+$/'
+            'alt_text' => 'nullable|string|max:255',
+            'title' => 'nullable|string|max:255',
+            'caption' => 'nullable|string|max:500'
         ]);
         
-        $path = $this->sanitizePath($request->get('path'));
-        $newName = $request->get('new_name');
-        
-        $fullPath = $this->mediaPath . '/' . $path;
-        $newPath = dirname($fullPath) . '/' . $newName;
-        
-        if (!File::exists($fullPath)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'File or folder not found'
-            ], 404);
-        }
-        
-        if (File::exists($newPath)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'A file or folder with that name already exists'
-            ], 422);
-        }
-        
-        File::move($fullPath, $newPath);
+        $media = Media::findOrFail($id);
+        $media->update($request->only(['alt_text', 'title', 'caption']));
         
         return response()->json([
             'success' => true,
-            'message' => 'Renamed successfully'
+            'message' => 'Media updated successfully',
+            'media' => $media
         ]);
     }
     
@@ -237,46 +214,48 @@ class MediaController extends Controller
         $type = $request->get('type', 'all'); // all, image
         
         $folder = $this->sanitizePath($folder);
-        $currentPath = $this->mediaPath . ($folder ? '/' . $folder : '');
-        
-        if (!File::exists($currentPath)) {
-            return response()->json([
-                'success' => true,
-                'files' => [],
-                'folders' => []
-            ]);
-        }
         
         // Get folders
+        $currentPath = $this->mediaPath . ($folder ? '/' . $folder : '');
         $folders = [];
-        $directories = File::directories($currentPath);
-        foreach ($directories as $dir) {
-            $folders[] = [
-                'name' => basename($dir),
-                'path' => $folder ? $folder . '/' . basename($dir) : basename($dir)
-            ];
+        
+        if (File::exists($currentPath)) {
+            $directories = File::directories($currentPath);
+            foreach ($directories as $dir) {
+                $folders[] = [
+                    'name' => basename($dir),
+                    'path' => $folder ? $folder . '/' . basename($dir) : basename($dir)
+                ];
+            }
         }
         
-        // Get files
+        // Get files from database
+        $mediaQuery = Media::query();
+        
+        if ($folder) {
+            $mediaQuery->where('folder', $folder);
+        } else {
+            $mediaQuery->whereNull('folder');
+        }
+        
+        if ($type === 'image') {
+            $mediaQuery->where('mime_type', 'like', 'image/%');
+        }
+        
+        $mediaFiles = $mediaQuery->orderBy('filename')->get();
+        
         $files = [];
-        $allFiles = File::files($currentPath);
-        foreach ($allFiles as $file) {
-            $extension = strtolower($file->getExtension());
-            $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp']);
-            
-            if ($type === 'image' && !$isImage) {
-                continue;
-            }
-            
-            $filePath = $folder ? $folder . '/' . $file->getFilename() : $file->getFilename();
-            
+        foreach ($mediaFiles as $media) {
             $files[] = [
-                'name' => $file->getFilename(),
-                'path' => $filePath,
-                'url' => asset('storage/media/' . $filePath),
-                'thumbnail' => $isImage ? asset('storage/media/' . $filePath) : null,
-                'size' => $this->formatSize($file->getSize()),
-                'is_image' => $isImage
+                'id' => $media->id,
+                'name' => $media->filename,
+                'path' => $media->path,
+                'url' => asset($media->path),
+                'thumbnail' => str_starts_with($media->mime_type, 'image/') ? asset($media->path) : null,
+                'size' => $this->formatSize($media->file_size),
+                'is_image' => str_starts_with($media->mime_type, 'image/'),
+                'alt_text' => $media->alt_text,
+                'title' => $media->title
             ];
         }
         

@@ -8,12 +8,12 @@ $member = $dj->teamMember;
 @endphp
 
 <section class="dj-hero" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 100px 0 60px; color: white; position: relative; overflow: hidden;">
-    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.1; background: url('{{ $member->photo ?? '' }}') center/cover;"></div>
+    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.1; background: url('{{ $member->photo ? asset($member->photo) : '' }}') center/cover;"></div>
     <div class="container" style="position: relative; z-index: 1;">
         <div style="display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: center;">
             <div>
                 @if($member->photo)
-                    <img src="{{ $member->photo }}" alt="{{ $member->name }}" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 4px solid var(--color-primary); box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                    <img src="{{ asset($member->photo) }}" alt="{{ $member->name }}" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; border: 4px solid var(--color-primary); box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
                 @else
                     <div style="width: 200px; height: 200px; border-radius: 50%; background: var(--color-primary); display: flex; align-items: center; justify-content: center; font-size: 80px;">
                         <i class="fas fa-user"></i>
