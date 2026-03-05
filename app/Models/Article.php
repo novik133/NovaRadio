@@ -73,37 +73,4 @@ class Article extends Model
         $words = str_word_count(strip_tags($this->content));
         return ceil($words / 200); // 200 words per minute
     }
-}
-admin@srv2:/www/wwwroot/www.novikradio.com$ sudo composer dump-autoload
-sudo php artisan db:seed --force
-PHP Warning:  Module "mbstring" is already loaded in Unknown on line 0
-Generating optimized autoload files
-> Illuminate\Foundation\ComposerScripts::postAutoloadDump
-> @php artisan package:discover --ansi
-PHP Warning:  Module "mbstring" is already loaded in Unknown on line 0
-
-   INFO  Discovering packages.  
-
-  laravel/tinker ...................................................................................... DONE
-  nesbot/carbon ....................................................................................... DONE
-  nunomaduro/termwind ................................................................................. DONE
-
-Generated optimized autoload files containing 4325 classes
-PHP Warning:  Module "mbstring" is already loaded in Unknown on line 0
-
-   INFO  Seeding database.  
-
-
-In Connection.php line 838:
-                                                                                                             
-  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'novik_radio.dj_profiles' doesn't exist (Connec  
-  tion: mysql, Host: 127.0.0.1, Port: 3306, Database: novik_radio, SQL: select * from `dj_profiles` where (  
-  `team_member_id` = 2) limit 1)                                                                             
-                                                                                                             
-
-In Connection.php line 420:
-                                                                                                     
-  SQLSTATE[42S02]: Base table or view not found: 1146 Table 'novik_radio.dj_profiles' doesn't exist  
-                                                                                                     
-
-admin@srv2:/www/wwwroot/www.novikradio.com$ 
+} 

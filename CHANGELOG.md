@@ -2,6 +2,23 @@
 
 All notable changes to NovaRadio project.
 
+## [2.0.1-1] - 2026-03-05
+
+### Update System Improvements
+- **Tarball Support**: Changed from zipball_url to tarball_url for more reliable downloads from GitHub
+- **Automatic Rollback**: System now automatically restores backup if update fails
+- **PHP Syntax Validation**: All PHP files are validated before installation to prevent corrupted files
+- **Automatic Cache Clearing**: After successful update, system automatically runs:
+  - `php artisan cache:clear`
+  - `php artisan config:clear`
+  - `php artisan view:clear`
+  - `php artisan route:clear`
+- **Enhanced Logging**: Each update step (download, validate, backup, install, migrate, cache, rollback) is now logged separately
+- **Rollback Cache Clearing**: Cache is also cleared after rollback to ensure clean state
+
+### Bug Fixes
+- Fixed corrupted Article.php file that caused frontend errors after update
+
 ## [2.0.1] - 2026-03-05
 
 ### Bug Fixes

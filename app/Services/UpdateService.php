@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
 class UpdateService
 {
     private string $githubRepo;
-    private string $currentVersion = '2.0.1';
+    private string $currentVersion = '2.0.1-1';
     private ?string $githubToken;
 
     public function __construct()
@@ -61,7 +61,7 @@ class UpdateService
                 'latest_version' => $latestVersion,
                 'has_update' => $hasUpdate,
                 'changelog' => $release['body'] ?? '',
-                'download_url' => $release['zipball_url'] ?? '',
+                'download_url' => $release['tarball_url'] ?? '',
                 'html_url' => $release['html_url'] ?? '',
             ]);
 
@@ -71,7 +71,7 @@ class UpdateService
                 'current_version' => $this->currentVersion,
                 'latest_version' => $latestVersion,
                 'changelog' => $release['body'] ?? 'No changelog available',
-                'download_url' => $release['zipball_url'] ?? '',
+                'download_url' => $release['tarball_url'] ?? '',
                 'html_url' => $release['html_url'] ?? '',
                 'published_at' => $release['published_at'] ?? null,
             ];
@@ -88,6 +88,7 @@ class UpdateService
 
     public function installUpdate(string $version, string $downloadUrl): array
     {
+        $backupPath = null;
         $this->logUpdate('install', UpdateLog::STATUS_PENDING, $version, 'Starting installation...');
 
         try {
@@ -96,26 +97,27 @@ class UpdateService
 
             // Download update
             $this->logUpdate('download', UpdateLog::STATUS_PENDING, $version, 'Downloading update...');
-            $zipFile = $tempDir . '/update.zip';
+            $archiveFile = $tempDir . '/update.tar.gz';
 
             $response = Http::timeout(120)->get($downloadUrl);
             if (!$response->successful()) {
                 throw new \Exception('Failed to download update package');
             }
 
-            File::put($zipFile, $response->body());
+            File::put($archiveFile, $response->body());
             $this->logUpdate('download', UpdateLog::STATUS_SUCCESS, $version, 'Download complete');
 
             // Extract
             $extractPath = $tempDir . '/extracted';
             File::ensureDirectoryExists($extractPath);
 
-            $zip = new \ZipArchive();
-            if ($zip->open($zipFile) !== true) {
-                throw new \Exception('Failed to open update package');
+            // Extract tar.gz
+            $command = "tar -xzf " . escapeshellarg($archiveFile) . " -C " . escapeshellarg($extractPath);
+            exec($command, $output, $returnCode);
+            
+            if ($returnCode !== 0) {
+                throw new \Exception('Failed to extract update package');
             }
-            $zip->extractTo($extractPath);
-            $zip->close();
 
             // Find actual source directory (GitHub extracts to subdirectory)
             $sourcePath = $extractPath;
@@ -124,25 +126,43 @@ class UpdateService
                 $sourcePath = $dirs[0];
             }
 
+            // Validate PHP syntax in extracted files
+            $this->logUpdate('validate', UpdateLog::STATUS_PENDING, $version, 'Validating PHP syntax...');
+            $validationErrors = $this->validatePhpSyntax($sourcePath);
+            
+            if (!empty($validationErrors)) {
+                throw new \Exception('PHP syntax validation failed: ' . implode(', ', $validationErrors));
+            }
+            
+            $this->logUpdate('validate', UpdateLog::STATUS_SUCCESS, $version, 'Syntax validation passed');
+
             // Backup current files
             $backupPath = storage_path('app/backups/' . date('Y-m-d-His'));
             File::ensureDirectoryExists($backupPath);
+            $this->logUpdate('backup', UpdateLog::STATUS_PENDING, $version, 'Creating backup...');
             $this->backupFiles($backupPath);
+            $this->logUpdate('backup', UpdateLog::STATUS_SUCCESS, $version, 'Backup created');
 
             // Install new files
+            $this->logUpdate('install', UpdateLog::STATUS_PENDING, $version, 'Installing files...');
             $this->installFiles($sourcePath);
 
             // Run migrations
+            $this->logUpdate('migrate', UpdateLog::STATUS_PENDING, $version, 'Running migrations...');
             Artisan::call('migrate', ['--force' => true]);
+            $this->logUpdate('migrate', UpdateLog::STATUS_SUCCESS, $version, 'Migrations complete');
 
             // Clear caches
+            $this->logUpdate('cache', UpdateLog::STATUS_PENDING, $version, 'Clearing caches...');
             Artisan::call('cache:clear');
             Artisan::call('config:clear');
             Artisan::call('view:clear');
+            Artisan::call('route:clear');
+            $this->logUpdate('cache', UpdateLog::STATUS_SUCCESS, $version, 'Caches cleared');
 
             // Cleanup
             File::deleteDirectory($extractPath);
-            File::delete($zipFile);
+            File::delete($archiveFile);
 
             $this->logUpdate('install', UpdateLog::STATUS_SUCCESS, $version, 'Installation complete', [
                 'backup_path' => $backupPath,
@@ -157,9 +177,35 @@ class UpdateService
             Log::error('Update installation failed', ['error' => $e->getMessage()]);
             $this->logUpdate('install', UpdateLog::STATUS_ERROR, $version, $e->getMessage());
 
+            // Automatic rollback if backup exists
+            if ($backupPath && File::exists($backupPath)) {
+                try {
+                    $this->logUpdate('rollback', UpdateLog::STATUS_PENDING, $version, 'Rolling back to previous version...');
+                    $this->restoreBackup($backupPath);
+                    
+                    // Clear caches after rollback
+                    Artisan::call('cache:clear');
+                    Artisan::call('config:clear');
+                    Artisan::call('view:clear');
+                    Artisan::call('route:clear');
+                    
+                    $this->logUpdate('rollback', UpdateLog::STATUS_SUCCESS, $version, 'Rollback successful');
+                    
+                    return [
+                        'success' => false,
+                        'message' => 'Update failed and was rolled back: ' . $e->getMessage(),
+                        'rolled_back' => true,
+                    ];
+                } catch (\Exception $rollbackError) {
+                    Log::error('Rollback failed', ['error' => $rollbackError->getMessage()]);
+                    $this->logUpdate('rollback', UpdateLog::STATUS_ERROR, $version, 'Rollback failed: ' . $rollbackError->getMessage());
+                }
+            }
+
             return [
                 'success' => false,
                 'message' => $e->getMessage(),
+                'rolled_back' => false,
             ];
         }
     }
@@ -181,6 +227,43 @@ class UpdateService
 
         foreach ($updateDirs as $dir) {
             $source = $sourcePath . '/' . $dir;
+            $dest = base_path($dir);
+
+            if (File::exists($source)) {
+                if (File::exists($dest)) {
+                    File::deleteDirectory($dest);
+                }
+                File::copyDirectory($source, $dest);
+            }
+        }
+    }
+
+    private function validatePhpSyntax(string $path): array
+    {
+        $errors = [];
+        $phpFiles = File::allFiles($path);
+
+        foreach ($phpFiles as $file) {
+            if ($file->getExtension() === 'php') {
+                $output = [];
+                $returnCode = 0;
+                exec('php -l ' . escapeshellarg($file->getPathname()) . ' 2>&1', $output, $returnCode);
+                
+                if ($returnCode !== 0) {
+                    $errors[] = $file->getRelativePath() . '/' . $file->getFilename() . ': ' . implode(' ', $output);
+                }
+            }
+        }
+
+        return $errors;
+    }
+
+    private function restoreBackup(string $backupPath): void
+    {
+        $dirsToRestore = ['app', 'config', 'database', 'resources', 'routes'];
+        
+        foreach ($dirsToRestore as $dir) {
+            $source = $backupPath . '/' . $dir;
             $dest = base_path($dir);
 
             if (File::exists($source)) {
