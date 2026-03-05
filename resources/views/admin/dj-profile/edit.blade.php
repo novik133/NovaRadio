@@ -190,10 +190,13 @@ document.getElementById('photo-upload')?.addEventListener('change', async (e) =>
         if (data.success) {
             document.getElementById('photo').value = data.url.replace(window.location.origin + '/', '');
             document.getElementById('photo-preview').innerHTML = '<img src="' + data.url + '" alt="Photo" style="width: 100%; height: 100%; object-fit: cover;">';
+            showToast('Photo uploaded successfully!', 'success');
+        } else {
+            showToast(data.message || 'Failed to upload photo', 'error');
         }
     } catch (err) {
         console.error('Upload failed:', err);
-        alert('Upload failed. Please try again.');
+        showToast('Upload failed. Please try again.', 'error');
     }
 });
 </script>

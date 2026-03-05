@@ -21,8 +21,12 @@
                     promotion: false,
                     images_file_types: 'jpg,svg,png,gif',
                     file_picker_callback: (callback, value, meta) => {
-                        // Open media manager popup
-                        window.openMediaPicker(callback);
+                        // Open media picker for TinyMCE
+                        if (meta.filetype === 'image') {
+                            window.openMediaPicker(function(url, id) {
+                                callback(url, { alt: 'Image' });
+                            });
+                        }
                     },
                     setup: function(editor) {
                         editor.on('change', function() {
@@ -42,6 +46,434 @@
             --border-color: #e2e8f0;
             --text-color: #0f172a;
             --text-muted: #64748b;
+        }
+        
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-width: 400px;
+        }
+        
+        .toast {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid;
+            min-width: 320px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .toast:hover {
+            transform: translateX(-4px);
+        }
+        
+        .toast.toast-success {
+            border-left-color: #22c55e;
+        }
+        
+        .toast.toast-error {
+            border-left-color: #ef4444;
+        }
+        
+        .toast.toast-warning {
+            border-left-color: #f59e0b;
+        }
+        
+        .toast.toast-info {
+            border-left-color: #3b82f6;
+        }
+        
+        .toast-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .toast-success .toast-icon {
+            color: #22c55e;
+        }
+        
+        .toast-error .toast-icon {
+            color: #ef4444;
+        }
+        
+        .toast-warning .toast-icon {
+            color: #f59e0b;
+        }
+        
+        .toast-info .toast-icon {
+            color: #3b82f6;
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .toast-message {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        
+        .toast-close:hover {
+            background: var(--bg-light);
+            color: var(--text-color);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+        }
+        
+        .toast.removing {
+            animation: slideOut 0.3s ease-out forwards;
+        }
+        
+        /* Media Picker Modal */
+        .media-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .media-picker-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+        
+        .media-picker-content {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .media-picker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .media-picker-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0;
+        }
+        
+        .btn-close {
+            background: none;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+        
+        .btn-close:hover {
+            background: var(--bg-light);
+            color: var(--text-color);
+        }
+        
+        .media-picker-tabs {
+            display: flex;
+            gap: 4px;
+            padding: 16px 24px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-muted);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tab-btn:hover {
+            color: var(--text-color);
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        
+        .media-picker-body {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .media-tab {
+            display: none;
+            height: 100%;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+        
+        .media-tab.active {
+            display: block;
+        }
+        
+        .media-picker-search {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .media-picker-search input {
+            width: 100%;
+            padding: 10px 40px 10px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .media-picker-search i {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+        
+        .media-picker-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 16px;
+            min-height: 300px;
+        }
+        
+        .media-picker-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .media-picker-item:hover {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+        
+        .media-picker-item.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+        
+        .media-picker-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .media-picker-item .check-icon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .media-picker-item.selected .check-icon {
+            display: flex;
+        }
+        
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-light);
+        }
+        
+        .upload-area.drag-over {
+            border-color: var(--primary-color);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        
+        .upload-area h4 {
+            font-size: 16px;
+            margin-bottom: 8px;
+            color: var(--text-color);
+        }
+        
+        .upload-area p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+        
+        .upload-area input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .upload-progress {
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-light);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s;
+            width: 0%;
+        }
+        
+        .progress-text {
+            text-align: center;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        
+        .loading-spinner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+            gap: 10px;
+        }
+        
+        .media-picker-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -397,19 +829,326 @@
         </aside>
 
         <main class="admin-content">
-            @if(session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-            @if(session('error'))
-                <div class="alert alert-error">{{ session('error') }}</div>
-            @endif
-            @if(session('warning'))
-                <div class="alert alert-warning">{{ session('warning') }}</div>
-            @endif
-
             @yield('content')
         </main>
     </div>
+    
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+    
+    <!-- Media Picker Modal -->
+    <div id="media-picker-modal" class="media-picker-modal" style="display: none;">
+        <div class="media-picker-overlay" onclick="closeMediaPicker()"></div>
+        <div class="media-picker-content">
+            <div class="media-picker-header">
+                <h3><i class="fas fa-images"></i> Select Media</h3>
+                <button class="btn-close" onclick="closeMediaPicker()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="media-picker-tabs">
+                <button class="tab-btn active" onclick="switchMediaTab('library')">
+                    <i class="fas fa-folder-open"></i> Media Library
+                </button>
+                <button class="tab-btn" onclick="switchMediaTab('upload')">
+                    <i class="fas fa-upload"></i> Upload New
+                </button>
+            </div>
+            
+            <div class="media-picker-body">
+                <!-- Library Tab -->
+                <div id="media-tab-library" class="media-tab active">
+                    <div class="media-picker-search">
+                        <input type="text" id="media-search" placeholder="Search images..." onkeyup="filterMediaItems()">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="media-picker-grid" id="media-picker-grid">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i> Loading media...
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Upload Tab -->
+                <div id="media-tab-upload" class="media-tab">
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Drag & Drop files here</h4>
+                        <p>or click to browse</p>
+                        <input type="file" id="media-picker-file-input" multiple accept="image/*" onchange="handleMediaUpload(this.files)">
+                    </div>
+                    <div id="upload-progress" class="upload-progress" style="display: none;">
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="upload-progress-fill"></div>
+                        </div>
+                        <div class="progress-text" id="upload-progress-text">0%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="media-picker-footer">
+                <button class="btn btn-secondary" onclick="closeMediaPicker()">Cancel</button>
+                <button class="btn btn-primary" id="media-select-btn" onclick="confirmMediaSelection()" disabled>
+                    <i class="fas fa-check"></i> Select
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Toast Notification System
+        window.showToast = function(message, type = 'info', title = null) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-circle-xmark',
+                warning: 'fa-triangle-exclamation',
+                info: 'fa-circle-info'
+            };
+            
+            const titles = {
+                success: title || 'Success',
+                error: title || 'Error',
+                warning: title || 'Warning',
+                info: title || 'Info'
+            };
+            
+            toast.innerHTML = `
+                <i class="fas ${icons[type]} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-title">${titles[type]}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            // Click anywhere on toast to close
+            toast.addEventListener('click', function(e) {
+                if (!e.target.closest('.toast-close')) {
+                    toast.classList.add('removing');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            });
+            
+            container.appendChild(toast);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.classList.add('removing');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        };
+        
+        // Override native alert
+        window.alert = function(message) {
+            window.showToast(message, 'info');
+        };
+        
+        // Show Laravel session messages as toasts
+        @if(session('success'))
+            window.showToast('{{ session('success') }}', 'success');
+        @endif
+        
+        @if(session('error'))
+            window.showToast('{{ session('error') }}', 'error');
+        @endif
+        
+        @if(session('warning'))
+            window.showToast('{{ session('warning') }}', 'warning');
+        @endif
+        
+        @if(session('info'))
+            window.showToast('{{ session('info') }}', 'info');
+        @endif
+        
+        // Show validation errors as toasts
+        @if($errors->any())
+            @foreach($errors->all() as $error)
+                window.showToast('{{ $error }}', 'error', 'Validation Error');
+            @endforeach
+        @endif
+        
+        // Media Picker System
+        let mediaPickerCallback = null;
+        let selectedMediaUrl = null;
+        let selectedMediaId = null;
+        
+        window.openMediaPicker = function(callback) {
+            mediaPickerCallback = callback;
+            selectedMediaUrl = null;
+            selectedMediaId = null;
+            document.getElementById('media-picker-modal').style.display = 'flex';
+            document.getElementById('media-select-btn').disabled = true;
+            loadMediaLibrary();
+        };
+        
+        window.closeMediaPicker = function() {
+            document.getElementById('media-picker-modal').style.display = 'none';
+            mediaPickerCallback = null;
+            selectedMediaUrl = null;
+            selectedMediaId = null;
+        };
+        
+        window.switchMediaTab = function(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.media-tab').forEach(t => t.classList.remove('active'));
+            
+            event.target.closest('.tab-btn').classList.add('active');
+            document.getElementById('media-tab-' + tab).classList.add('active');
+        };
+        
+        window.loadMediaLibrary = function() {
+            const grid = document.getElementById('media-picker-grid');
+            grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading media...</div>';
+            
+            fetch('{{ route("admin.media.api.list") }}')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        renderMediaGrid(data.files);
+                    } else {
+                        grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-exclamation-circle"></i> Failed to load media</div>';
+                    }
+                })
+                .catch(err => {
+                    console.error('Failed to load media:', err);
+                    grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-exclamation-circle"></i> Failed to load media</div>';
+                });
+        };
+        
+        window.renderMediaGrid = function(files) {
+            const grid = document.getElementById('media-picker-grid');
+            
+            if (files.length === 0) {
+                grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-folder-open"></i> No images found</div>';
+                return;
+            }
+            
+            grid.innerHTML = files.map(file => `
+                <div class="media-picker-item" data-id="${file.id}" data-url="${file.url}" onclick="selectMediaItem(this)">
+                    <img src="${file.url}" alt="${file.name}" loading="lazy">
+                    <div class="check-icon"><i class="fas fa-check"></i></div>
+                </div>
+            `).join('');
+        };
+        
+        window.selectMediaItem = function(element) {
+            document.querySelectorAll('.media-picker-item').forEach(item => item.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            selectedMediaUrl = element.dataset.url;
+            selectedMediaId = element.dataset.id;
+            document.getElementById('media-select-btn').disabled = false;
+        };
+        
+        window.confirmMediaSelection = function() {
+            if (selectedMediaUrl && mediaPickerCallback) {
+                mediaPickerCallback(selectedMediaUrl, selectedMediaId);
+                closeMediaPicker();
+            }
+        };
+        
+        window.filterMediaItems = function() {
+            const search = document.getElementById('media-search').value.toLowerCase();
+            document.querySelectorAll('.media-picker-item').forEach(item => {
+                const img = item.querySelector('img');
+                const alt = img ? img.alt.toLowerCase() : '';
+                item.style.display = alt.includes(search) ? 'block' : 'none';
+            });
+        };
+        
+        window.handleMediaUpload = function(files) {
+            if (!files || files.length === 0) return;
+            
+            const progressDiv = document.getElementById('upload-progress');
+            const progressFill = document.getElementById('upload-progress-fill');
+            const progressText = document.getElementById('upload-progress-text');
+            
+            progressDiv.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressText.textContent = '0%';
+            
+            const formData = new FormData();
+            for (let file of files) {
+                formData.append('files[]', file);
+            }
+            formData.append('folder', 'images');
+            
+            const xhr = new XMLHttpRequest();
+            
+            xhr.upload.addEventListener('progress', (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    progressFill.style.width = percent + '%';
+                    progressText.textContent = percent + '%';
+                }
+            });
+            
+            xhr.addEventListener('load', () => {
+                const response = JSON.parse(xhr.responseText);
+                if (response.success) {
+                    showToast('Files uploaded successfully!', 'success');
+                    progressDiv.style.display = 'none';
+                    
+                    // Switch to library tab and reload
+                    switchMediaTab('library');
+                    document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                    document.querySelectorAll('.tab-btn')[1].classList.remove('active');
+                    loadMediaLibrary();
+                } else {
+                    showToast(response.message || 'Upload failed', 'error');
+                    progressDiv.style.display = 'none';
+                }
+            });
+            
+            xhr.addEventListener('error', () => {
+                showToast('Upload failed. Please try again.', 'error');
+                progressDiv.style.display = 'none';
+            });
+            
+            xhr.open('POST', '{{ route("admin.media.upload") }}');
+            xhr.setRequestHeader('X-CSRF-TOKEN', document.querySelector('meta[name="csrf-token"]').content);
+            xhr.send(formData);
+        };
+        
+        // Drag and drop for upload area
+        const uploadArea = document.getElementById('upload-area');
+        if (uploadArea) {
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => {
+                    uploadArea.classList.add('drag-over');
+                }, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, () => {
+                    uploadArea.classList.remove('drag-over');
+                }, false);
+            });
+            
+            uploadArea.addEventListener('drop', (e) => {
+                const files = e.dataTransfer.files;
+                handleMediaUpload(files);
+            }, false);
+        }
+    </script>
     
     @stack('scripts')
 </body>

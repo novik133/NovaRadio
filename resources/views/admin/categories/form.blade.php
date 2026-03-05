@@ -42,7 +42,7 @@
         
         <div class="form-group">
             <label>Description</label>
-            <textarea name="description" rows="3">{{ old('description', $category->description) }}</textarea>
+            <textarea name="description" class="rich-editor" rows="3">{{ old('description', $category->description) }}</textarea>
         </div>
         
         <div style="display: flex; gap: 12px;">

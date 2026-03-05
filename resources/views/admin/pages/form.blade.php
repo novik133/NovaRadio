@@ -87,3 +87,20 @@
     </form>
 </div>
 @endsection
+
+
+@push('scripts')
+<script>
+function openMediaPickerForImage() {
+    window.openMediaPicker(function(url, id) {
+        document.getElementById('featured_image').value = url.replace('{{ url('/') }}/', '');
+        document.getElementById('image-preview').innerHTML = '<img src="' + url + '" alt="Featured">';
+    });
+}
+
+function clearFeaturedImage() {
+    document.getElementById('featured_image').value = '';
+    document.getElementById('image-preview').innerHTML = '<div class="no-image"><i class="fas fa-image"></i> Click to select image</div>';
+}
+</script>
+@endpush

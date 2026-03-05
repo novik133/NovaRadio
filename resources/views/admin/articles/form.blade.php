@@ -174,19 +174,10 @@
 @push('scripts')
 <script>
 function openMediaPickerForImage() {
-    if (window.openMediaPicker) {
-        window.openMediaPicker(function(url) {
-            document.getElementById('featured_image').value = url;
-            document.getElementById('image-preview').innerHTML = '<img src="' + url + '" alt="Featured">';
-        });
-    } else {
-        // Fallback: prompt for URL
-        const url = prompt('Enter image URL:');
-        if (url) {
-            document.getElementById('featured_image').value = url;
-            document.getElementById('image-preview').innerHTML = '<img src="' + url + '" alt="Featured">';
-        }
-    }
+    window.openMediaPicker(function(url, id) {
+        document.getElementById('featured_image').value = url.replace('{{ url('/') }}/', '');
+        document.getElementById('image-preview').innerHTML = '<img src="' + url + '" alt="Featured">';
+    });
 }
 </script>
 @endpush

@@ -183,8 +183,80 @@
         </div>
     </div>
 
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
     <!-- Scripts -->
     <script src="{{ asset('themes/default/js/app.js') }}"></script>
+    <script>
+        // Toast Notification System
+        window.showToast = function(message, type = 'info', title = null) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            const icons = {
+                success: 'fa-circle-check',
+                error: 'fa-circle-xmark',
+                warning: 'fa-triangle-exclamation',
+                info: 'fa-circle-info'
+            };
+            
+            const titles = {
+                success: title || 'Success',
+                error: title || 'Error',
+                warning: title || 'Warning',
+                info: title || 'Info'
+            };
+            
+            toast.innerHTML = `
+                <i class="fas ${icons[type]} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-title">${titles[type]}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close" onclick="this.parentElement.remove()">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            
+            toast.addEventListener('click', function(e) {
+                if (!e.target.closest('.toast-close')) {
+                    toast.classList.add('removing');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            });
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.classList.add('removing');
+                    setTimeout(() => toast.remove(), 300);
+                }
+            }, 5000);
+        };
+        
+        window.alert = function(message) {
+            window.showToast(message, 'info');
+        };
+        
+        @if(session('success'))
+            window.showToast('{{ session('success') }}', 'success');
+        @endif
+        
+        @if(session('error'))
+            window.showToast('{{ session('error') }}', 'error');
+        @endif
+        
+        @if(session('warning'))
+            window.showToast('{{ session('warning') }}', 'warning');
+        @endif
+        
+        @if(session('info'))
+            window.showToast('{{ session('info') }}', 'info');
+        @endif
+    </script>
     @stack('scripts')
 </body>
 </html>

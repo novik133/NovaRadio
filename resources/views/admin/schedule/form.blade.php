@@ -77,7 +77,7 @@
 
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea name="description" id="description" class="form-control" rows="4">{{ old('description', $show->description) }}</textarea>
+            <textarea name="description" id="description" class="form-control rich-editor" rows="4">{{ old('description', $show->description) }}</textarea>
         </div>
 
         <div style="display: flex; gap: 12px; margin-top: 24px;">

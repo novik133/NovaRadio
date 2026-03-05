@@ -61,7 +61,7 @@
 
                         <div class="form-group mb-3">
                             <label for="bio">Bio</label>
-                            <textarea name="bio" id="bio" class="form-control" rows="4">{{ old('bio', $user->bio) }}</textarea>
+                            <textarea name="bio" id="bio" class="form-control rich-editor" rows="4">{{ old('bio', $user->bio) }}</textarea>
                         </div>
 
                         <button type="submit" class="btn btn-primary">Update Profile</button>
@@ -150,14 +150,14 @@ document.getElementById('avatar-input').addEventListener('change', function(e) {
     .then(data => {
         if (data.success) {
             document.querySelector('.rounded-circle').src = data.url;
-            alert('Avatar updated successfully!');
+            showToast('Avatar updated successfully!', 'success');
         } else {
-            alert('Failed to upload avatar');
+            showToast('Failed to upload avatar', 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error uploading avatar');
+        showToast('Error uploading avatar', 'error');
     });
 });
 </script>

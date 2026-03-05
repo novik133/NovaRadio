@@ -96,12 +96,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         // Media
         Route::get('/media', [MediaController::class, 'index'])->name('media.index');
+        Route::get('/media/api/list', [MediaController::class, 'browse'])->name('media.api.list');
         Route::post('/media/upload', [MediaController::class, 'upload'])->name('media.upload');
         Route::post('/media/folder', [MediaController::class, 'createFolder'])->name('media.create-folder');
         Route::post('/media/rename', [MediaController::class, 'rename'])->name('media.rename');
         Route::put('/media/{id}', [MediaController::class, 'update'])->name('media.update');
         Route::delete('/media', [MediaController::class, 'delete'])->name('media.delete');
-        Route::get('/media/browse', [MediaController::class, 'browse'])->name('media.browse');
+        
         // Articles
         Route::resource('articles', AdminArticleController::class);
         Route::resource('categories', CategoryController::class)->except(['show']);

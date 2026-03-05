@@ -416,14 +416,16 @@ function uploadFiles(files) {
     xhr.addEventListener('load', () => {
         const response = JSON.parse(xhr.responseText);
         if (response.success) {
-            location.reload();
+            showToast('Files uploaded successfully!', 'success');
+            setTimeout(() => location.reload(), 1000);
         } else {
-            alert(response.message || 'Upload failed');
+            showToast(response.message || 'Upload failed', 'error');
+            progressDiv.style.display = 'none';
         }
     });
     
     xhr.addEventListener('error', () => {
-        alert('Upload failed. Please try again.');
+        showToast('Upload failed. Please try again.', 'error');
         progressDiv.style.display = 'none';
     });
     
@@ -450,9 +452,10 @@ function createFolder() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            location.reload();
+            showToast('Folder created successfully!', 'success');
+            setTimeout(() => location.reload(), 1000);
         } else {
-            alert(data.message);
+            showToast(data.message, 'error');
         }
     });
 }
@@ -490,7 +493,7 @@ function renameItem() {
     // For now, renaming is not supported for files in database
     // Only folders can be renamed
     if (currentItemId) {
-        alert('File renaming is not supported. Please delete and re-upload with new name.');
+        showToast('File renaming is not supported. Please delete and re-upload with new name.', 'warning');
         return;
     }
     
@@ -511,9 +514,10 @@ function renameItem() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            location.reload();
+            showToast('Item renamed successfully!', 'success');
+            setTimeout(() => location.reload(), 1000);
         } else {
-            alert(data.message);
+            showToast(data.message, 'error');
         }
     });
 }
@@ -522,7 +526,7 @@ function deleteItem() {
     if (!confirm('Are you sure you want to delete "' + currentItemName + '"?')) return;
     
     if (!currentItemId) {
-        alert('Cannot delete folders yet');
+        showToast('Cannot delete folders yet', 'warning');
         return;
     }
     
@@ -537,9 +541,10 @@ function deleteItem() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            location.reload();
+            showToast('Item deleted successfully!', 'success');
+            setTimeout(() => location.reload(), 1000);
         } else {
-            alert(data.message);
+            showToast(data.message, 'error');
         }
     });
 }

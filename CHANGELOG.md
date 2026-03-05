@@ -2,6 +2,75 @@
 
 All notable changes to NovaRadio project.
 
+## [2.0.3-1] - 2026-03-05
+
+### New Features
+- **TinyMCE Rich Text Editor**: Added self-hosted TinyMCE editor to all description/bio fields
+  - Articles content field
+  - Categories description field
+  - Events description field
+  - Team/DJ bio field
+  - My Profile bio field
+  - DJ Profile biography field
+  - Pages content field
+  - Schedule description field
+  - Full formatting toolbar with images, links, tables, and more
+  - Integrated with Media Picker for easy image insertion
+
+- **Toast Notification System**: Replaced native browser alerts with elegant toast notifications
+  - Non-intrusive notifications in top-right corner
+  - Auto-dismiss after 5 seconds
+  - Click to dismiss manually
+  - Different colors for success, error, warning, and info messages
+  - Smooth slide-in/slide-out animations
+  - Works in both admin panel and frontend
+  - Overrides native `alert()` function
+  - Displays Laravel session messages and validation errors
+
+- **Universal Media Picker Modal**: Elegant modal for selecting and uploading media
+  - Two tabs: Media Library and Upload New
+  - Media Library tab:
+    - Grid view of all images
+    - Search functionality
+    - Visual selection with checkmark indicator
+    - Click to select image
+  - Upload tab:
+    - Drag & drop file upload
+    - Click to browse files
+    - Upload progress bar
+    - Auto-switch to library after upload
+  - Integrated everywhere:
+    - Articles featured image
+    - Events image
+    - Team/DJ photos
+    - Pages featured image
+    - TinyMCE image insertion
+  - Replaces old popup windows and prompts
+  - Beautiful animations and responsive design
+
+### Improvements
+- **Better User Experience**: All system messages now use toast notifications instead of browser alerts
+  - Avatar upload success/error messages
+  - Media upload notifications
+  - Folder creation confirmations
+  - File deletion confirmations
+  - Form validation errors
+  - All AJAX operations feedback
+
+- **Consistent Media Selection**: Single unified interface for all media operations
+  - No more popup windows
+  - No more URL prompts
+  - Consistent behavior across all forms
+  - Better mobile experience
+
+### Technical Changes
+- Added `media.api.list` route for AJAX media loading
+- Enhanced MediaController with `browse()` method for API access
+- Added toast notification styles to admin layout
+- Added toast notification styles to frontend layout
+- Updated all form scripts to use new media picker
+- Removed duplicate media routes from web.php
+
 ## [2.0.3] - 2026-03-05
 
 ### New Features

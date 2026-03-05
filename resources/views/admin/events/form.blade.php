@@ -34,7 +34,7 @@
 
         <div class="form-group">
             <label for="description">Description</label>
-            <textarea name="description" id="description" class="form-control" rows="4">{{ old('description', $event->description) }}</textarea>
+            <textarea name="description" id="description" class="form-control rich-editor" rows="4">{{ old('description', $event->description) }}</textarea>
         </div>
 
         <div class="form-group">
@@ -132,12 +132,10 @@
 @push('scripts')
 <script>
 function openMediaPickerForImage() {
-    const picker = window.open('{{ route("admin.media.index") }}?picker=1&type=image', 'media-picker', 'width=900,height=600');
-    window.mediaPickerCallback = function(url, name) {
+    window.openMediaPicker(function(url, id) {
         document.getElementById('image').value = url.replace('{{ url('/') }}/', '');
         document.getElementById('image-preview').innerHTML = '<img src="' + url + '" alt="Event Image">';
-        picker.close();
-    };
+    });
 }
 
 function clearImage() {

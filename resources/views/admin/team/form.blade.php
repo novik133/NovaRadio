@@ -29,7 +29,7 @@
 
         <div class="form-group">
             <label>Bio</label>
-            <textarea name="bio" rows="4">{{ old('bio', $member->bio) }}</textarea>
+            <textarea name="bio" class="rich-editor" rows="4">{{ old('bio', $member->bio) }}</textarea>
         </div>
 
         <div class="form-group">
@@ -122,19 +122,10 @@
 @push('scripts')
 <script>
 function openMediaPickerForPhoto() {
-    if (window.openMediaPicker) {
-        window.openMediaPicker(function(url) {
-            document.getElementById('photo').value = url;
-            document.getElementById('photo-preview').innerHTML = '<img src="' + url + '" alt="Photo">';
-        });
-    } else {
-        // Fallback: simple URL prompt
-        const url = prompt('Enter photo URL:');
-        if (url) {
-            document.getElementById('photo').value = url;
-            document.getElementById('photo-preview').innerHTML = '<img src="' + url + '" alt="Photo">';
-        }
-    }
+    window.openMediaPicker(function(url, id) {
+        document.getElementById('photo').value = url.replace('{{ url('/') }}/', '');
+        document.getElementById('photo-preview').innerHTML = '<img src="' + url + '" alt="Photo">';
+    });
 }
 
 function clearPhoto() {
