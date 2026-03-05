@@ -7,7 +7,7 @@ return [
         'station_id' => env('AZURACAST_STATION_ID', '1'),
     ],
     'github' => [
-        'repo' => env('GITHUB_REPO', 'novik133/NovaRadia'),
+        'repo' => env('GITHUB_REPO', 'novik133/NovaRadio'),
         'token' => env('GITHUB_TOKEN'),
     ],
 ];

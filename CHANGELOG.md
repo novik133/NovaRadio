@@ -2,6 +2,15 @@
 
 All notable changes to NovaRadio project.
 
+## [2.0.1] - 2026-03-05
+
+### Bug Fixes
+- **Update System**: Fixed incorrect GitHub repository name in update configuration
+  - Changed from `novik133/NovaRadia` to `novik133/NovaRadio` in UpdateService
+  - Updated default repository name in config/services.php
+  - Updated .env.example with correct repository name
+  - This fix enables the automatic update system to properly check for and install updates from GitHub releases
+
 ## [2.0.0] - 2026-03-04
 
 ### Overview

@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\File;
 class UpdateService
 {
     private string $githubRepo;
-    private string $currentVersion = '2.0.0';
+    private string $currentVersion = '2.0.1';
     private ?string $githubToken;
 
     public function __construct()
     {
-        $this->githubRepo = config('services.github.repo', env('GITHUB_REPO', 'novik133/NovaRadia'));
+        $this->githubRepo = config('services.github.repo', env('GITHUB_REPO', 'novik133/NovaRadio'));
         $this->githubToken = config('services.github.token', env('GITHUB_TOKEN', ''));
     }
 
