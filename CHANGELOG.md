@@ -56,6 +56,9 @@ All notable changes to NovaRadio project.
 - Updated media routes to include update endpoint for metadata editing
 - ProfileController now registers uploaded avatars in media library
 - All view templates updated to use `asset()` for image URLs
+- **UpdateService now reads version from composer.json** instead of hardcoded value
+  - Version is automatically updated with each release
+  - No need to manually update version in code
 
 ## [2.0.2] - 2026-03-05
 

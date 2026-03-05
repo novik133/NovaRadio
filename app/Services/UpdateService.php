@@ -12,13 +12,32 @@ use Illuminate\Support\Facades\File;
 class UpdateService
 {
     private string $githubRepo;
-    private string $currentVersion = '2.0.3';
+    private string $currentVersion;
     private ?string $githubToken;
 
     public function __construct()
     {
         $this->githubRepo = config('services.github.repo', env('GITHUB_REPO', 'novik133/NovaRadio'));
         $this->githubToken = config('services.github.token', env('GITHUB_TOKEN', ''));
+        $this->currentVersion = $this->getVersionFromComposer();
+    }
+
+    /**
+     * Get current version from composer.json
+     */
+    private function getVersionFromComposer(): string
+    {
+        try {
+            $composerPath = base_path('composer.json');
+            if (file_exists($composerPath)) {
+                $composer = json_decode(file_get_contents($composerPath), true);
+                return $composer['version'] ?? '0.0.0';
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to read version from composer.json', ['error' => $e->getMessage()]);
+        }
+        
+        return '0.0.0';
     }
 
     public function getCurrentVersion(): string
