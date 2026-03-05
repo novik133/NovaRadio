@@ -117,7 +117,7 @@ routes/
 
 ### Migration Guide from v1.x
 1. Export content from v1.x database
-2. Install NovaRadio 2.0 fresh
+2. Install NovaRadio 2.0 fresh (Migration from version 0.x-1.x is not possible and requires a clean installation)
 3. Manually recreate content (no automated migration available)
 4. Re-upload images to new storage locations
 5. Reconfigure settings in admin panel
@@ -146,29 +146,3 @@ Vanilla PHP implementation with basic functionality:
 - Simple admin panel
 - Manual configuration
 - File-based storage
-
----
-
-## Future Roadmap
-
-### Planned for v2.1
-- [ ] Multi-station support
-- [ ] Podcast management
-- [ ] Listener statistics dashboard
-- [ ] Song request system
-- [ ] API rate limiting
-- [ ] Two-factor authentication
-- [ ] Email notifications
-- [ ] Backup/restore functionality
-
-### Planned for v2.2
-- [ ] Mobile app API
-- [ ] Webhook integrations
-- [ ] Advanced analytics
-- [ ] Advertising management
-- [ ] Live chat integration
-- [ ] Multi-language support
-
----
-
-**Note**: Versions before 2.0.0 are not tracked in this changelog as they represent the legacy vanilla PHP codebase.
