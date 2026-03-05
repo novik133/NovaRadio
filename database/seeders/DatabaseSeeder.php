@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Event;
 use App\Models\DjProfile;
+use App\Models\Media;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Http;
@@ -162,7 +163,6 @@ class DatabaseSeeder extends Seeder
     <h2>8. Third-Party Processors</h2>
     <p>We use the following third-party services that may process your data:</p>
     <ul>
-        <li><strong>Unsplash:</strong> For displaying stock images (CDN)</li>
         <li><strong>Font Awesome:</strong> For icon fonts (CDN)</li>
         <li><strong>AzuraCast:</strong> For streaming services (if configured)</li>
     </ul>
@@ -346,7 +346,6 @@ class DatabaseSeeder extends Seeder
     <h2>3. Third-Party Cookies</h2>
     <p>We use services from third parties that may set cookies:</p>
     <ul>
-        <li><strong>Unsplash:</strong> Used for loading images from their CDN</li>
         <li><strong>Font Awesome:</strong> Used for loading icon fonts</li>
         <li><strong>Google Analytics:</strong> Used for website analytics (if enabled)</li>
     </ul>
@@ -576,6 +575,9 @@ class DatabaseSeeder extends Seeder
                 'featured_dj_id' => 3,
             ]
         );
+
+        // Register all existing images in media library
+        $this->call(MediaSeeder::class);
     }
     
     /**

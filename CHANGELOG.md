@@ -2,6 +2,34 @@
 
 All notable changes to NovaRadio project.
 
+## [2.0.2] - 2026-03-05
+
+### New Features
+- **Media Library System**: Added comprehensive media management system
+  - New `media` table for storing image metadata
+  - Media model with file size formatting and URL generation
+  - MediaSeeder automatically registers existing images in library
+  - Images remain in `public/images` but are tracked in database
+  
+- **Dynamic Hero Section**: Hero background now displays album art from currently playing track
+  - Real-time updates every 30 seconds
+  - Smooth fade transitions between album covers
+  - "Now Playing" card showing current track info with album art
+  - Automatic fallback to default hero image when no album art available
+  - Blurred background effect for better text readability
+
+### Improvements
+- **Privacy Compliance**: Removed Unsplash CDN references from Privacy Policy and Cookie Policy
+  - All images now served locally
+  - Reduced third-party data processors
+  - Improved GDPR compliance
+
+### Technical Changes
+- Added `Media` model with relationships and helper methods
+- Created migration for `media` table with folder organization
+- Enhanced JavaScript to update hero background dynamically
+- Improved AzuraCast integration for album art display
+
 ## [2.0.1-1] - 2026-03-05
 
 ### Update System Improvements

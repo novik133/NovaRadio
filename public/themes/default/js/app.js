@@ -153,6 +153,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (title) title.textContent = data.now_playing.song.title || 'Unknown';
                     if (artist) artist.textContent = data.now_playing.song.artist || 'Unknown Artist';
                     if (listeners) listeners.textContent = data.listeners?.total || 0;
+
+                    // Update hero background with album art
+                    const heroSection = document.querySelector('.hero');
+                    const heroBackground = heroSection?.querySelector('[style*="background-image"]');
+                    const nowPlayingCard = document.querySelector('.hero [style*="backdrop-filter"]');
+                    
+                    if (data.now_playing.song.art && heroBackground) {
+                        // Smoothly transition to new album art
+                        heroBackground.style.transition = 'opacity 1s ease-in-out';
+                        heroBackground.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            heroBackground.style.backgroundImage = `url('${data.now_playing.song.art}')`;
+                            heroBackground.style.opacity = '1';
+                        }, 1000);
+                    }
+
+                    // Update now playing card in hero
+                    if (nowPlayingCard) {
+                        const cardImg = nowPlayingCard.querySelector('img');
+                        const cardTitle = nowPlayingCard.querySelector('[style*="font-size: 16px"]');
+                        const cardArtist = nowPlayingCard.querySelector('[style*="font-size: 14px"]');
+
+                        if (cardImg && data.now_playing.song.art) {
+                            cardImg.src = data.now_playing.song.art;
+                        }
+                        if (cardTitle) cardTitle.textContent = data.now_playing.song.title || 'Unknown Track';
+                        if (cardArtist) cardArtist.textContent = data.now_playing.song.artist || 'Unknown Artist';
+                    }
                 }
             })
             .catch(() => {});

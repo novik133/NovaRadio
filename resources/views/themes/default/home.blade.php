@@ -2,14 +2,52 @@
 
 @section('content')
 <!-- Hero Section -->
-<section class="hero">
-    <div class="container">
+<section class="hero" style="position: relative; overflow: hidden;">
+    @php
+        $heroImage = null;
+        // Try to get album art from now playing
+        if ($nowPlaying && isset($nowPlaying['now_playing']['song']['art'])) {
+            $heroImage = $nowPlaying['now_playing']['song']['art'];
+        }
+        // Fallback to default hero image from settings
+        if (!$heroImage) {
+            $heroImage = asset('images/hero/hero-main.jpg');
+        }
+    @endphp
+    
+    <!-- Background Image with Overlay -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: url('{{ $heroImage }}'); background-size: cover; background-position: center; filter: blur(20px); transform: scale(1.1);"></div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.85) 100%);"></div>
+    </div>
+    
+    <div class="container" style="position: relative; z-index: 1;">
         <div class="hero-badge">
             <span class="live-dot"></span>
             Live Broadcasting
         </div>
         <h1>Your Soundtrack to Life</h1>
         <p class="hero-description">Experience the best music curated just for you. Listen live 24/7 and discover your next favorite song.</p>
+        
+        @if($nowPlaying && isset($nowPlaying['now_playing']['song']))
+            <div style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border-radius: 12px; padding: 16px 24px; margin: 24px auto; max-width: 500px; border: 1px solid rgba(255, 255, 255, 0.2);">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    @if(isset($nowPlaying['now_playing']['song']['art']))
+                        <img src="{{ $nowPlaying['now_playing']['song']['art'] }}" alt="Album Art" style="width: 60px; height: 60px; border-radius: 8px; object-fit: cover;">
+                    @else
+                        <div style="width: 60px; height: 60px; border-radius: 8px; background: rgba(255, 255, 255, 0.1); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-music" style="color: rgba(255, 255, 255, 0.5);"></i>
+                        </div>
+                    @endif
+                    <div style="flex: 1; text-align: left;">
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; margin-bottom: 4px;">Now Playing</div>
+                        <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 2px;">{{ $nowPlaying['now_playing']['song']['title'] ?? 'Unknown Track' }}</div>
+                        <div style="font-size: 14px; color: rgba(255, 255, 255, 0.8);">{{ $nowPlaying['now_playing']['song']['artist'] ?? 'Unknown Artist' }}</div>
+                    </div>
+                </div>
+            </div>
+        @endif
+        
         <div class="hero-buttons">
             <a href="#player" class="btn btn-primary">
                 <i class="fas fa-play"></i> Start Listening

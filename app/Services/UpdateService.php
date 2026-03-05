@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\File;
 class UpdateService
 {
     private string $githubRepo;
-    private string $currentVersion = '2.0.1-1';
+    private string $currentVersion = '2.0.2';
     private ?string $githubToken;
 
     public function __construct()
