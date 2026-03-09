@@ -2,6 +2,43 @@
 
 All notable changes to NovaRadio project.
 
+## [2.0.4] - 2026-03-09
+
+### Bug Fixes
+- **Fixed Composer version string**: Changed invalid version `2.0.3-1` to valid semver `2.0.4` — fixes `Invalid version string "2.0.3-1"` error in VersionParser during installation
+- **Fixed database migration during installation**: Installer now properly reconnects to database after writing `.env` file, ensuring all migrations run correctly. Added verification step to confirm all 17 required tables are created
+- **Fixed "Direct Stream URL" not saving in admin settings**: The `SettingsController::update()` was hardcoding `'general'` as the group for all settings, overwriting the correct group. Now maps each setting key to its proper group (`streaming`, `advanced`, `social`, etc.)
+- **Fixed unchecked checkboxes not saving**: HTML forms don't submit unchecked checkboxes. Added explicit handling to default unchecked checkbox fields (`azuracast_enabled`, `player_autoplay`, `maintenance_mode`, etc.) to `'0'`
+- **Fixed radio player not using Direct Stream URL**: `AzuraCastService::getStreamUrl()` now falls back to the `stream_url` database setting when AzuraCast is not configured or returns no URL
+- **Fixed settings label column**: Made `label` column nullable in base settings migration to prevent errors when creating new settings
+
+### Improvements
+- **Redesigned installer**: Complete overhaul matching the main site's dark theme (`#0f172a`, `#1e293b`, `#6366f1`)
+  - Split into 5-step wizard: License → Requirements → Database → Admin → Streaming
+  - License acceptance step with switch toggle (reads from LICENSE file)
+  - Step indicator with progress visualization
+  - Client-side validation per step (required fields, password match, min length)
+  - Loading spinner on submit
+  - Direct Stream URL field in streaming step
+  - Responsive design for mobile
+- **Enhanced installer backend**:
+  - Validates license acceptance server-side
+  - Saves `stream_url` to settings during installation
+  - Creates storage symlink automatically
+  - Checks writable directories (storage, cache, public)
+  - Auto-detects `APP_URL` from current request
+  - Preserves form input on error with `withInput()`
+  - More complete `.env` generation with all Laravel defaults
+- **Improved Setting model**: `Setting::set()` now accepts optional `type`, `group`, and `label` parameters, preserving existing values when not provided
+
+### Technical Changes
+- Updated `composer.json` version to `2.0.4`
+- Updated `InstallController` with proper DB reconnection flow after `.env` write
+- Updated `SettingsController::update()` with group mapping and checkbox handling
+- Updated `AzuraCastService::getStreamUrl()` with database fallback
+- Updated `Setting::set()` signature to support granular updates
+- Made `label` nullable in base settings migration
+
 ## [2.0.3-1] - 2026-03-05
 
 ### New Features

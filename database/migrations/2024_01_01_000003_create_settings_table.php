@@ -14,7 +14,7 @@ return new class extends Migration
             $table->text('value')->nullable();
             $table->enum('type', ['string', 'text', 'integer', 'boolean', 'json'])->default('string');
             $table->string('group')->default('general');
-            $table->string('label');
+            $table->string('label')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
         });

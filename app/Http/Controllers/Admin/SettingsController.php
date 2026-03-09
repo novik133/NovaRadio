@@ -30,11 +30,49 @@ class SettingsController extends Controller
     {
         $data = $request->except('_token');
         
-        foreach ($data as $key => $value) {
-            Setting::set($key, $value, 'string', 'general');
+        // Map setting keys to their correct groups
+        $groupMap = [
+            'site_name' => 'general', 'site_tagline' => 'general', 'site_description' => 'general',
+            'site_language' => 'general', 'timezone' => 'general',
+            'contact_email' => 'contact', 'contact_phone' => 'contact',
+            'contact_address' => 'contact', 'admin_name' => 'contact',
+            'social_facebook' => 'social', 'social_twitter' => 'social',
+            'social_instagram' => 'social', 'social_youtube' => 'social',
+            'social_discord' => 'social', 'social_tiktok' => 'social',
+            'seo_meta_title' => 'seo', 'seo_meta_description' => 'seo',
+            'seo_keywords' => 'seo', 'google_analytics' => 'seo',
+            'primary_color' => 'appearance', 'secondary_color' => 'appearance',
+            'azuracast_enabled' => 'streaming', 'station_name' => 'streaming',
+            'stream_url' => 'streaming', 'player_autoplay' => 'streaming',
+            'maintenance_mode' => 'advanced', 'cache_enabled' => 'advanced',
+            'debug_mode' => 'advanced', 'registration_enabled' => 'advanced',
+        ];
+        
+        // Checkbox fields need special handling: if unchecked, they won't be in the request
+        $checkboxFields = [
+            'azuracast_enabled', 'player_autoplay',
+            'maintenance_mode', 'cache_enabled', 'debug_mode', 'registration_enabled',
+        ];
+        
+        // Set unchecked checkboxes to '0'
+        foreach ($checkboxFields as $field) {
+            if (!isset($data[$field])) {
+                $data[$field] = '0';
+            }
         }
         
-        // Clear settings cache
+        foreach ($data as $key => $value) {
+            $group = $groupMap[$key] ?? null;
+            if ($group === null) {
+                continue;
+            }
+            Setting::set($key, $value, null, $group);
+        }
+        
+        // Clear all setting caches
+        foreach (array_keys($data) as $key) {
+            Cache::forget("setting.{$key}");
+        }
         Cache::forget('settings');
         
         return redirect()->route('admin.settings.index')

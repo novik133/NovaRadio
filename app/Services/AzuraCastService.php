@@ -73,16 +73,20 @@ class AzuraCastService
     {
         $nowPlaying = $this->getNowPlaying();
         
-        if (!$nowPlaying) {
-            return null;
+        if ($nowPlaying) {
+            if (isset($nowPlaying['station']['listen_url'])) {
+                return $nowPlaying['station']['listen_url'];
+            }
+
+            if (isset($nowPlaying['station']['mounts'][0]['url'])) {
+                return $nowPlaying['station']['mounts'][0]['url'];
+            }
         }
 
-        if (isset($nowPlaying['station']['listen_url'])) {
-            return $nowPlaying['station']['listen_url'];
-        }
-
-        if (isset($nowPlaying['station']['mounts'][0]['url'])) {
-            return $nowPlaying['station']['mounts'][0]['url'];
+        // Fallback to direct stream URL from settings
+        $fallbackUrl = \App\Models\Setting::get('stream_url');
+        if (!empty($fallbackUrl)) {
+            return $fallbackUrl;
         }
 
         return null;

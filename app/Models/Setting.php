@@ -30,12 +30,34 @@ class Setting extends Model
         });
     }
 
-    public static function set(string $key, $value): void
+    public static function set(string $key, $value, ?string $type = 'string', ?string $group = 'general', ?string $label = null): void
     {
-        self::updateOrCreate(
-            ['key' => $key],
-            ['value' => is_array($value) ? json_encode($value) : $value]
-        );
+        $setting = self::where('key', $key)->first();
+        
+        if ($setting) {
+            // Update existing setting - preserve label if not provided
+            $setting->value = is_array($value) ? json_encode($value) : $value;
+            if ($type !== null) {
+                $setting->type = $type;
+            }
+            if ($group !== null) {
+                $setting->group = $group;
+            }
+            if ($label !== null) {
+                $setting->label = $label;
+            }
+            $setting->save();
+        } else {
+            // Create new setting - label is required for new records
+            self::create([
+                'key' => $key,
+                'value' => is_array($value) ? json_encode($value) : $value,
+                'type' => $type ?? 'string',
+                'group' => $group ?? 'general',
+                'label' => $label ?? ucwords(str_replace('_', ' ', $key)),
+            ]);
+        }
+        
         Cache::forget("setting.{$key}");
     }
 
