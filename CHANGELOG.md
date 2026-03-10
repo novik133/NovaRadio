@@ -33,12 +33,6 @@ All notable changes to NovaRadio project.
 - Added try-catch blocks in helper functions to prevent crashes from database errors
 - Improved middleware stack for better installation flow and security
 
-### Documentation
-- Added DEPLOYMENT.md with full deployment instructions
-- Added VPS-UPLOAD-INSTRUCTIONS.md for Plesk users
-- Added FIX-FRONTEND-500.md with troubleshooting guide
-- Added CHANGELOG-FIX.md with detailed fix information
-
 ### Bug Fixes
 - **Fixed 419 CSRF errors**: Proper session configuration
   - Fixed `config/session.php` with safe defaults (`secure` defaults to `false`, `domain` defaults to `null`)
