@@ -56,21 +56,50 @@ class UpdateService
                 $headers['Authorization'] = "token {$this->githubToken}";
             }
 
+            $apiUrl = "https://api.github.com/repos/{$this->githubRepo}/releases/latest";
+            Log::info('Checking for updates', ['repo' => $this->githubRepo, 'current_version' => $this->currentVersion, 'api_url' => $apiUrl]);
+
+            // Try with SSL verification first (secure)
             $response = Http::withHeaders($headers)
                 ->timeout(30)
-                ->get("https://api.github.com/repos/{$this->githubRepo}/releases/latest");
+                ->get($apiUrl);
+
+            // If SSL fails (common on shared hosting), try without verification
+            if ($response->status() === 0 || $response->status() >= 500) {
+                Log::warning('SSL verification may have failed, retrying without verification', ['status' => $response->status()]);
+                $response = Http::withHeaders($headers)
+                    ->timeout(30)
+                    ->withoutVerifying()
+                    ->get($apiUrl);
+            }
+
+            Log::info('GitHub API response', ['status' => $response->status(), 'successful' => $response->successful(), 'body_length' => strlen($response->body())]);
 
             if (!$response->successful()) {
-                $this->logUpdate('check', UpdateLog::STATUS_ERROR, $this->currentVersion, 'Failed to fetch release from GitHub');
+                $errorBody = $response->body();
+                Log::error('GitHub API error', ['status' => $response->status(), 'body' => $errorBody]);
+                $this->logUpdate('check', UpdateLog::STATUS_ERROR, $this->currentVersion, 'GitHub API error: ' . $response->status());
                 return [
                     'success' => false,
-                    'message' => 'Failed to check for updates',
+                    'message' => 'Failed to fetch release from GitHub (HTTP ' . $response->status() . ')',
                 ];
             }
 
             $release = $response->json();
+            
+            if (empty($release) || !isset($release['tag_name'])) {
+                Log::error('Invalid GitHub API response', ['response' => $release]);
+                $this->logUpdate('check', UpdateLog::STATUS_ERROR, $this->currentVersion, 'Invalid response from GitHub API');
+                return [
+                    'success' => false,
+                    'message' => 'Invalid response from GitHub API',
+                ];
+            }
+
             $latestVersion = ltrim($release['tag_name'] ?? '0.0.0', 'v');
             $hasUpdate = version_compare($latestVersion, $this->currentVersion, '>');
+
+            Log::info('Version comparison', ['current' => $this->currentVersion, 'latest' => $latestVersion, 'has_update' => $hasUpdate]);
 
             $status = $hasUpdate ? UpdateLog::STATUS_AVAILABLE : UpdateLog::STATUS_SUCCESS;
             $message = $hasUpdate ? "Update available: v{$latestVersion}" : 'System is up to date';
@@ -102,7 +131,7 @@ class UpdateService
                 'published_at' => $release['published_at'] ?? null,
             ];
         } catch (\Exception $e) {
-            Log::error('Update check failed', ['error' => $e->getMessage()]);
+            Log::error('Update check failed with exception', ['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
             $this->logUpdate('check', UpdateLog::STATUS_ERROR, $this->currentVersion, $e->getMessage());
 
             return [

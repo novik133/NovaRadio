@@ -33,7 +33,8 @@ class UpdateController extends Controller
         }
 
         return redirect()->route('admin.updates.index')
-            ->with('success', $result['success'] ? __('admin.updates.check_success') : __('admin.updates.check_failed'));
+            ->with($result['success'] ? 'success' : 'error', 
+                $result['success'] ? __('admin.updates.check_success') : ($result['message'] ?? __('admin.updates.check_failed')));
     }
 
     public function install(Request $request)
