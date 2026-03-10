@@ -23,7 +23,7 @@ $member = $dj->teamMember;
             <div>
                 @if($dj->is_resident)
                     <span style="display: inline-block; background: var(--color-primary); color: white; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; margin-bottom: 16px;">
-                        <i class="fas fa-star"></i> Resident DJ
+                        <i class="fas fa-star"></i> {{ __('admin.dj_profile.is_resident') }}
                     </span>
                 @endif
                 <h1 style="font-size: 48px; font-weight: 800; margin-bottom: 8px;">{{ $dj->stage_name ?? $member->name }}</h1>
@@ -45,7 +45,7 @@ $member = $dj->teamMember;
             <div>
                 @if($dj->biography)
                 <div style="margin-bottom: 40px;">
-                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">Biography</h2>
+                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">{{ __('frontend.dj.biography') }}</h2>
                     <div style="font-size: 16px; line-height: 1.8; color: var(--color-text);">
                         {!! nl2br(e($dj->biography)) !!}
                     </div>
@@ -54,7 +54,7 @@ $member = $dj->teamMember;
                 
                 @if($dj->equipment)
                 <div style="margin-bottom: 40px;">
-                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">Equipment</h2>
+                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">{{ __('frontend.dj.equipment') }}</h2>
                     <p style="color: var(--color-text-light);">{{ $dj->equipment }}</p>
                 </div>
                 @endif
@@ -83,7 +83,7 @@ $member = $dj->teamMember;
                 {{-- Shows Schedule --}}
                 @if($shows->count() > 0)
                 <div>
-                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">Show Schedule</h2>
+                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 20px;">{{ __('frontend.dj.shows') }}</h2>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         @foreach($shows as $show)
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">

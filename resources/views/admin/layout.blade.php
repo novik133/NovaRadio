@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -733,7 +733,7 @@
 </head>
 <body>
     <header class="admin-header">
-        <h1><i class="fas fa-broadcast-tower"></i> NovaRadio Admin</h1>
+        <h1><i class="fas fa-broadcast-tower"></i> {{ __('admin.sidebar.admin_panel') }}</h1>
         <div class="header-actions">
             {{-- Update Notification Badge --}}
             @php
@@ -743,13 +743,13 @@
             @if($updateAvailable)
                 <a href="{{ route('admin.updates.index') }}" class="update-badge">
                     <i class="fas fa-arrow-up"></i>
-                    <span>Update v{{ $newVersion }} available</span>
+                    <span>{{ __('admin.updates.update_available') }} v{{ $newVersion }}</span>
                     <span class="update-pulse"></span>
                 </a>
             @endif
             
             <div class="user-menu">
-                <span class="user-name">{{ auth()->user()?->name ?? 'Guest' }}</span>
+                <span class="user-name">{{ auth()->user()?->name ?? __('admin.sidebar.guest') }}</span>
                 <form method="POST" action="{{ route('admin.logout') }}" style="display: inline;">
                     @csrf
                     <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-sign-out-alt"></i></button>
@@ -762,68 +762,68 @@
         <aside class="admin-sidebar">
             <div class="sidebar-section">
                 <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                    <i class="fas fa-tachometer-alt"></i> {{ __('admin.sidebar.dashboard') }}
                 </a>
             </div>
             
             <div class="sidebar-section">
-                <div class="sidebar-title">Content</div>
+                <div class="sidebar-title">{{ __('admin.sidebar.content') }}</div>
                 <a href="{{ route('admin.pages.index') }}" class="{{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
-                    <i class="fas fa-file-alt"></i> Pages
+                    <i class="fas fa-file-alt"></i> {{ __('admin.sidebar.pages') }}
                 </a>
                 <a href="{{ route('admin.articles.index') }}" class="{{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
-                    <i class="fas fa-newspaper"></i> Articles
+                    <i class="fas fa-newspaper"></i> {{ __('admin.sidebar.articles') }}
                 </a>
                 <a href="{{ route('admin.categories.index') }}" class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
-                    <i class="fas fa-folder"></i> Categories
+                    <i class="fas fa-folder"></i> {{ __('admin.sidebar.categories') }}
                 </a>
                 <a href="{{ route('admin.tags.index') }}" class="{{ request()->routeIs('admin.tags.*') ? 'active' : '' }}">
-                    <i class="fas fa-tags"></i> Tags
+                    <i class="fas fa-tags"></i> {{ __('admin.sidebar.tags') }}
                 </a>
                 <a href="{{ route('admin.events.index') }}" class="{{ request()->routeIs('admin.events.*') ? 'active' : '' }}">
-                    <i class="fas fa-calendar-check"></i> Events
+                    <i class="fas fa-calendar-check"></i> {{ __('admin.sidebar.events') }}
                 </a>
                 <a href="{{ route('admin.team.index') }}" class="{{ request()->routeIs('admin.team.*') ? 'active' : '' }}">
-                    <i class="fas fa-users"></i> Team / DJs
+                    <i class="fas fa-users"></i> {{ __('admin.sidebar.team') }}
                 </a>
                 <a href="{{ route('admin.schedule.index') ?? '#' }}" class="{{ request()->routeIs('admin.schedule.*') ? 'active' : '' }}">
-                    <i class="fas fa-calendar-alt"></i> Schedule
+                    <i class="fas fa-calendar-alt"></i> {{ __('admin.sidebar.schedule') }}
                 </a>
             </div>
             
             <div class="sidebar-section">
-                <div class="sidebar-title">Media & Design</div>
+                <div class="sidebar-title">{{ __('admin.sidebar.media') }}</div>
                 <a href="{{ route('admin.media.index') ?? '#' }}" class="{{ request()->routeIs('admin.media.*') ? 'active' : '' }}">
-                    <i class="fas fa-images"></i> Media Library
+                    <i class="fas fa-images"></i> {{ __('admin.media.title') }}
                 </a>
                 <a href="{{ route('admin.themes.index') ?? '#' }}" class="{{ request()->routeIs('admin.themes.*') ? 'active' : '' }}">
-                    <i class="fas fa-palette"></i> Themes
+                    <i class="fas fa-palette"></i> {{ __('admin.sidebar.themes') }}
                 </a>
             </div>
             
             <div class="sidebar-section">
-                <div class="sidebar-title">Account</div>
+                <div class="sidebar-title">{{ __('admin.profile.title') }}</div>
                 <a href="{{ route('admin.profile.edit') }}" class="{{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
-                    <i class="fas fa-user-circle"></i> My Profile
+                    <i class="fas fa-user-circle"></i> {{ __('admin.sidebar.my_profile') }}
                 </a>
             </div>
             
             <div class="sidebar-section">
-                <div class="sidebar-title">System</div>
+                <div class="sidebar-title">{{ __('admin.updates.title') }}</div>
                 <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                    <i class="fas fa-cog"></i> Settings
+                    <i class="fas fa-cog"></i> {{ __('admin.sidebar.settings') }}
                 </a>
                 <a href="{{ route('admin.updates.index') }}" class="{{ request()->routeIs('admin.updates.*') ? 'active' : '' }}">
-                    <i class="fas fa-sync"></i> Updates
+                    <i class="fas fa-sync"></i> {{ __('admin.sidebar.updates') }}
                     @if($updateAvailable)
-                        <span class="badge badge-published" style="margin-left: auto; font-size: 10px;">NEW</span>
+                        <span class="badge badge-published" style="margin-left: auto; font-size: 10px;">{{ __('admin.sidebar.new_badge') }}</span>
                     @endif
                 </a>
             </div>
             
             <div class="sidebar-section">
                 <a href="{{ route('home') }}" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> View Site
+                    <i class="fas fa-external-link-alt"></i> {{ __('admin.sidebar.view_site') }}
                 </a>
             </div>
         </aside>
@@ -841,7 +841,7 @@
         <div class="media-picker-overlay" onclick="closeMediaPicker()"></div>
         <div class="media-picker-content">
             <div class="media-picker-header">
-                <h3><i class="fas fa-images"></i> Select Media</h3>
+                <h3><i class="fas fa-images"></i> {{ __('admin.media.media_library') }}</h3>
                 <button class="btn-close" onclick="closeMediaPicker()">
                     <i class="fas fa-times"></i>
                 </button>
@@ -849,10 +849,10 @@
             
             <div class="media-picker-tabs">
                 <button class="tab-btn active" onclick="switchMediaTab('library')">
-                    <i class="fas fa-folder-open"></i> Media Library
+                    <i class="fas fa-folder-open"></i> {{ __('admin.media.media_library') }}
                 </button>
                 <button class="tab-btn" onclick="switchMediaTab('upload')">
-                    <i class="fas fa-upload"></i> Upload New
+                    <i class="fas fa-upload"></i> {{ __('admin.media.upload_new') }}
                 </button>
             </div>
             
@@ -860,12 +860,12 @@
                 <!-- Library Tab -->
                 <div id="media-tab-library" class="media-tab active">
                     <div class="media-picker-search">
-                        <input type="text" id="media-search" placeholder="Search images..." onkeyup="filterMediaItems()">
+                        <input type="text" id="media-search" placeholder="{{ __('admin.media.search_images') }}" onkeyup="filterMediaItems()">
                         <i class="fas fa-search"></i>
                     </div>
                     <div class="media-picker-grid" id="media-picker-grid">
                         <div class="loading-spinner">
-                            <i class="fas fa-spinner fa-spin"></i> Loading media...
+                            <i class="fas fa-spinner fa-spin"></i> {{ __('admin.media.loading_media') }}
                         </div>
                     </div>
                 </div>
@@ -874,8 +874,8 @@
                 <div id="media-tab-upload" class="media-tab">
                     <div class="upload-area" id="upload-area">
                         <i class="fas fa-cloud-upload-alt"></i>
-                        <h4>Drag & Drop files here</h4>
-                        <p>or click to browse</p>
+                        <h4>{{ __('admin.media.drag_drop_here') }}</h4>
+                        <p>{{ __('admin.media.or_click_browse') }}</p>
                         <input type="file" id="media-picker-file-input" multiple accept="image/*" onchange="handleMediaUpload(this.files)">
                     </div>
                     <div id="upload-progress" class="upload-progress" style="display: none;">
@@ -888,9 +888,9 @@
             </div>
             
             <div class="media-picker-footer">
-                <button class="btn btn-secondary" onclick="closeMediaPicker()">Cancel</button>
+                <button class="btn btn-secondary" onclick="closeMediaPicker()">{{ __('admin.actions.cancel') }}</button>
                 <button class="btn btn-primary" id="media-select-btn" onclick="confirmMediaSelection()" disabled>
-                    <i class="fas fa-check"></i> Select
+                    <i class="fas fa-check"></i> {{ __('admin.actions.select') }}
                 </button>
             </div>
         </div>
@@ -911,10 +911,10 @@
             };
             
             const titles = {
-                success: title || 'Success',
-                error: title || 'Error',
-                warning: title || 'Warning',
-                info: title || 'Info'
+                success: title || '{{ __('admin.actions.success') }}',
+                error: title || '{{ __('admin.actions.error') }}',
+                warning: title || '{{ __('admin.actions.warning') }}',
+                info: title || '{{ __('admin.actions.info') }}'
             };
             
             toast.innerHTML = `
@@ -972,7 +972,7 @@
         // Show validation errors as toasts
         @if($errors->any())
             @foreach($errors->all() as $error)
-                window.showToast('{{ $error }}', 'error', 'Validation Error');
+                window.showToast('{{ $error }}', 'error', '{{ __('admin.actions.validation_error') }}');
             @endforeach
         @endif
         
@@ -1007,7 +1007,7 @@
         
         window.loadMediaLibrary = function() {
             const grid = document.getElementById('media-picker-grid');
-            grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> Loading media...</div>';
+            grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-spinner fa-spin"></i> {{ __('admin.media.loading_media') }}</div>';
             
             fetch('{{ route("admin.media.api.list") }}')
                 .then(r => r.json())
@@ -1015,12 +1015,12 @@
                     if (data.success) {
                         renderMediaGrid(data.files);
                     } else {
-                        grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-exclamation-circle"></i> Failed to load media</div>';
+                        grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-exclamation-circle"></i> {{ __('admin.media.failed_to_load') }}</div>';
                     }
                 })
                 .catch(err => {
                     console.error('Failed to load media:', err);
-                    grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-exclamation-circle"></i> Failed to load media</div>';
+                    grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-exclamation-circle"></i> {{ __('admin.media.failed_to_load') }}</div>';
                 });
         };
         
@@ -1028,7 +1028,7 @@
             const grid = document.getElementById('media-picker-grid');
             
             if (files.length === 0) {
-                grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-folder-open"></i> No images found</div>';
+                grid.innerHTML = '<div class="loading-spinner"><i class="fas fa-folder-open"></i> {{ __('admin.media.no_images') }}</div>';
                 return;
             }
             
@@ -1095,7 +1095,7 @@
             xhr.addEventListener('load', () => {
                 const response = JSON.parse(xhr.responseText);
                 if (response.success) {
-                    showToast('Files uploaded successfully!', 'success');
+                    showToast('{{ __('admin.media.files_uploaded') }}', 'success');
                     progressDiv.style.display = 'none';
                     
                     // Switch to library tab and reload
@@ -1104,13 +1104,13 @@
                     document.querySelectorAll('.tab-btn')[1].classList.remove('active');
                     loadMediaLibrary();
                 } else {
-                    showToast(response.message || 'Upload failed', 'error');
+                    showToast(response.message || '{{ __('admin.media.upload_failed') }}', 'error');
                     progressDiv.style.display = 'none';
                 }
             });
             
             xhr.addEventListener('error', () => {
-                showToast('Upload failed. Please try again.', 'error');
+                showToast('{{ __('admin.media.upload_failed') }}', 'error');
                 progressDiv.style.display = 'none';
             });
             

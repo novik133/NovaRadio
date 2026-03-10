@@ -75,12 +75,19 @@ class UpdateService
             $status = $hasUpdate ? UpdateLog::STATUS_AVAILABLE : UpdateLog::STATUS_SUCCESS;
             $message = $hasUpdate ? "Update available: v{$latestVersion}" : 'System is up to date';
 
+            // Prefer zipball for easier extraction; fall back to tarball
+            $downloadUrl = $release['zipball_url'] ?? $release['tarball_url'] ?? '';
+            $changelog = $release['body'] ?? '';
+            if (empty(trim($changelog))) {
+                $changelog = 'No changelog available';
+            }
+
             $this->logUpdate('check', $status, $latestVersion, $message, [
                 'current_version' => $this->currentVersion,
                 'latest_version' => $latestVersion,
                 'has_update' => $hasUpdate,
-                'changelog' => $release['body'] ?? '',
-                'download_url' => $release['tarball_url'] ?? '',
+                'changelog' => $changelog,
+                'download_url' => $downloadUrl,
                 'html_url' => $release['html_url'] ?? '',
             ]);
 
@@ -89,8 +96,8 @@ class UpdateService
                 'has_update' => $hasUpdate,
                 'current_version' => $this->currentVersion,
                 'latest_version' => $latestVersion,
-                'changelog' => $release['body'] ?? 'No changelog available',
-                'download_url' => $release['tarball_url'] ?? '',
+                'changelog' => $changelog,
+                'download_url' => $downloadUrl,
                 'html_url' => $release['html_url'] ?? '',
                 'published_at' => $release['published_at'] ?? null,
             ];
@@ -118,7 +125,15 @@ class UpdateService
             $this->logUpdate('download', UpdateLog::STATUS_PENDING, $version, 'Downloading update...');
             $archiveFile = $tempDir . '/update.tar.gz';
 
-            $response = Http::timeout(120)->get($downloadUrl);
+            $downloadHeaders = ['Accept' => 'application/octet-stream'];
+            if ($this->githubToken) {
+                $downloadHeaders['Authorization'] = "token {$this->githubToken}";
+            }
+
+            $response = Http::withHeaders($downloadHeaders)
+                ->timeout(120)
+                ->withOptions(['allow_redirects' => true])
+                ->get($downloadUrl);
             if (!$response->successful()) {
                 throw new \Exception('Failed to download update package');
             }
@@ -130,9 +145,22 @@ class UpdateService
             $extractPath = $tempDir . '/extracted';
             File::ensureDirectoryExists($extractPath);
 
-            // Extract tar.gz
-            $command = "tar -xzf " . escapeshellarg($archiveFile) . " -C " . escapeshellarg($extractPath);
-            exec($command, $output, $returnCode);
+            // Detect archive type and extract accordingly
+            $isZip = str_contains($downloadUrl, 'zipball') || str_ends_with($archiveFile, '.zip');
+            if ($isZip) {
+                $zip = new \ZipArchive();
+                if ($zip->open($archiveFile) === true) {
+                    $zip->extractTo($extractPath);
+                    $zip->close();
+                    $returnCode = 0;
+                } else {
+                    $returnCode = 1;
+                }
+                $output = [];
+            } else {
+                $command = "tar -xzf " . escapeshellarg($archiveFile) . " -C " . escapeshellarg($extractPath);
+                exec($command, $output, $returnCode);
+            }
             
             if ($returnCode !== 0) {
                 throw new \Exception('Failed to extract update package');
@@ -231,18 +259,27 @@ class UpdateService
 
     private function backupFiles(string $backupPath): void
     {
-        $dirsToBackup = ['app', 'config', 'database', 'resources', 'routes'];
+        $dirsToBackup = ['app', 'config', 'database', 'resources', 'routes', 'bootstrap'];
         foreach ($dirsToBackup as $dir) {
             $source = base_path($dir);
             if (File::exists($source)) {
                 File::copyDirectory($source, $backupPath . '/' . $dir);
             }
         }
+
+        // Backup root files
+        $rootFiles = ['composer.json', 'CHANGELOG.md', 'LICENSE', '.gitignore'];
+        foreach ($rootFiles as $file) {
+            $source = base_path($file);
+            if (File::exists($source)) {
+                File::copy($source, $backupPath . '/' . $file);
+            }
+        }
     }
 
     private function installFiles(string $sourcePath): void
     {
-        $updateDirs = ['app', 'config', 'database', 'resources', 'routes'];
+        $updateDirs = ['app', 'config', 'database', 'resources', 'routes', 'bootstrap'];
 
         foreach ($updateDirs as $dir) {
             $source = $sourcePath . '/' . $dir;
@@ -253,6 +290,35 @@ class UpdateService
                     File::deleteDirectory($dest);
                 }
                 File::copyDirectory($source, $dest);
+            }
+        }
+
+        // Copy root-level files
+        $rootFiles = ['composer.json', 'CHANGELOG.md', 'LICENSE', '.gitignore'];
+        foreach ($rootFiles as $file) {
+            $source = $sourcePath . '/' . $file;
+            if (File::exists($source)) {
+                File::copy($source, base_path($file));
+            }
+        }
+
+        // Copy public assets (excluding user uploads)
+        $publicSource = $sourcePath . '/public';
+        if (File::exists($publicSource)) {
+            $excludeDirs = ['images', 'storage'];
+            foreach (File::directories($publicSource) as $dir) {
+                $dirName = basename($dir);
+                if (!in_array($dirName, $excludeDirs)) {
+                    $dest = public_path($dirName);
+                    if (File::exists($dest)) {
+                        File::deleteDirectory($dest);
+                    }
+                    File::copyDirectory($dir, $dest);
+                }
+            }
+            // Copy root public files (index.php, .htaccess, robots.txt, etc.)
+            foreach (File::files($publicSource) as $file) {
+                File::copy($file->getPathname(), public_path($file->getFilename()));
             }
         }
     }
@@ -279,7 +345,7 @@ class UpdateService
 
     private function restoreBackup(string $backupPath): void
     {
-        $dirsToRestore = ['app', 'config', 'database', 'resources', 'routes'];
+        $dirsToRestore = ['app', 'config', 'database', 'resources', 'routes', 'bootstrap'];
         
         foreach ($dirsToRestore as $dir) {
             $source = $backupPath . '/' . $dir;
@@ -290,6 +356,15 @@ class UpdateService
                     File::deleteDirectory($dest);
                 }
                 File::copyDirectory($source, $dest);
+            }
+        }
+
+        // Restore root files
+        $rootFiles = ['composer.json', 'CHANGELOG.md', 'LICENSE', '.gitignore'];
+        foreach ($rootFiles as $file) {
+            $source = $backupPath . '/' . $file;
+            if (File::exists($source)) {
+                File::copy($source, base_path($file));
             }
         }
     }

@@ -3,8 +3,8 @@
 @section('content')
 <div class="page-header" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 120px 0 60px; text-align: center;">
     <div class="container">
-        <h1 style="font-size: 48px; font-weight: 800;">Our Team</h1>
-        <p style="font-size: 18px; opacity: 0.9; max-width: 600px; margin: 16px auto 0;">Meet the talented DJs and staff behind NovaRadio</p>
+        <h1 style="font-size: 48px; font-weight: 800;">{{ __('frontend.team_page.title') }}</h1>
+        <p style="font-size: 18px; opacity: 0.9; max-width: 600px; margin: 16px auto 0;">{{ __('frontend.team_page.subtitle') }}</p>
     </div>
 </div>
 
@@ -41,7 +41,7 @@
             @empty
                 <div style="grid-column: 1 / -1; text-align: center; padding: 60px;">
                     <i class="fas fa-users" style="font-size: 48px; color: var(--color-text-muted); margin-bottom: 16px;"></i>
-                    <p style="color: var(--color-text-muted);">No team members added yet.</p>
+                    <p style="color: var(--color-text-muted);">{{ __('admin.team.no_members') }}</p>
                 </div>
             @endforelse
         </div>

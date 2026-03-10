@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'My DJ Profile')
+@section('title', __('admin.dj_profile.title'))
 
 @section('content')
 <div class="page-header">
-    <h1><i class="fas fa-user-circle"></i> My DJ Profile</h1>
+    <h1><i class="fas fa-user-circle"></i> {{ __('admin.dj_profile.title') }}</h1>
     <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Back to Dashboard
+        <i class="fas fa-arrow-left"></i> {{ __('admin.actions.back') }}
     </a>
 </div>
 
@@ -49,25 +49,25 @@
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Stage Name</label>
-                        <input type="text" name="stage_name" value="{{ old('stage_name', $djProfile->stage_name) }}" placeholder="Your DJ name">
+                        <label>{{ __('admin.dj_profile.stage_name') }}</label>
+                        <input type="text" name="stage_name" value="{{ old('stage_name', $djProfile->stage_name) }}" placeholder="{{ __('admin.dj_profile.stage_name_placeholder') }}">
                     </div>
                     <div class="form-group">
-                        <label>Genre</label>
-                        <input type="text" name="genre" value="{{ old('genre', $djProfile->genre) }}" placeholder="e.g. House, Techno, Jazz">
+                        <label>{{ __('admin.dj_profile.genre') }}</label>
+                        <input type="text" name="genre" value="{{ old('genre', $djProfile->genre) }}" placeholder="{{ __('admin.dj_profile.genre_placeholder') }}">
                     </div>
                 </div>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Years of Experience</label>
+                        <label>{{ __('admin.dj_profile.years_experience') }}</label>
                         <input type="number" name="years_experience" value="{{ old('years_experience', $djProfile->years_experience) }}" min="0">
                     </div>
                     <div class="form-group checkbox-group" style="align-self: end;">
                         <label class="checkbox-label">
                             <input type="checkbox" name="is_resident" value="1" {{ old('is_resident', $djProfile->is_resident) ? 'checked' : '' }}>
                             <span class="checkmark"></span>
-                            Resident DJ
+                            {{ __('admin.dj_profile.is_resident') }}
                         </label>
                     </div>
                 </div>
@@ -75,16 +75,16 @@
         </div>
         
         <div class="form-group">
-            <label>Biography</label>
-            <textarea name="biography" rows="6" class="rich-editor" placeholder="Tell your story...">{{ old('biography', $djProfile->biography) }}</textarea>
+            <label>{{ __('admin.dj_profile.biography') }}</label>
+            <textarea name="biography" rows="6" class="rich-editor" placeholder="{{ __('admin.dj_profile.biography_placeholder') }}">{{ old('biography', $djProfile->biography) }}</textarea>
         </div>
         
         <div class="form-group">
-            <label>Equipment</label>
-            <input type="text" name="equipment" value="{{ old('equipment', $djProfile->equipment) }}" placeholder="e.g. Pioneer CDJ-3000, DJM-900">
+            <label>{{ __('admin.dj_profile.equipment') }}</label>
+            <input type="text" name="equipment" value="{{ old('equipment', $djProfile->equipment) }}" placeholder="{{ __('admin.dj_profile.equipment_placeholder') }}">
         </div>
         
-        <h4 style="margin: 32px 0 16px; padding-top: 24px; border-top: 1px solid var(--border-color);">Social Links</h4>
+        <h4 style="margin: 32px 0 16px; padding-top: 24px; border-top: 1px solid var(--border-color);">{{ __('admin.dj_profile.social_links') }}</h4>
         
         <div class="form-row">
             <div class="form-group">
@@ -110,10 +110,10 @@
         
         <div style="display: flex; gap: 12px; margin-top: 32px;">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> Save Profile
+                <i class="fas fa-save"></i> {{ __('admin.actions.save') }}
             </button>
             <a href="{{ route('dj.show', $member->slug) }}" target="_blank" class="btn btn-secondary">
-                <i class="fas fa-external-link-alt"></i> View Public Profile
+                <i class="fas fa-external-link-alt"></i> {{ __('admin.dj_profile.view_public_profile') }}
             </a>
         </div>
     </form>
@@ -190,13 +190,13 @@ document.getElementById('photo-upload')?.addEventListener('change', async (e) =>
         if (data.success) {
             document.getElementById('photo').value = data.url.replace(window.location.origin + '/', '');
             document.getElementById('photo-preview').innerHTML = '<img src="' + data.url + '" alt="Photo" style="width: 100%; height: 100%; object-fit: cover;">';
-            showToast('Photo uploaded successfully!', 'success');
+            showToast('{{ __('admin.dj_profile.photo_uploaded') }}', 'success');
         } else {
-            showToast(data.message || 'Failed to upload photo', 'error');
+            showToast(data.message || '{{ __('admin.dj_profile.photo_upload_failed') }}', 'error');
         }
     } catch (err) {
         console.error('Upload failed:', err);
-        showToast('Upload failed. Please try again.', 'error');
+        showToast('{{ __('admin.media.upload_failed') }}', 'error');
     }
 });
 </script>

@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Pages')
+@section('title', __('admin.pages.title'))
 
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-    <h2 style="font-size: 24px; font-weight: 700;">Pages</h2>
+    <h2 style="font-size: 24px; font-weight: 700;">{{ __('admin.pages.title') }}</h2>
     <a href="{{ route('admin.pages.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add Page
+        <i class="fas fa-plus"></i> {{ __('admin.pages.create') }}
     </a>
 </div>
 
@@ -14,11 +14,11 @@
     <table>
         <thead>
             <tr>
-                <th>Title</th>
-                <th>Slug</th>
-                <th>Status</th>
-                <th>Published</th>
-                <th>Actions</th>
+                <th>{{ __('admin.pages.page_title') }}</th>
+                <th>{{ __('admin.pages.slug') }}</th>
+                <th>{{ __('admin.pages.status') }}</th>
+                <th>{{ __('admin.pages.published_at') }}</th>
+                <th>{{ __('admin.actions.actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -28,11 +28,11 @@
                     <td><code style="background: #f1f5f9; padding: 4px 8px; border-radius: 4px; font-size: 12px;">{{ $page->slug }}</code></td>
                     <td>
                         <span class="badge badge-{{ $page->status }}">
-                            {{ ucfirst($page->status) }}
+                            {{ __('admin.pages.' . $page->status) }}
                         </span>
                     </td>
                     <td style="color: #64748b; font-size: 13px;">
-                        {{ $page->published_at?->format('M d, Y') ?? 'Not published' }}
+                        {{ $page->published_at?->format('M d, Y') ?? __('admin.pages.not_published') }}
                     </td>
                     <td>
                         <div style="display: flex; gap: 8px;">
@@ -42,7 +42,7 @@
                             <a href="{{ route('admin.pages.edit', $page) }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('admin.pages.destroy', $page) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this page?');">
+                            <form action="{{ route('admin.pages.destroy', $page) }}" method="POST" style="display: inline;" onsubmit="return confirm('{{ __('admin.actions.confirm_delete') }}');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
@@ -56,7 +56,7 @@
                 <tr>
                     <td colspan="5" style="text-align: center; padding: 40px; color: #64748b;">
                         <i class="fas fa-inbox" style="font-size: 32px; margin-bottom: 12px; display: block;"></i>
-                        No pages found
+                        {{ __('admin.pages.no_pages') }}
                     </td>
                 </tr>
             @endforelse

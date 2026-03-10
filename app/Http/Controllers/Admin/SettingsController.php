@@ -30,6 +30,11 @@ class SettingsController extends Controller
     {
         $data = $request->except('_token');
         
+        // Only admin can change site language
+        if (!auth()->user()->isAdmin()) {
+            unset($data['site_language']);
+        }
+        
         // Map setting keys to their correct groups
         $groupMap = [
             'site_name' => 'general', 'site_tagline' => 'general', 'site_description' => 'general',

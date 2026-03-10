@@ -7,7 +7,7 @@
 <section class="category-hero" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 80px 0; color: white;">
     <div class="container">
         <div style="display: inline-block; background: {{ $category->color }}; color: white; padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; margin-bottom: 16px;">
-            <i class="fas fa-folder"></i> Category
+            <i class="fas fa-folder"></i> {{ __('frontend.articles.category_label') }}
         </div>
         <h1 style="font-size: 48px; font-weight: 800; margin-bottom: 16px;">{{ $category->name }}</h1>
         @if($category->description)
@@ -20,7 +20,7 @@
     <div class="container">
         {{-- Categories Filter --}}
         <div class="categories-filter" style="margin-bottom: 40px;">
-            <a href="{{ route('articles.index') }}" class="btn btn-secondary">All</a>
+            <a href="{{ route('articles.index') }}" class="btn btn-secondary">{{ __('frontend.articles.all') }}</a>
             @foreach($categories as $cat)
                 <a href="{{ route('articles.category', $cat->slug) }}" class="btn {{ $cat->id === $category->id ? 'btn-primary' : 'btn-secondary' }}" style="margin-left: 8px;">
                     {{ $cat->name }}
@@ -69,8 +69,7 @@
         @else
             <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 16px;">
                 <i class="fas fa-inbox" style="font-size: 64px; color: var(--color-text-light); margin-bottom: 16px;"></i>
-                <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 8px;">No articles yet</h3>
-                <p style="color: var(--color-text-light);">Articles in this category will appear here.</p>
+                <h3 style="font-size: 24px; font-weight: 600; margin-bottom: 8px;">{{ __('frontend.articles.no_articles') }}</h3>
             </div>
         @endif
     </div>

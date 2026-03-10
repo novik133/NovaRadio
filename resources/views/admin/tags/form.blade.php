@@ -1,11 +1,11 @@
 @extends('admin.layout')
 
-@section('title', $tag->id ? 'Edit Tag' : 'New Tag')
+@section('title', $tag->id ? __('admin.tags.edit') : __('admin.tags.create'))
 
 @section('content')
 <div class="page-header">
-    <h1>{{ $tag->id ? 'Edit Tag' : 'New Tag' }}</h1>
-    <a href="{{ route('admin.tags.index') }}" class="btn btn-secondary">Back</a>
+    <h1>{{ $tag->id ? __('admin.tags.edit') : __('admin.tags.create') }}</h1>
+    <a href="{{ route('admin.tags.index') }}" class="btn btn-secondary">{{ __('admin.actions.back') }}</a>
 </div>
 
 <div class="card">
@@ -17,20 +17,20 @@
         
         <div class="form-row">
             <div class="form-group">
-                <label>Name</label>
+                <label>{{ __('admin.tags.name') }}</label>
                 <input type="text" name="name" value="{{ old('name', $tag->name) }}" required>
             </div>
             <div class="form-group">
-                <label>Slug (optional)</label>
+                <label>{{ __('admin.tags.slug_optional') }}</label>
                 <input type="text" name="slug" value="{{ old('slug', $tag->slug) }}">
             </div>
         </div>
         
         <div style="display: flex; gap: 12px;">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> {{ $tag->id ? 'Update' : 'Create' }}
+                <i class="fas fa-save"></i> {{ $tag->id ? __('admin.actions.update') : __('admin.actions.create') }}
             </button>
-            <a href="{{ route('admin.tags.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.tags.index') }}" class="btn btn-secondary">{{ __('admin.actions.cancel') }}</a>
         </div>
     </form>
 </div>

@@ -1,12 +1,12 @@
 @extends('themes.default.layout')
 
-@section('title', 'Events & Gigs')
+@section('title', __('frontend.events_page.title'))
 
 @section('content')
 <section class="events-hero" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 80px 0; color: white;">
     <div class="container">
-        <h1 style="font-size: 48px; font-weight: 800; margin-bottom: 16px;">Events & Gigs</h1>
-        <p style="font-size: 20px; color: #94a3b8;">Upcoming shows and live performances</p>
+        <h1 style="font-size: 48px; font-weight: 800; margin-bottom: 16px;">{{ __('frontend.events_page.title') }}</h1>
+        <p style="font-size: 20px; color: #94a3b8;">{{ __('frontend.events_page.subtitle') }}</p>
     </div>
 </section>
 
@@ -16,7 +16,7 @@
         @if($ongoing->count() > 0)
         <div style="margin-bottom: 60px;">
             <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 30px; color: #22c55e;">
-                <i class="fas fa-broadcast-tower"></i> Live Now
+                <i class="fas fa-broadcast-tower"></i> {{ __('frontend.schedule_page.live_now') }}
             </h2>
             <div class="events-grid" style="display: grid; gap: 24px;">
                 @foreach($ongoing as $event)
@@ -44,7 +44,7 @@
         
         {{-- Upcoming Events --}}
         <div style="margin-bottom: 60px;">
-            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 30px;">Upcoming Events</h2>
+            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 30px;">{{ __('frontend.sections.upcoming_events') }}</h2>
             @if($upcoming->count() > 0)
             <div class="events-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px;">
                 @foreach($upcoming as $event)
@@ -62,7 +62,7 @@
                                 {{ $event->start_date->format('M d, Y') }}
                             </span>
                             @if($event->is_free)
-                                <span style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">FREE</span>
+                                <span style="background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">{{ __('frontend.events_page.free') }}</span>
                             @else
                                 <span style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">${{ $event->ticket_price }}</span>
                             @endif
@@ -72,9 +72,9 @@
                             <i class="fas fa-map-marker-alt"></i> {{ $event->venue }}, {{ $event->city }}
                         </p>
                         <div style="display: flex; gap: 12px;">
-                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary" style="flex: 1; text-align: center;">Details</a>
+                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary" style="flex: 1; text-align: center;">{{ __('frontend.sections.details') }}</a>
                             @if($event->ticket_url)
-                                <a href="{{ $event->ticket_url }}" target="_blank" class="btn btn-secondary" style="flex: 1; text-align: center;">Get Tickets</a>
+                                <a href="{{ $event->ticket_url }}" target="_blank" class="btn btn-secondary" style="flex: 1; text-align: center;">{{ __('frontend.events_page.buy_tickets') }}</a>
                             @endif
                         </div>
                     </div>
@@ -84,8 +84,8 @@
             @else
             <div style="text-align: center; padding: 60px; background: var(--bg-light); border-radius: 16px;">
                 <i class="fas fa-calendar" style="font-size: 48px; color: var(--text-muted); margin-bottom: 16px;"></i>
-                <h3>No upcoming events</h3>
-                <p style="color: var(--text-muted);">Check back soon for new events!</p>
+                <h3>{{ __('frontend.events_page.no_events') }}</h3>
+                <p style="color: var(--text-muted);"></p>
             </div>
             @endif
         </div>
@@ -93,7 +93,7 @@
         {{-- Past Events --}}
         @if($past->count() > 0)
         <div>
-            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 30px; color: var(--text-muted);">Past Events</h2>
+            <h2 style="font-size: 28px; font-weight: 700; margin-bottom: 30px; color: var(--text-muted);">{{ __('frontend.events_page.past_events') }}</h2>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; opacity: 0.7;">
                 @foreach($past as $event)
                 <div style="background: white; border-radius: 12px; padding: 20px;">

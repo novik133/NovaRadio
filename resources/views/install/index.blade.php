@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Install NovaRadio</title>
+    <title>{{ __('installer.title') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -545,34 +545,34 @@
                 </div>
                 <span>NovaRadio</span>
             </div>
-            <p>Installation Wizard v2.0</p>
+            <p>{{ __('installer.title') }}</p>
         </div>
 
         <!-- Step Indicator -->
         <div class="step-indicator">
             <div class="step-dot active" data-step="1">
                 <span class="step-num">1</span>
-                <span class="step-label">License</span>
+                <span class="step-label">{{ __('installer.steps.license') }}</span>
             </div>
             <div class="step-line"></div>
             <div class="step-dot" data-step="2">
                 <span class="step-num">2</span>
-                <span class="step-label">Requirements</span>
+                <span class="step-label">{{ __('installer.steps.requirements') }}</span>
             </div>
             <div class="step-line"></div>
             <div class="step-dot" data-step="3">
                 <span class="step-num">3</span>
-                <span class="step-label">Database</span>
+                <span class="step-label">{{ __('installer.steps.database') }}</span>
             </div>
             <div class="step-line"></div>
             <div class="step-dot" data-step="4">
                 <span class="step-num">4</span>
-                <span class="step-label">Admin</span>
+                <span class="step-label">{{ __('installer.steps.admin') }}</span>
             </div>
             <div class="step-line"></div>
             <div class="step-dot" data-step="5">
                 <span class="step-num">5</span>
-                <span class="step-label">Streaming</span>
+                <span class="step-label">{{ __('installer.steps.streaming') }}</span>
             </div>
         </div>
 
@@ -590,15 +590,15 @@
                 <!-- Step 1: License -->
                 <div class="step-panel active" id="step-1">
                     <div class="card-body">
-                        <div class="card-title"><i class="fas fa-file-contract"></i> License Agreement</div>
-                        <div class="card-subtitle">Please read and accept the license before continuing</div>
+                        <div class="card-title"><i class="fas fa-file-contract"></i> {{ __('installer.license_title') }}</div>
+                        <div class="card-subtitle">{{ __('installer.license_subtitle') }}</div>
 
                         <div class="license-box">{{ $license }}</div>
 
                         <div class="license-accept">
                             <div class="license-accept-text">
-                                I accept the license agreement
-                                <small>You must accept to continue installation</small>
+                                {{ __('installer.accept_license') }}
+                                <small>{{ __('installer.must_accept') }}</small>
                             </div>
                             <div class="switch-toggle">
                                 <input type="checkbox" id="license_accepted" name="license_accepted">
@@ -609,7 +609,7 @@
                     <div class="card-footer">
                         <div></div>
                         <button type="button" class="btn btn-primary" id="btn-next-1" disabled onclick="goToStep(2)">
-                            Next <i class="fas fa-arrow-right"></i>
+                            {{ __('installer.next') }} <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
@@ -617,8 +617,8 @@
                 <!-- Step 2: Requirements -->
                 <div class="step-panel" id="step-2">
                     <div class="card-body">
-                        <div class="card-title"><i class="fas fa-clipboard-check"></i> System Requirements</div>
-                        <div class="card-subtitle">Ensure your server meets all requirements</div>
+                        <div class="card-title"><i class="fas fa-clipboard-check"></i> {{ __('installer.requirements_title') }}</div>
+                        <div class="card-subtitle">{{ __('installer.requirements_subtitle') }}</div>
 
                         <div class="requirements-grid">
                             @foreach($requirements as $req)
@@ -636,10 +636,10 @@
                     </div>
                     <div class="card-footer">
                         <button type="button" class="btn btn-secondary" onclick="goToStep(1)">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> {{ __('installer.previous') }}
                         </button>
                         <button type="button" class="btn btn-primary" onclick="goToStep(3)" {{ $allMet ? '' : 'disabled' }}>
-                            Next <i class="fas fa-arrow-right"></i>
+                            {{ __('installer.next') }} <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
@@ -647,38 +647,38 @@
                 <!-- Step 3: Database -->
                 <div class="step-panel" id="step-3">
                     <div class="card-body">
-                        <div class="card-title"><i class="fas fa-database"></i> Database Configuration</div>
-                        <div class="card-subtitle">Enter your MySQL database credentials</div>
+                        <div class="card-title"><i class="fas fa-database"></i> {{ __('installer.database_title') }}</div>
+                        <div class="card-subtitle">{{ __('installer.database_subtitle') }}</div>
 
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="db_host">Database Host</label>
+                                <label for="db_host">{{ __('installer.db_host') }}</label>
                                 <input type="text" id="db_host" name="db_host" value="{{ old('db_host', '127.0.0.1') }}" required>
                             </div>
                             <div class="form-group">
-                                <label for="db_port">Database Port</label>
+                                <label for="db_port">{{ __('installer.db_port') }}</label>
                                 <input type="number" id="db_port" name="db_port" value="{{ old('db_port', '3306') }}" required>
                             </div>
                             <div class="form-group">
-                                <label for="db_database">Database Name</label>
+                                <label for="db_database">{{ __('installer.db_name') }}</label>
                                 <input type="text" id="db_database" name="db_database" value="{{ old('db_database') }}" placeholder="novaradio" required>
                             </div>
                             <div class="form-group">
-                                <label for="db_username">Database Username</label>
+                                <label for="db_username">{{ __('installer.db_username') }}</label>
                                 <input type="text" id="db_username" name="db_username" value="{{ old('db_username') }}" placeholder="root" required>
                             </div>
                             <div class="form-group full-width">
-                                <label for="db_password">Database Password</label>
+                                <label for="db_password">{{ __('installer.db_password') }}</label>
                                 <input type="password" id="db_password" name="db_password" placeholder="Leave empty if no password">
                             </div>
                         </div>
                     </div>
                     <div class="card-footer">
                         <button type="button" class="btn btn-secondary" onclick="goToStep(2)">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> {{ __('installer.previous') }}
                         </button>
                         <button type="button" class="btn btn-primary" onclick="goToStep(4)">
-                            Next <i class="fas fa-arrow-right"></i>
+                            {{ __('installer.next') }} <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
@@ -686,35 +686,35 @@
                 <!-- Step 4: Admin Account -->
                 <div class="step-panel" id="step-4">
                     <div class="card-body">
-                        <div class="card-title"><i class="fas fa-user-shield"></i> Admin Account</div>
-                        <div class="card-subtitle">Create your administrator account</div>
+                        <div class="card-title"><i class="fas fa-user-shield"></i> {{ __('installer.admin_title') }}</div>
+                        <div class="card-subtitle">{{ __('installer.admin_subtitle') }}</div>
 
                         <div class="form-grid">
                             <div class="form-group">
-                                <label for="admin_name">Admin Name</label>
+                                <label for="admin_name">{{ __('installer.admin_name') }}</label>
                                 <input type="text" id="admin_name" name="admin_name" value="{{ old('admin_name', 'Administrator') }}" required>
                             </div>
                             <div class="form-group">
-                                <label for="admin_email">Admin Email</label>
+                                <label for="admin_email">{{ __('installer.admin_email') }}</label>
                                 <input type="email" id="admin_email" name="admin_email" value="{{ old('admin_email') }}" placeholder="admin@example.com" required>
                             </div>
                             <div class="form-group">
-                                <label for="admin_password">Password</label>
+                                <label for="admin_password">{{ __('installer.admin_password') }}</label>
                                 <input type="password" id="admin_password" name="admin_password" required>
-                                <small>Minimum 8 characters</small>
+                                <small>{{ __('installer.password_min') }}</small>
                             </div>
                             <div class="form-group">
-                                <label for="admin_password_confirmation">Confirm Password</label>
+                                <label for="admin_password_confirmation">{{ __('installer.admin_password_confirm') }}</label>
                                 <input type="password" id="admin_password_confirmation" name="admin_password_confirmation" required>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer">
                         <button type="button" class="btn btn-secondary" onclick="goToStep(3)">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> {{ __('installer.previous') }}
                         </button>
                         <button type="button" class="btn btn-primary" onclick="goToStep(5)">
-                            Next <i class="fas fa-arrow-right"></i>
+                            {{ __('installer.next') }} <i class="fas fa-arrow-right"></i>
                         </button>
                     </div>
                 </div>
@@ -722,16 +722,16 @@
                 <!-- Step 5: Streaming (AzuraCast) -->
                 <div class="step-panel" id="step-5">
                     <div class="card-body">
-                        <div class="card-title"><i class="fas fa-broadcast-tower"></i> Streaming Setup</div>
-                        <div class="card-subtitle">Configure AzuraCast integration (optional, can be set later in admin panel)</div>
+                        <div class="card-title"><i class="fas fa-broadcast-tower"></i> {{ __('installer.streaming_title') }}</div>
+                        <div class="card-subtitle">{{ __('installer.streaming_subtitle') }}</div>
 
                         <div class="form-grid">
                             <div class="form-group full-width">
-                                <label for="azuracast_url">AzuraCast URL</label>
+                                <label for="azuracast_url">{{ __('installer.azuracast_url') }}</label>
                                 <input type="url" id="azuracast_url" name="azuracast_url" value="{{ old('azuracast_url') }}" placeholder="https://your-azuracast.com">
                             </div>
                             <div class="form-group full-width">
-                                <label for="azuracast_api_key">AzuraCast API Key</label>
+                                <label for="azuracast_api_key">{{ __('installer.azuracast_api_key') }}</label>
                                 <input type="text" id="azuracast_api_key" name="azuracast_api_key" value="{{ old('azuracast_api_key') }}" placeholder="Your API key">
                             </div>
                         </div>
@@ -742,18 +742,18 @@
 
                         <div class="form-grid">
                             <div class="form-group full-width">
-                                <label for="stream_url">Direct Stream URL</label>
-                                <input type="url" id="stream_url" name="stream_url" value="{{ old('stream_url') }}" placeholder="https://your-stream.com/radio.mp3">
-                                <small>Fallback URL if AzuraCast is not configured</small>
+                                <label for="stream_url">{{ __('installer.stream_url') }}</label>
+                                <input type="url" id="stream_url" name="stream_url" value="{{ old('stream_url') }}" placeholder="{{ __('installer.stream_url_placeholder') }}">
+                                <small>{{ __('installer.stream_url_hint') }}</small>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer">
                         <button type="button" class="btn btn-secondary" onclick="goToStep(4)">
-                            <i class="fas fa-arrow-left"></i> Back
+                            <i class="fas fa-arrow-left"></i> {{ __('installer.previous') }}
                         </button>
                         <button type="submit" class="btn btn-install" id="btn-submit">
-                            <i class="fas fa-rocket"></i> Install NovaRadio
+                            <i class="fas fa-rocket"></i> {{ __('installer.install') }}
                         </button>
                     </div>
                 </div>
@@ -839,7 +839,7 @@
             }
             const btn = document.getElementById('btn-submit');
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span> Installing...';
+            btn.innerHTML = '<span class="spinner"></span> {{ __('installer.installing') }}';
         });
     </script>
 </body>

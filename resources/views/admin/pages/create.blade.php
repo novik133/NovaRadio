@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Create Page')
+@section('title', __('admin.pages.create'))
 
 @php
 $page = new \App\Models\Page();

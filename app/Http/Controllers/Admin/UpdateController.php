@@ -23,7 +23,7 @@ class UpdateController extends Controller
     {
         $result = $this->updateService->checkForUpdates();
 
-        if ($result['success'] && $result['has_update'] ?? false) {
+        if ($result['success'] && ($result['has_update'] ?? false)) {
             return redirect()->route('admin.updates.index')
                 ->with('update_available', true)
                 ->with('version', $result['latest_version'])
@@ -33,7 +33,7 @@ class UpdateController extends Controller
         }
 
         return redirect()->route('admin.updates.index')
-            ->with('success', $result['success'] ? 'System is up to date' : 'Failed to check for updates');
+            ->with('success', $result['success'] ? __('admin.updates.check_success') : __('admin.updates.check_failed'));
     }
 
     public function install(Request $request)

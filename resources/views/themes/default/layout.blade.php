@@ -51,11 +51,11 @@
             </a>
 
             <nav class="nav-desktop">
-                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a>
-                <a href="{{ route('page.show', 'about') }}">About</a>
-                <a href="{{ route('schedule') }}">Schedule</a>
-                <a href="{{ route('team') }}">Team</a>
-                <a href="{{ route('page.show', 'contact') }}">Contact</a>
+                <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">{{ __('frontend.nav.home') }}</a>
+                <a href="{{ route('page.show', 'about') }}">{{ __('frontend.nav.about') }}</a>
+                <a href="{{ route('schedule') }}">{{ __('frontend.nav.schedule') }}</a>
+                <a href="{{ route('team') }}">{{ __('frontend.nav.team') }}</a>
+                <a href="{{ route('page.show', 'contact') }}">{{ __('frontend.nav.contact') }}</a>
             </nav>
 
             <button class="mobile-menu-toggle" aria-label="Menu">
@@ -78,7 +78,7 @@
                         <i class="fas fa-broadcast-tower"></i>
                         <span>{{ $siteName ?? 'NovaRadio' }}</span>
                     </div>
-                    <p class="footer-description">{{ $siteTagline ?? 'Your Soundtrack to Life' }}. Listen to the best music curated just for you.</p>
+                    <p class="footer-description">{{ __('frontend.footer.description', ['tagline' => $siteTagline ?? __('frontend.hero.tagline')]) }}</p>
                     <div class="footer-social">
                         <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
@@ -88,36 +88,36 @@
                 </div>
 
                 <div>
-                    <h4 class="footer-title">Navigation</h4>
+                    <h4 class="footer-title">{{ __('frontend.footer.navigation') }}</h4>
                     <ul class="footer-links">
-                        <li><a href="{{ route('home') }}">Home</a></li>
-                        <li><a href="{{ route('page.show', 'about') }}">About</a></li>
-                        <li><a href="{{ route('schedule') }}">Schedule</a></li>
-                        <li><a href="{{ route('team') }}">Team</a></li>
+                        <li><a href="{{ route('home') }}">{{ __('frontend.nav.home') }}</a></li>
+                        <li><a href="{{ route('page.show', 'about') }}">{{ __('frontend.nav.about') }}</a></li>
+                        <li><a href="{{ route('schedule') }}">{{ __('frontend.nav.schedule') }}</a></li>
+                        <li><a href="{{ route('team') }}">{{ __('frontend.nav.team') }}</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="footer-title">Legal</h4>
+                    <h4 class="footer-title">{{ __('frontend.footer.legal') }}</h4>
                     <ul class="footer-links">
-                        <li><a href="{{ route('page.show', 'privacy-policy') }}">Privacy Policy</a></li>
-                        <li><a href="{{ route('page.show', 'terms-of-service') }}">Terms of Service</a></li>
-                        <li><a href="{{ route('page.show', 'cookie-policy') }}">Cookie Policy</a></li>
+                        <li><a href="{{ route('page.show', 'privacy-policy') }}">{{ __('frontend.footer.privacy_policy') }}</a></li>
+                        <li><a href="{{ route('page.show', 'terms-of-service') }}">{{ __('frontend.footer.terms_of_service') }}</a></li>
+                        <li><a href="{{ route('page.show', 'cookie-policy') }}">{{ __('frontend.footer.cookie_policy') }}</a></li>
                     </ul>
                 </div>
 
                 <div>
-                    <h4 class="footer-title">Contact</h4>
+                    <h4 class="footer-title">{{ __('frontend.footer.contact') }}</h4>
                     <ul class="footer-links">
-                        <li><a href="{{ route('page.show', 'contact') }}">Contact Us</a></li>
+                        <li><a href="{{ route('page.show', 'contact') }}">{{ __('frontend.footer.contact_us') }}</a></li>
                         <li><a href="mailto:contact@novikradio.com">contact@novikradio.com</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; {{ date('Y') }} {{ $siteName ?? 'NovaRadio' }}. All rights reserved.</p>
-                <p>Made with <i class="fas fa-heart" style="color: var(--color-secondary);"></i> for music lovers</p>
+                <p>&copy; {{ date('Y') }} {{ $siteName ?? 'NovaRadio' }}. {{ __('frontend.footer.all_rights_reserved') }}</p>
+                <p>{{ __('frontend.footer.made_with_love', ['heart' => '<i class="fas fa-heart" style="color: var(--color-secondary);"></i>']) }}</p>
             </div>
         </div>
     </footer>
@@ -130,15 +130,15 @@
                 <div class="cookie-icon">
                     <i class="fas fa-cookie-bite"></i>
                 </div>
-                <h3>Cookie Preferences</h3>
-                <p>We use cookies to enhance your browsing experience, serve personalized content, and analyze our traffic. Please select your preferences below.</p>
+                <h3>{{ __('frontend.cookies.title') }}</h3>
+                <p>{{ __('frontend.cookies.description') }}</p>
             </div>
 
             <div class="cookie-options">
                 <div class="cookie-option cookie-option-disabled">
                     <div class="cookie-option-info">
-                        <strong>Essential Cookies</strong>
-                        <span>Required for the website to function properly. Cannot be disabled.</span>
+                        <strong>{{ __('frontend.cookies.essential') }}</strong>
+                        <span>{{ __('frontend.cookies.essential_desc') }}</span>
                     </div>
                     <div class="cookie-toggle">
                         <input type="checkbox" checked disabled id="essential-cookies">
@@ -148,8 +148,8 @@
 
                 <div class="cookie-option">
                     <div class="cookie-option-info">
-                        <strong>Analytics Cookies</strong>
-                        <span>Help us understand how visitors interact with our website.</span>
+                        <strong>{{ __('frontend.cookies.analytics') }}</strong>
+                        <span>{{ __('frontend.cookies.analytics_desc') }}</span>
                     </div>
                     <div class="cookie-toggle">
                         <input type="checkbox" id="analytics-cookies">
@@ -159,8 +159,8 @@
 
                 <div class="cookie-option">
                     <div class="cookie-option-info">
-                        <strong>Functional Cookies</strong>
-                        <span>Remember your preferences like volume settings.</span>
+                        <strong>{{ __('frontend.cookies.functional') }}</strong>
+                        <span>{{ __('frontend.cookies.functional_desc') }}</span>
                     </div>
                     <div class="cookie-toggle">
                         <input type="checkbox" id="functional-cookies">
@@ -170,14 +170,14 @@
             </div>
 
             <div class="cookie-actions">
-                <button id="customize-cookies" class="btn-cookie btn-cookie-outline">Customize</button>
-                <button id="essential-only" class="btn-cookie btn-cookie-secondary">Essential Only</button>
-                <button id="accept-all" class="btn-cookie btn-cookie-primary">Accept All</button>
+                <button id="customize-cookies" class="btn-cookie btn-cookie-outline">{{ __('frontend.cookies.customize') }}</button>
+                <button id="essential-only" class="btn-cookie btn-cookie-secondary">{{ __('frontend.cookies.essential_only') }}</button>
+                <button id="accept-all" class="btn-cookie btn-cookie-primary">{{ __('frontend.cookies.accept_all') }}</button>
             </div>
 
             <div class="cookie-footer">
                 <a href="{{ route('page.show', 'cookie-policy') }}" target="_blank">
-                    <i class="fas fa-external-link-alt"></i> Read full Cookie Policy
+                    <i class="fas fa-external-link-alt"></i> {{ __('frontend.cookies.read_full_policy') }}
                 </a>
             </div>
         </div>
@@ -203,10 +203,10 @@
             };
             
             const titles = {
-                success: title || 'Success',
-                error: title || 'Error',
-                warning: title || 'Warning',
-                info: title || 'Info'
+                success: title || '{{ __('frontend.toast.success') }}',
+                error: title || '{{ __('frontend.toast.error') }}',
+                warning: title || '{{ __('frontend.toast.warning') }}',
+                info: title || '{{ __('frontend.toast.info') }}'
             };
             
             toast.innerHTML = `

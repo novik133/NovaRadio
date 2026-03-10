@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Schedule')
+@section('title', __('admin.schedule.title'))
 
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-    <h2 style="font-size: 24px; font-weight: 700;">Schedule</h2>
+    <h2 style="font-size: 24px; font-weight: 700;">{{ __('admin.schedule.title') }}</h2>
     <a href="{{ route('admin.schedule.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add Show
+        <i class="fas fa-plus"></i> {{ __('admin.schedule.create') }}
     </a>
 </div>
 
@@ -27,12 +27,12 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Time</th>
-                            <th>Title</th>
-                            <th>Host</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>Actions</th>
+                            <th>{{ __('admin.schedule.start_time') }}</th>
+                            <th>{{ __('admin.schedule.show_name') }}</th>
+                            <th>{{ __('admin.schedule.dj') }}</th>
+                            <th>{{ __('admin.schedule.description') }}</th>
+                            <th>{{ __('admin.pages.status') }}</th>
+                            <th>{{ __('admin.actions.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,7 +49,7 @@
                             </td>
                             <td>
                                 <span class="badge badge-{{ $show->status === 'active' ? 'published' : 'draft' }}">
-                                    {{ ucfirst($show->status) }}
+                                    {{ $show->status === 'active' ? __('admin.schedule.active') : __('admin.schedule.inactive') }}
                                 </span>
                             </td>
                             <td>
@@ -57,7 +57,7 @@
                                     <a href="{{ route('admin.schedule.edit', $show) }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('admin.schedule.destroy', $show) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this show?');">
+                                    <form action="{{ route('admin.schedule.destroy', $show) }}" method="POST" style="display: inline;" onsubmit="return confirm('{{ __('admin.actions.confirm_delete') }}');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
@@ -74,7 +74,7 @@
         @else
             <div class="card" style="padding: 40px; text-align: center;">
                 <i class="fas fa-calendar-times" style="font-size: 32px; color: #cbd5e1; margin-bottom: 12px;"></i>
-                <p style="color: #64748b; margin: 0;">No shows scheduled for {{ $dayName }}</p>
+                <p style="color: #64748b; margin: 0;">{{ __('admin.schedule.no_shows') }}</p>
             </div>
         @endif
     </div>

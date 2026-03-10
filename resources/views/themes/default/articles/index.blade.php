@@ -1,12 +1,12 @@
 @extends('themes.default.layout')
 
-@section('title', 'News & Articles')
+@section('title', __('frontend.articles.title'))
 
 @section('content')
 <section class="articles-hero" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); padding: 80px 0; color: white;">
     <div class="container">
-        <h1 style="font-size: 48px; font-weight: 800; margin-bottom: 16px;">Latest News</h1>
-        <p style="font-size: 20px; color: #94a3b8;">Stay updated with the latest from NovaRadio</p>
+        <h1 style="font-size: 48px; font-weight: 800; margin-bottom: 16px;">{{ __('frontend.sections.latest_news') }}</h1>
+        <p style="font-size: 20px; color: #94a3b8;">{{ __('frontend.articles.subtitle') }}</p>
     </div>
 </section>
 
@@ -33,7 +33,7 @@
                             </span>
                         @endif
                         <span style="background: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                            <i class="fas fa-star"></i> Featured
+                            <i class="fas fa-star"></i> {{ __('admin.articles.featured') }}
                         </span>
                     </div>
                     <h2 style="font-size: 32px; font-weight: 700; margin-bottom: 16px; color: var(--color-text);">{{ $featured->title }}</h2>

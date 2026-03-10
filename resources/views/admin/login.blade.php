@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - NovaRadio</title>
+    <title>{{ __('auth.login.title') }} - NovaRadio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -89,7 +89,7 @@
     <div class="login-card">
         <div class="login-logo">
             <i class="fas fa-broadcast-tower"></i>
-            <h1>NovaRadio Admin</h1>
+            <h1>{{ __('auth.login.heading') }}</h1>
         </div>
 
         @if($errors->any())
@@ -101,15 +101,15 @@
         <form method="POST" action="{{ route('admin.login') }}">
             @csrf
             <div class="form-group">
-                <label>Email Address</label>
+                <label>{{ __('auth.login.email') }}</label>
                 <input type="email" name="email" required autofocus>
             </div>
             <div class="form-group">
-                <label>Password</label>
+                <label>{{ __('auth.login.password') }}</label>
                 <input type="password" name="password" required>
             </div>
             <button type="submit" class="btn-login">
-                <i class="fas fa-sign-in-alt"></i> Sign In
+                <i class="fas fa-sign-in-alt"></i> {{ __('auth.login.sign_in') }}
             </button>
         </form>
     </div>

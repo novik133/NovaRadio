@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Categories')
+@section('title', __('admin.categories.title'))
 
 @section('content')
 <div class="page-header">
-    <h1><i class="fas fa-folder"></i> Categories</h1>
+    <h1><i class="fas fa-folder"></i> {{ __('admin.categories.title') }}</h1>
     <a href="{{ route('admin.categories.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> New Category
+        <i class="fas fa-plus"></i> {{ __('admin.categories.create') }}
     </a>
 </div>
 
@@ -14,11 +14,11 @@
     <table>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Slug</th>
-                <th>Color</th>
-                <th>Order</th>
-                <th>Actions</th>
+                <th>{{ __('admin.categories.name') }}</th>
+                <th>{{ __('admin.categories.slug') }}</th>
+                <th>{{ __('admin.categories.color') }}</th>
+                <th>{{ __('admin.categories.order') }}</th>
+                <th>{{ __('admin.actions.actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -39,7 +39,7 @@
                     <a href="{{ route('admin.categories.edit', $category) }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" style="display: inline;" onsubmit="return confirm('Delete?');">
+                    <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" style="display: inline;" onsubmit="return confirm('{{ __('admin.actions.confirm_delete') }}');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger">
@@ -50,7 +50,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="5" class="empty-state">No categories</td>
+                <td colspan="5" class="empty-state">{{ __('admin.categories.no_categories') }}</td>
             </tr>
             @endforelse
         </tbody>

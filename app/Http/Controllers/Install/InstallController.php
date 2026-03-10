@@ -45,16 +45,16 @@ class InstallController extends Controller
         ]);
 
         try {
-            // Configure database connection at runtime
-            config([
+            $dbConfig = [
                 'database.connections.mysql.host' => $validated['db_host'],
                 'database.connections.mysql.port' => $validated['db_port'],
                 'database.connections.mysql.database' => $validated['db_database'],
                 'database.connections.mysql.username' => $validated['db_username'],
                 'database.connections.mysql.password' => $validated['db_password'] ?? '',
-            ]);
+            ];
 
-            // Purge and test connection
+            // Configure database connection at runtime
+            config($dbConfig);
             DB::purge('mysql');
             DB::reconnect('mysql');
             DB::connection('mysql')->getPdo();
@@ -69,22 +69,19 @@ class InstallController extends Controller
             }
             Artisan::call('config:clear');
 
-            // Re-apply runtime config after clearing (artisan may have reloaded)
-            config([
-                'database.connections.mysql.host' => $validated['db_host'],
-                'database.connections.mysql.port' => $validated['db_port'],
-                'database.connections.mysql.database' => $validated['db_database'],
-                'database.connections.mysql.username' => $validated['db_username'],
-                'database.connections.mysql.password' => $validated['db_password'] ?? '',
-            ]);
+            // Always re-apply runtime DB config after any Artisan call
+            // (Artisan calls may reload config from .env which resets runtime overrides)
+            config($dbConfig);
             DB::purge('mysql');
             DB::reconnect('mysql');
 
-            // Run migrations
-            Artisan::call('migrate', [
-                '--force' => true,
-                '--path' => 'database/migrations',
-            ]);
+            // Run migrations (no --path so Laravel discovers all migration files)
+            Artisan::call('migrate', ['--force' => true]);
+
+            // Re-apply DB config after migrate
+            config($dbConfig);
+            DB::purge('mysql');
+            DB::reconnect('mysql');
 
             // Verify critical tables exist
             $requiredTables = [
@@ -106,12 +103,22 @@ class InstallController extends Controller
             // Run seeders
             Artisan::call('db:seed', ['--force' => true]);
 
-            // Update admin user
-            DB::table('users')->where('id', 1)->update([
-                'name' => $validated['admin_name'],
-                'email' => $validated['admin_email'],
-                'password' => bcrypt($validated['admin_password']),
-            ]);
+            // Re-apply DB config after seeder
+            config($dbConfig);
+            DB::purge('mysql');
+            DB::reconnect('mysql');
+
+            // Update admin user with installer-provided credentials
+            // Use the seeder's default email to find the user, then overwrite
+            $adminUser = DB::table('users')->where('role', 'admin')->first();
+            if ($adminUser) {
+                DB::table('users')->where('id', $adminUser->id)->update([
+                    'name' => $validated['admin_name'],
+                    'email' => $validated['admin_email'],
+                    'password' => bcrypt($validated['admin_password']),
+                    'updated_at' => now(),
+                ]);
+            }
 
             // Save stream_url setting if provided
             if (!empty($validated['stream_url'])) {
@@ -128,10 +135,24 @@ class InstallController extends Controller
                 );
             }
 
+            // Update admin email in settings too
+            DB::table('settings')->updateOrInsert(
+                ['key' => 'admin_email'],
+                [
+                    'value' => $validated['admin_email'],
+                    'type' => 'string',
+                    'group' => 'legal',
+                    'label' => 'Administrator Email',
+                    'updated_at' => now(),
+                ]
+            );
+
             // Create storage symlink
             Artisan::call('storage:link', ['--force' => true]);
 
             // Final cache clear
+            config($dbConfig);
+            DB::purge('mysql');
             Artisan::call('config:clear');
             Artisan::call('cache:clear');
 
@@ -220,6 +241,9 @@ class InstallController extends Controller
         $azuracastUrl = $data['azuracast_url'] ?? '';
         $azuracastKey = $data['azuracast_api_key'] ?? '';
 
+        // Detect if the current request is HTTPS
+        $isSecure = request()->secure() ? 'true' : 'false';
+
         return <<<ENV
 APP_NAME=NovaRadio
 APP_ENV=production
@@ -241,17 +265,19 @@ LOG_DEPRECATIONS_CHANNEL=null
 LOG_LEVEL=error
 
 DB_CONNECTION=mysql
-DB_HOST={$data['db_host']}
+DB_HOST="{$data['db_host']}"
 DB_PORT={$data['db_port']}
-DB_DATABASE={$data['db_database']}
-DB_USERNAME={$data['db_username']}
-DB_PASSWORD={$dbPassword}
+DB_DATABASE="{$data['db_database']}"
+DB_USERNAME="{$data['db_username']}"
+DB_PASSWORD="{$dbPassword}"
 
 SESSION_DRIVER=file
 SESSION_LIFETIME=120
 SESSION_ENCRYPT=false
 SESSION_PATH=/
 SESSION_DOMAIN=null
+SESSION_SECURE_COOKIE={$isSecure}
+SESSION_SAME_SITE=lax
 
 BROADCAST_CONNECTION=log
 FILESYSTEM_DISK=local
@@ -259,8 +285,8 @@ QUEUE_CONNECTION=sync
 
 CACHE_STORE=file
 
-AZURACAST_BASE_URL={$azuracastUrl}
-AZURACAST_API_KEY={$azuracastKey}
+AZURACAST_BASE_URL="{$azuracastUrl}"
+AZURACAST_API_KEY="{$azuracastKey}"
 AZURACAST_STATION_ID=1
 
 GITHUB_REPO=novik133/NovaRadio

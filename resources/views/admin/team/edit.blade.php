@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Edit Team Member')
+@section('title', __('admin.team.edit'))
 
 @section('content')
 @include('admin.team.form')

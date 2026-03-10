@@ -1,10 +1,10 @@
 @extends('admin.layout')
 
-@section('title', 'My Profile')
+@section('title', __('admin.profile.title'))
 
 @section('content')
 <div class="content-header">
-    <h1>My Profile</h1>
+    <h1>{{ __('admin.profile.title') }}</h1>
 </div>
 
 <div class="content-body">
@@ -26,7 +26,7 @@
         <div class="col-md-8">
             <div class="card mb-4">
                 <div class="card-header">
-                    <h5>Profile Information</h5>
+                    <h5>{{ __('admin.profile.title') }}</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.profile.update') }}" method="POST">
@@ -34,22 +34,22 @@
                         @method('PUT')
 
                         <div class="form-group mb-3">
-                            <label for="name">Name *</label>
+                            <label for="name">{{ __('admin.profile.name') }} *</label>
                             <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $user->name) }}" required>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="email">Email *</label>
+                            <label for="email">{{ __('admin.profile.email') }} *</label>
                             <input type="email" name="email" id="email" class="form-control" value="{{ old('email', $user->email) }}" required>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="phone">Phone</label>
+                            <label for="phone">{{ __('admin.profile.phone') }}</label>
                             <input type="text" name="phone" id="phone" class="form-control" value="{{ old('phone', $user->phone) }}">
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="timezone">Timezone</label>
+                            <label for="timezone">{{ __('admin.profile.timezone') }}</label>
                             <select name="timezone" id="timezone" class="form-control">
                                 <option value="UTC" {{ old('timezone', $user->timezone) === 'UTC' ? 'selected' : '' }}>UTC</option>
                                 <option value="Europe/Warsaw" {{ old('timezone', $user->timezone) === 'Europe/Warsaw' ? 'selected' : '' }}>Europe/Warsaw</option>
@@ -60,18 +60,18 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="bio">Bio</label>
+                            <label for="bio">{{ __('admin.profile.bio') }}</label>
                             <textarea name="bio" id="bio" class="form-control rich-editor" rows="4">{{ old('bio', $user->bio) }}</textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                        <button type="submit" class="btn btn-primary">{{ __('admin.profile.update_profile') }}</button>
                     </form>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <h5>Change Password</h5>
+                    <h5>{{ __('admin.profile.change_password') }}</h5>
                 </div>
                 <div class="card-body">
                     <form action="{{ route('admin.profile.password') }}" method="POST">
@@ -79,21 +79,21 @@
                         @method('PUT')
 
                         <div class="form-group mb-3">
-                            <label for="current_password">Current Password</label>
+                            <label for="current_password">{{ __('admin.profile.current_password') }}</label>
                             <input type="password" name="current_password" id="current_password" class="form-control" required>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="password">New Password</label>
+                            <label for="password">{{ __('admin.profile.new_password') }}</label>
                             <input type="password" name="password" id="password" class="form-control" required>
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="password_confirmation">Confirm New Password</label>
+                            <label for="password_confirmation">{{ __('admin.profile.confirm_password') }}</label>
                             <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
                         </div>
 
-                        <button type="submit" class="btn btn-warning">Change Password</button>
+                        <button type="submit" class="btn btn-warning">{{ __('admin.profile.change_password') }}</button>
                     </form>
                 </div>
             </div>
@@ -102,7 +102,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    <h5>Avatar</h5>
+                    <h5>{{ __('admin.profile.avatar') }}</h5>
                 </div>
                 <div class="card-body text-center">
                     <img src="{{ $user->avatar ? asset($user->avatar) : asset('images/default-avatar.png') }}" 
@@ -111,7 +111,7 @@
                          style="width: 120px; height: 120px; object-fit: cover;">
                     
                     <div class="form-group">
-                        <label for="avatar-input">Upload New Avatar</label>
+                        <label for="avatar-input">{{ __('admin.profile.upload_avatar') }}</label>
                         <input type="file" id="avatar-input" class="form-control" accept="image/*">
                     </div>
                 </div>
@@ -119,12 +119,12 @@
 
             <div class="card mt-4">
                 <div class="card-header">
-                    <h5>Account Info</h5>
+                    <h5>{{ __('admin.profile.account_info') }}</h5>
                 </div>
                 <div class="card-body">
-                    <p><strong>Role:</strong> {{ ucfirst($user->role) }}</p>
-                    <p><strong>Member Since:</strong> {{ $user->created_at->format('M d, Y') }}</p>
-                    <p><strong>Status:</strong> {{ $user->is_active ? 'Active' : 'Inactive' }}</p>
+                    <p><strong>{{ __('admin.profile.role') }}:</strong> {{ ucfirst($user->role) }}</p>
+                    <p><strong>{{ __('admin.profile.member_since') }}:</strong> {{ $user->created_at->format('M d, Y') }}</p>
+                    <p><strong>{{ __('admin.profile.status') }}:</strong> {{ $user->is_active ? __('admin.profile.active') : __('admin.profile.inactive') }}</p>
                 </div>
             </div>
         </div>
@@ -150,14 +150,14 @@ document.getElementById('avatar-input').addEventListener('change', function(e) {
     .then(data => {
         if (data.success) {
             document.querySelector('.rounded-circle').src = data.url;
-            showToast('Avatar updated successfully!', 'success');
+            showToast('{{ __('admin.profile.avatar_updated') }}', 'success');
         } else {
-            showToast('Failed to upload avatar', 'error');
+            showToast('{{ __('admin.profile.avatar_upload_failed') }}', 'error');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        showToast('Error uploading avatar', 'error');
+        showToast('{{ __('admin.profile.avatar_upload_error') }}', 'error');
     });
 });
 </script>

@@ -1,15 +1,14 @@
 @extends('admin.layout')
 
-@section('title', 'Themes')
+@section('title', __('admin.themes.title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h1><i class="fas fa-palette"></i> Themes</h1>
-        <p style="color: var(--text-muted); margin-top: 4px;">Manage your website appearance</p>
+        <h1><i class="fas fa-palette"></i> {{ __('admin.themes.title') }}</h1>
     </div>
     <button class="btn btn-primary" onclick="document.getElementById('theme-upload-modal').classList.add('show')">
-        <i class="fas fa-upload"></i> Upload Theme
+        <i class="fas fa-upload"></i> {{ __('admin.themes.upload_theme') }}
     </button>
 </div>
 
@@ -30,13 +29,13 @@
             @else
                 <div class="no-screenshot">
                     <i class="fas fa-image"></i>
-                    <span>No preview</span>
+                    <span>{{ __('admin.themes.no_preview') }}</span>
                 </div>
             @endif
             
             @if($theme['active'])
                 <div class="active-badge">
-                    <i class="fas fa-check"></i> Active
+                    <i class="fas fa-check"></i> {{ __('admin.themes.active') }}
                 </div>
             @endif
             
@@ -45,13 +44,13 @@
                     <form method="POST" action="{{ route('admin.themes.activate', $theme['name']) }}" style="display: inline;">
                         @csrf
                         <button type="submit" class="btn-activate">
-                            <i class="fas fa-check"></i> Activate
+                            <i class="fas fa-check"></i> {{ __('admin.themes.activate') }}
                         </button>
                     </form>
                 @endif
                 
                 <button type="button" class="btn-preview" onclick="previewTheme('{{ $theme['name'] }}')">
-                    <i class="fas fa-eye"></i> Preview
+                    <i class="fas fa-eye"></i> {{ __('admin.themes.preview') }}
                 </button>
             </div>
         </div>
@@ -77,11 +76,11 @@
             @if(!$theme['active'] && $theme['name'] !== 'default')
                 <form method="POST" action="{{ route('admin.themes.delete', $theme['name']) }}" 
                       style="display: inline;"
-                      onsubmit="return confirm('Are you sure you want to delete this theme?');">
+                      onsubmit="return confirm('{{ __('admin.themes.confirm_delete_theme') }}');">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn-delete">
-                        <i class="fas fa-trash"></i> Delete
+                        <i class="fas fa-trash"></i> {{ __('admin.actions.delete') }}
                     </button>
                 </form>
             @endif
@@ -90,8 +89,7 @@
     @empty
     <div class="empty-state">
         <i class="fas fa-palette"></i>
-        <h3>No themes found</h3>
-        <p>Upload your first theme to get started</p>
+        <h3>{{ __('admin.themes.no_themes') }}</h3>
     </div>
     @endforelse
 </div>
@@ -101,7 +99,7 @@
     <div class="modal-backdrop" onclick="this.parentElement.classList.remove('show')"></div>
     <div class="modal-content">
         <div class="modal-header">
-            <h3><i class="fas fa-upload"></i> Upload Theme</h3>
+            <h3><i class="fas fa-upload"></i> {{ __('admin.themes.upload_theme') }}</h3>
             <button type="button" class="btn-close" onclick="document.getElementById('theme-upload-modal').classList.remove('show')">
                 <i class="fas fa-times"></i>
             </button>
@@ -114,19 +112,19 @@
                 <div class="upload-icon">
                     <i class="fas fa-cloud-upload-alt"></i>
                 </div>
-                <p class="upload-text">Drag & drop your theme ZIP file here</p>
-                <p class="upload-or">or</p>
+                <p class="upload-text">{{ __('admin.themes.drag_drop_theme') }}</p>
+                <p class="upload-or">{{ __('admin.themes.or_text') }}</p>
                 <label for="theme-file" class="btn btn-secondary">
-                    <i class="fas fa-folder-open"></i> Browse Files
+                    <i class="fas fa-folder-open"></i> {{ __('admin.themes.browse_files') }}
                 </label>
                 <input type="file" id="theme-file" name="theme" accept=".zip" required style="display: none;">
-                <p class="upload-hint">Maximum file size: 10MB</p>
+                <p class="upload-hint">{{ __('admin.themes.max_file_size') }}</p>
             </div>
             
             <div class="file-info" id="file-info" style="display: none;">
                 <div class="file-selected">
                     <i class="fas fa-file-archive"></i>
-                    <span id="filename">No file selected</span>
+                    <span id="filename">{{ __('admin.themes.no_file_selected') }}</span>
                     <button type="button" class="btn-remove" onclick="clearFile()">
                         <i class="fas fa-times"></i>
                     </button>
@@ -135,10 +133,10 @@
             
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" onclick="document.getElementById('theme-upload-modal').classList.remove('show')">
-                    Cancel
+                    {{ __('admin.actions.cancel') }}
                 </button>
                 <button type="submit" class="btn btn-primary" id="upload-btn" disabled>
-                    <i class="fas fa-upload"></i> Install Theme
+                    <i class="fas fa-upload"></i> {{ __('admin.themes.upload_theme') }}
                 </button>
             </div>
         </form>
@@ -150,7 +148,7 @@
     <div class="modal-backdrop" onclick="this.parentElement.classList.remove('show')"></div>
     <div class="modal-content modal-large">
         <div class="modal-header">
-            <h3 id="preview-title">Theme Preview</h3>
+            <h3 id="preview-title">{{ __('admin.themes.theme_preview') }}</h3>
             <button type="button" class="btn-close" onclick="document.getElementById('theme-preview-modal').classList.remove('show')">
                 <i class="fas fa-times"></i>
             </button>
@@ -606,14 +604,14 @@ function previewTheme(themeName) {
     fetch(`/admin/themes/${themeName}/preview`)
         .then(r => r.json())
         .then(data => {
-            document.getElementById('preview-title').textContent = `${data.name} Preview`;
+            document.getElementById('preview-title').textContent = `${data.name} {{ __('admin.themes.preview') }}`;
             document.getElementById('preview-name').textContent = data.name;
             document.getElementById('preview-desc').textContent = data.description;
             document.getElementById('preview-meta').innerHTML = `
-                <span><label>Version:</label> <span>v${data.version}</span></span>
-                <span><label>Author:</label> <span>${data.author}</span></span>
-                <span><label>Has CSS:</label> <span>${data.has_css ? 'Yes' : 'No'}</span></span>
-                <span><label>Has JS:</label> <span>${data.has_js ? 'Yes' : 'No'}</span></span>
+                <span><label>{{ __('admin.themes.version') }}:</label> <span>v${data.version}</span></span>
+                <span><label>{{ __('admin.themes.author') }}:</label> <span>${data.author}</span></span>
+                <span><label>{{ __('admin.themes.has_css') }}:</label> <span>${data.has_css ? '{{ __('admin.themes.yes') }}' : '{{ __('admin.themes.no') }}'}</span></span>
+                <span><label>{{ __('admin.themes.has_js') }}:</label> <span>${data.has_js ? '{{ __('admin.themes.yes') }}' : '{{ __('admin.themes.no') }}'}</span></span>
             `;
             
             const screenshot = document.getElementById('preview-screenshot');
@@ -623,7 +621,7 @@ function previewTheme(themeName) {
                 screenshot.innerHTML = `
                     <div style="text-align: center; color: var(--text-muted);">
                         <i class="fas fa-image" style="font-size: 64px; margin-bottom: 16px;"></i>
-                        <p>No screenshot available</p>
+                        <p>{{ __('admin.themes.no_screenshot') }}</p>
                     </div>
                 `;
             }

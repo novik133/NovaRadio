@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Tags')
+@section('title', __('admin.tags.title'))
 
 @section('content')
 <div class="page-header">
-    <h1><i class="fas fa-tags"></i> Tags</h1>
+    <h1><i class="fas fa-tags"></i> {{ __('admin.tags.title') }}</h1>
     <a href="{{ route('admin.tags.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> New Tag
+        <i class="fas fa-plus"></i> {{ __('admin.tags.create') }}
     </a>
 </div>
 
@@ -14,9 +14,9 @@
     <table>
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Slug</th>
-                <th>Actions</th>
+                <th>{{ __('admin.tags.name') }}</th>
+                <th>{{ __('admin.tags.slug') }}</th>
+                <th>{{ __('admin.actions.actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -28,7 +28,7 @@
                     <a href="{{ route('admin.tags.edit', $tag) }}" class="btn btn-sm btn-secondary">
                         <i class="fas fa-edit"></i>
                     </a>
-                    <form method="POST" action="{{ route('admin.tags.destroy', $tag) }}" style="display: inline;" onsubmit="return confirm('Delete?');">
+                    <form method="POST" action="{{ route('admin.tags.destroy', $tag) }}" style="display: inline;" onsubmit="return confirm('{{ __('admin.actions.confirm_delete') }}');">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger">
@@ -39,7 +39,7 @@
             </tr>
             @empty
             <tr>
-                <td colspan="3" class="empty-state">No tags</td>
+                <td colspan="3" class="empty-state">{{ __('admin.tags.no_tags') }}</td>
             </tr>
             @endforelse
         </tbody>

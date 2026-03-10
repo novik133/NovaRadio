@@ -1,19 +1,18 @@
 @extends('admin.layout')
 
-@section('title', 'Media Library')
+@section('title', __('admin.media.title'))
 
 @section('content')
 <div class="page-header">
     <div>
-        <h1><i class="fas fa-images"></i> Media Library</h1>
-        <p style="color: var(--text-muted); margin-top: 4px;">Manage your images and files</p>
+        <h1><i class="fas fa-images"></i> {{ __('admin.media.title') }}</h1>
     </div>
     <div style="display: flex; gap: 12px;">
         <button class="btn btn-secondary" onclick="createFolder()">
-            <i class="fas fa-folder-plus"></i> New Folder
+            <i class="fas fa-folder-plus"></i> {{ __('admin.media.create_folder') }}
         </button>
         <button class="btn btn-primary" onclick="document.getElementById('file-input').click()">
-            <i class="fas fa-upload"></i> Upload
+            <i class="fas fa-upload"></i> {{ __('admin.actions.upload') }}
         </button>
         <input type="file" id="file-input" multiple style="display: none;" onchange="uploadFiles(this.files)">
     </div>
@@ -78,8 +77,7 @@
     @if(empty($folders))
     <div class="empty-state" style="grid-column: 1 / -1;">
         <i class="fas fa-folder-open"></i>
-        <h3>Folder is empty</h3>
-        <p>Upload files or create folders to get started</p>
+        <h3>{{ __('admin.media.no_files') }}</h3>
     </div>
     @endif
     @endforelse
@@ -88,21 +86,21 @@
 {{-- Context Menu --}}
 <div id="context-menu" class="context-menu">
     <div class="context-item" onclick="renameItem()">
-        <i class="fas fa-edit"></i> Rename
+        <i class="fas fa-edit"></i> {{ __('admin.media.rename') }}
     </div>
     <div class="context-item" onclick="copyItemUrl()">
-        <i class="fas fa-link"></i> Copy URL
+        <i class="fas fa-link"></i> {{ __('admin.media.copy_url') }}
     </div>
     <div class="context-divider"></div>
     <div class="context-item danger" onclick="deleteItem()">
-        <i class="fas fa-trash"></i> Delete
+        <i class="fas fa-trash"></i> {{ __('admin.actions.delete') }}
     </div>
 </div>
 
 {{-- Upload Progress --}}
 <div id="upload-progress" class="upload-progress" style="display: none;">
     <div class="progress-header">
-        <span><i class="fas fa-upload"></i> Uploading...</span>
+        <span><i class="fas fa-upload"></i> {{ __('admin.media.upload_progress') }}</span>
         <button onclick="document.getElementById('upload-progress').style.display='none'">
             <i class="fas fa-times"></i>
         </button>
@@ -416,16 +414,16 @@ function uploadFiles(files) {
     xhr.addEventListener('load', () => {
         const response = JSON.parse(xhr.responseText);
         if (response.success) {
-            showToast('Files uploaded successfully!', 'success');
+            showToast('{{ __('admin.media.files_uploaded') }}', 'success');
             setTimeout(() => location.reload(), 1000);
         } else {
-            showToast(response.message || 'Upload failed', 'error');
+            showToast(response.message || '{{ __('admin.media.upload_failed') }}', 'error');
             progressDiv.style.display = 'none';
         }
     });
     
     xhr.addEventListener('error', () => {
-        showToast('Upload failed. Please try again.', 'error');
+        showToast('{{ __('admin.media.upload_failed') }}', 'error');
         progressDiv.style.display = 'none';
     });
     
@@ -435,7 +433,7 @@ function uploadFiles(files) {
 }
 
 function createFolder() {
-    const name = prompt('Enter folder name:');
+    const name = prompt('{{ __('admin.media.enter_folder_name') }}');
     if (!name) return;
     
     fetch('{{ route("admin.media.create-folder") }}', {
@@ -452,7 +450,7 @@ function createFolder() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            showToast('Folder created successfully!', 'success');
+            showToast('{{ __('admin.media.folder_created') }}', 'success');
             setTimeout(() => location.reload(), 1000);
         } else {
             showToast(data.message, 'error');
@@ -493,11 +491,11 @@ function renameItem() {
     // For now, renaming is not supported for files in database
     // Only folders can be renamed
     if (currentItemId) {
-        showToast('File renaming is not supported. Please delete and re-upload with new name.', 'warning');
+        showToast('{{ __('admin.media.rename_not_supported') }}', 'warning');
         return;
     }
     
-    const newName = prompt('Enter new name:', currentItemName);
+    const newName = prompt('{{ __('admin.media.enter_new_name') }}', currentItemName);
     if (!newName || newName === currentItemName) return;
     
     fetch('{{ route("admin.media.rename") }}', {
@@ -514,7 +512,7 @@ function renameItem() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            showToast('Item renamed successfully!', 'success');
+            showToast('{{ __('admin.media.item_renamed') }}', 'success');
             setTimeout(() => location.reload(), 1000);
         } else {
             showToast(data.message, 'error');
@@ -523,10 +521,10 @@ function renameItem() {
 }
 
 function deleteItem() {
-    if (!confirm('Are you sure you want to delete "' + currentItemName + '"?')) return;
+    if (!confirm(@json(__('admin.media.confirm_delete_item', ['name' => '__NAME__'])).replace('__NAME__', currentItemName))) return;
     
     if (!currentItemId) {
-        showToast('Cannot delete folders yet', 'warning');
+        showToast('{{ __('admin.media.cannot_delete_folders') }}', 'warning');
         return;
     }
     
@@ -541,7 +539,7 @@ function deleteItem() {
     .then(r => r.json())
     .then(data => {
         if (data.success) {
-            showToast('Item deleted successfully!', 'success');
+            showToast('{{ __('admin.media.item_deleted') }}', 'success');
             setTimeout(() => location.reload(), 1000);
         } else {
             showToast(data.message, 'error');
@@ -562,7 +560,7 @@ function copyUrl(url) {
         // Show toast
         const toast = document.createElement('div');
         toast.style.cssText = 'position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:10px 20px;border-radius:8px;z-index:10000;';
-        toast.textContent = 'URL copied!';
+        toast.textContent = '{{ __('admin.media.url_copied') }}';
         document.body.appendChild(toast);
         setTimeout(() => toast.remove(), 2000);
     });

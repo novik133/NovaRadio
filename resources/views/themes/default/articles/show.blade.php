@@ -51,7 +51,7 @@
                 {{-- Tags --}}
                 @if($article->tags->count() > 0)
                 <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid var(--color-border);">
-                    <h4 style="font-size: 16px; margin-bottom: 16px;">Tags:</h4>
+                    <h4 style="font-size: 16px; margin-bottom: 16px;">{{ __('admin.articles.tags') }}:</h4>
                     <div style="display: flex; flex-wrap: wrap; gap: 8px;">
                         @foreach($article->tags as $tag)
                             <span style="background: var(--color-bg-alt); padding: 8px 16px; border-radius: 20px; font-size: 14px;">
@@ -82,7 +82,7 @@
                 {{-- Related Articles --}}
                 @if($related->count() > 0)
                 <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-                    <h4 style="font-size: 16px; margin-bottom: 16px;">Related Articles</h4>
+                    <h4 style="font-size: 16px; margin-bottom: 16px;">{{ __('frontend.articles.related_articles') }}</h4>
                     @foreach($related as $rel)
                         <a href="{{ route('articles.show', $rel->slug) }}" style="display: block; padding: 12px 0; border-bottom: 1px solid var(--color-border); text-decoration: none; color: inherit;">
                             <div style="font-weight: 500; margin-bottom: 4px;">{{ $rel->title }}</div>

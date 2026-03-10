@@ -1,6 +1,6 @@
 @extends('admin.layout')
 
-@section('title', 'Add Team Member')
+@section('title', __('admin.team.create'))
 
 @php
 $member = new \App\Models\TeamMember();

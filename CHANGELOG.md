@@ -2,6 +2,37 @@
 
 All notable changes to NovaRadio project.
 
+## [2.0.5] - 2026-03-10
+
+### Bug Fixes
+- **Fixed 419 CSRF errors**: Proper session configuration
+  - Fixed `config/session.php` with safe defaults (`secure` defaults to `false`, `domain` defaults to `null`)
+  - Updated `.env.example` with `SESSION_DOMAIN=null`, `SESSION_SECURE_COOKIE=false`, `SESSION_SAME_SITE=lax`
+  - Fixed installer to generate proper `.env` with auto-detected HTTPS setting
+  - Excluded install route from CSRF verification (no APP_KEY exists during install)
+  - Added 419 error handler that redirects back with "Your session has expired" message
+- **Fixed database password special characters**: Installer now wraps all `.env` values in quotes to prevent `#` and other special characters from being interpreted as comments
+- **Fixed admin credentials not saving during install**: Installer now finds admin user by role instead of hardcoded ID
+- **Fixed database migration issues**: Removed `--path` from migrate call and re-applied DB config after each Artisan command
+
+### Language System Fixes
+- **Fixed site_language not changing**: SetLocale middleware now properly clears cache and sets `config(['app.locale' => $locale])` for admin panel translations
+- **Reverted per-user locale**: Removed per-user language switching, now admin-only global setting via Settings
+- **Removed language switcher from admin header**: Language change now only available in Settings view
+- **Added missing translation keys**: Added `status_pending`, `check_success`, `check_failed` and all `type_*` keys to all 4 locales (en, pl, es, fr)
+- **Added session_expired translation**: All locales now have the "Your session has expired" message
+
+### UI/UX Improvements
+- **Fixed hero section**: Reverted to single default hero image from settings instead of blurry now-playing album art
+- **Fixed update check status display**: Status card now properly shows "Up to Date", "Update Available", "Failed", "Pending", or "Never" with appropriate colors
+
+### Technical Changes
+- Removed `locale` column from users table migration
+- Deleted `add_locale_to_users_table` migration
+- Removed `setLocale` method from ProfileController
+- Removed language switcher UI, CSS, and JS from admin layout
+- Fixed UpdateController to use translation keys instead of hardcoded English
+
 ## [2.0.4] - 2026-03-09
 
 ### Bug Fixes

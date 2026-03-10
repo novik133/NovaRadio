@@ -5,16 +5,8 @@
 <section class="hero" style="position: relative; overflow: hidden;">
     @php
         $heroImage = null;
-        $isLive = false;
-        // Try to get album art from now playing
-        if ($nowPlaying && isset($nowPlaying['now_playing']['song']['art'])) {
-            $heroImage = $nowPlaying['now_playing']['song']['art'];
-            $isLive = true;
-        }
-        // Fallback to default hero image from settings
-        if (!$heroImage) {
-            $heroImage = asset('images/hero/hero-main.jpg');
-        }
+        // Use default hero image from settings
+        $heroImage = setting('hero_image') ? asset('storage/' . setting('hero_image')) : asset('images/hero/hero-main.jpg');
     @endphp
     
     <!-- Background Image with Overlay -->
@@ -26,10 +18,10 @@
     <div class="container" style="position: relative; z-index: 1;">
         <div class="hero-badge">
             <span class="live-dot {{ $isLive ? '' : 'offline' }}"></span>
-            {{ $isLive ? 'Live Broadcasting' : 'Radio Offline' }}
+            {{ $isLive ? __('frontend.hero.live_broadcasting') : __('frontend.hero.radio_offline') }}
         </div>
-        <h1>Your Soundtrack to Life</h1>
-        <p class="hero-description">Experience the best music curated just for you. Listen live 24/7 and discover your next favorite song.</p>
+        <h1>{{ __('frontend.hero.tagline') }}</h1>
+        <p class="hero-description">{{ __('frontend.hero.description') }}</p>
         
         @if($nowPlaying && isset($nowPlaying['now_playing']['song']))
             <div style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 12px; padding: 16px 24px; margin: 24px auto; max-width: 500px; border: 1px solid rgba(255, 255, 255, 0.25);">
@@ -42,9 +34,9 @@
                         </div>
                     @endif
                     <div style="flex: 1; text-align: left;">
-                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; margin-bottom: 4px;">Now Playing</div>
-                        <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 2px;">{{ $nowPlaying['now_playing']['song']['title'] ?? 'Unknown Track' }}</div>
-                        <div style="font-size: 14px; color: rgba(255, 255, 255, 0.8);">{{ $nowPlaying['now_playing']['song']['artist'] ?? 'Unknown Artist' }}</div>
+                        <div style="font-size: 12px; color: rgba(255, 255, 255, 0.7); text-transform: uppercase; margin-bottom: 4px;">{{ __('frontend.hero.now_playing') }}</div>
+                        <div style="font-size: 16px; font-weight: 600; color: white; margin-bottom: 2px;">{{ $nowPlaying['now_playing']['song']['title'] ?? __('frontend.hero.unknown_track') }}</div>
+                        <div style="font-size: 14px; color: rgba(255, 255, 255, 0.8);">{{ $nowPlaying['now_playing']['song']['artist'] ?? __('frontend.hero.unknown_artist') }}</div>
                     </div>
                 </div>
             </div>
@@ -52,9 +44,9 @@
         
         <div class="hero-buttons">
             <a href="#player" class="btn btn-primary">
-                <i class="fas fa-play"></i> Start Listening
+                <i class="fas fa-play"></i> {{ __('frontend.hero.start_listening') }}
             </a>
-            <a href="{{ route('page.show', 'about') }}" class="btn btn-secondary">Learn More</a>
+            <a href="{{ route('page.show', 'about') }}" class="btn btn-secondary">{{ __('frontend.hero.learn_more') }}</a>
         </div>
     </div>
 </section>
@@ -69,8 +61,8 @@
                         <i class="fas fa-play"></i>
                     </button>
                     <div class="track-info">
-                        <div class="track-title">Loading...</div>
-                        <div class="track-artist">Connecting to stream...</div>
+                        <div class="track-title">{{ __('frontend.player.loading') }}</div>
+                        <div class="track-artist">{{ __('frontend.player.connecting') }}</div>
                     </div>
                     <div class="volume-control">
                         <i class="fas fa-volume-up"></i>
@@ -79,7 +71,7 @@
                 </div>
                 <div class="listeners">
                     <i class="fas fa-users"></i>
-                    <span><span class="listeners-count">0</span> listeners tuned in</span>
+                    <span><span class="listeners-count">0</span> {{ __('frontend.player.listeners_tuned_in', ['count' => '']) }}</span>
                 </div>
                 <audio id="audio-player" preload="none">
                     <source src="{{ $streamUrl }}" type="audio/mpeg">
@@ -87,7 +79,7 @@
             @else
                 <div style="text-align: center; padding: 40px;">
                     <i class="fas fa-broadcast-tower" style="font-size: 48px; color: var(--color-text-muted); margin-bottom: 16px;"></i>
-                    <p style="color: var(--color-text-muted);">Radio stream is currently unavailable. Please check back later.</p>
+                    <p style="color: var(--color-text-muted);">{{ __('frontend.player.stream_unavailable') }}</p>
                 </div>
             @endif
         </div>
@@ -98,7 +90,7 @@
 @if(!empty($recentTracks))
 <section class="recent-tracks">
     <div class="container">
-        <h2 class="section-title">Recently Played</h2>
+        <h2 class="section-title">{{ __('frontend.sections.recently_played') }}</h2>
         <div class="tracks-list">
             @foreach($recentTracks as $track)
                 <div class="track-item">
@@ -111,8 +103,8 @@
                         @endif
                     </div>
                     <div class="track-details">
-                        <div class="track-name">{{ $track['song']['title'] ?? 'Unknown' }}</div>
-                        <div class="track-meta">{{ $track['song']['artist'] ?? 'Unknown Artist' }}</div>
+                        <div class="track-name">{{ $track['song']['title'] ?? __('frontend.hero.unknown_track') }}</div>
+                        <div class="track-meta">{{ $track['song']['artist'] ?? __('frontend.hero.unknown_artist') }}</div>
                     </div>
                 </div>
             @endforeach
@@ -126,7 +118,7 @@
 <section class="featured-article-section" style="padding: 80px 0; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);">
     <div class="container">
         <h2 style="color: white; font-size: 32px; font-weight: 700; margin-bottom: 40px; text-align: center;">
-            <i class="fas fa-newspaper" style="color: var(--color-secondary);"></i> Latest News
+            <i class="fas fa-newspaper" style="color: var(--color-secondary);"></i> {{ __('frontend.sections.latest_news') }}
         </h2>
         <a href="{{ route('articles.show', $featuredArticle->slug) }}" style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; text-decoration: none; color: inherit;">
             <div style="border-radius: 16px; overflow: hidden; height: 350px;">
@@ -142,7 +134,7 @@
                 @endif
                 <h3 style="color: white; font-size: 28px; font-weight: 700; margin-bottom: 16px;">{{ $featuredArticle->title }}</h3>
                 <p style="color: #94a3b8; font-size: 16px; line-height: 1.6; margin-bottom: 24px;">{{ $featuredArticle->excerpt }}</p>
-                <span style="color: var(--color-primary); font-weight: 600;">Read More <i class="fas fa-arrow-right"></i></span>
+                <span style="color: var(--color-primary); font-weight: 600;">{{ __('frontend.sections.read_more') }} <i class="fas fa-arrow-right"></i></span>
             </div>
         </a>
     </div>
@@ -154,8 +146,8 @@
 <section style="padding: 60px 0;">
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h2 class="section-title" style="margin: 0;">More News</h2>
-            <a href="{{ route('articles.index') }}" class="btn btn-secondary">View All</a>
+            <h2 class="section-title" style="margin: 0;">{{ __('frontend.sections.more_news') }}</h2>
+            <a href="{{ route('articles.index') }}" class="btn btn-secondary">{{ __('frontend.sections.view_all') }}</a>
         </div>
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
             @foreach($recentArticles as $article)
@@ -184,8 +176,8 @@
 <section style="padding: 80px 0; background: var(--color-bg-alt);">
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
-            <h2 class="section-title" style="margin: 0;"><i class="fas fa-calendar-check" style="color: var(--color-primary);"></i> Upcoming Events</h2>
-            <a href="{{ route('events.index') }}" class="btn btn-secondary">View All Events</a>
+            <h2 class="section-title" style="margin: 0;"><i class="fas fa-calendar-check" style="color: var(--color-primary);"></i> {{ __('frontend.sections.upcoming_events') }}</h2>
+            <a href="{{ route('events.index') }}" class="btn btn-secondary">{{ __('frontend.sections.view_all_events') }}</a>
         </div>
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
             @foreach($upcomingEvents as $event)
@@ -202,7 +194,7 @@
                     <div style="padding: 24px;">
                         <h4 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">{{ $event->title }}</h4>
                         <p style="color: #64748b; margin-bottom: 16px;"><i class="fas fa-map-marker-alt"></i> {{ $event->venue }}, {{ $event->city }}</p>
-                        <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">Details</a>
+                        <a href="{{ route('events.show', $event->id) }}" class="btn btn-primary" style="width: 100%; text-align: center;">{{ __('frontend.sections.details') }}</a>
                     </div>
                 </div>
             @endforeach
@@ -216,7 +208,7 @@
 <section style="padding: 80px 0;">
     <div class="container">
         <h2 class="section-title" style="text-align: center; margin-bottom: 40px;">
-            <i class="fas fa-users" style="color: var(--color-secondary);"></i> Resident DJs
+            <i class="fas fa-users" style="color: var(--color-secondary);"></i> {{ __('frontend.sections.resident_djs') }}
         </h2>
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
             @foreach($featuredDjs as $dj)
@@ -240,28 +232,28 @@
 <!-- Features -->
 <section class="features-section">
     <div class="container">
-        <h2 class="section-title">Why Listen With Us</h2>
+        <h2 class="section-title">{{ __('frontend.sections.why_listen') }}</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-music"></i>
                 </div>
-                <h3>Curated Playlists</h3>
-                <p>Handpicked tracks by our expert DJs, updated daily with fresh music.</p>
+                <h3>{{ __('frontend.features.curated_playlists') }}</h3>
+                <p>{{ __('frontend.features.curated_playlists_desc') }}</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-bolt"></i>
                 </div>
-                <h3>Live Shows</h3>
-                <p>Exclusive live performances and interviews with emerging artists.</p>
+                <h3>{{ __('frontend.features.live_shows') }}</h3>
+                <p>{{ __('frontend.features.live_shows_desc') }}</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">
                     <i class="fas fa-mobile-alt"></i>
                 </div>
-                <h3>Anywhere Access</h3>
-                <p>Listen on any device, anywhere in the world. 24/7 streaming.</p>
+                <h3>{{ __('frontend.features.anywhere_access') }}</h3>
+                <p>{{ __('frontend.features.anywhere_access_desc') }}</p>
             </div>
         </div>
     </div>

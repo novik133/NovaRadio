@@ -1,11 +1,11 @@
 @extends('admin.layout')
 
-@section('title', $category->id ? 'Edit Category' : 'New Category')
+@section('title', $category->id ? __('admin.categories.edit') : __('admin.categories.create'))
 
 @section('content')
 <div class="page-header">
-    <h1>{{ $category->id ? 'Edit Category' : 'New Category' }}</h1>
-    <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Back</a>
+    <h1>{{ $category->id ? __('admin.categories.edit') : __('admin.categories.create') }}</h1>
+    <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">{{ __('admin.actions.back') }}</a>
 </div>
 
 <div class="card">
@@ -17,39 +17,39 @@
         
         <div class="form-row">
             <div class="form-group">
-                <label>Name</label>
+                <label>{{ __('admin.categories.name') }}</label>
                 <input type="text" name="name" value="{{ old('name', $category->name) }}" required>
             </div>
             <div class="form-group">
-                <label>Slug (optional)</label>
+                <label>{{ __('admin.categories.slug_optional') }}</label>
                 <input type="text" name="slug" value="{{ old('slug', $category->slug) }}">
             </div>
         </div>
         
         <div class="form-row">
             <div class="form-group">
-                <label>Color</label>
+                <label>{{ __('admin.categories.color') }}</label>
                 <div class="color-picker-wrapper">
                     <input type="color" name="color" value="{{ old('color', $category->color ?? '#6366f1') }}">
                     <input type="text" name="color_text" value="{{ old('color', $category->color ?? '#6366f1') }}" class="color-input">
                 </div>
             </div>
             <div class="form-group">
-                <label>Order</label>
+                <label>{{ __('admin.categories.order') }}</label>
                 <input type="number" name="order" value="{{ old('order', $category->order ?? 0) }}">
             </div>
         </div>
         
         <div class="form-group">
-            <label>Description</label>
+            <label>{{ __('admin.categories.description') }}</label>
             <textarea name="description" class="rich-editor" rows="3">{{ old('description', $category->description) }}</textarea>
         </div>
         
         <div style="display: flex; gap: 12px;">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> {{ $category->id ? 'Update' : 'Create' }}
+                <i class="fas fa-save"></i> {{ $category->id ? __('admin.actions.update') : __('admin.actions.create') }}
             </button>
-            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.categories.index') }}" class="btn btn-secondary">{{ __('admin.actions.cancel') }}</a>
         </div>
     </form>
 </div>

@@ -46,7 +46,7 @@
                 
                 @if($event->featuredDJ)
                     <div style="margin-top: 40px; padding: 24px; background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 16px;">Featured DJ</h3>
+                        <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 16px;">{{ __('frontend.events_page.featured_dj') }}</h3>
                         <div style="display: flex; align-items: center; gap: 16px;">
                             @if($event->featuredDJ->photo)
                                 <img src="{{ asset($event->featuredDJ->photo) }}" alt="{{ $event->featuredDJ->name }}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover;">
@@ -70,56 +70,56 @@
             <div>
                 {{-- Event Details --}}
                 <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">Event Details</h3>
+                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px;">{{ __('frontend.sections.details') }}</h3>
                     
                     <div style="margin-bottom: 16px;">
-                        <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">Date</label>
+                        <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">{{ __('frontend.events_page.date') }}</label>
                         <p style="font-size: 16px; font-weight: 500;">{{ $event->start_date->format('l, F d, Y') }}</p>
                     </div>
                     
                     <div style="margin-bottom: 16px;">
-                        <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">Time</label>
+                        <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">{{ __('frontend.events_page.time') }}</label>
                         <p style="font-size: 16px; font-weight: 500;">{{ $event->start_date->format('H:i') }} - {{ $event->end_date?->format('H:i') ?? 'Late' }}</p>
                     </div>
                     
                     @if($event->venue)
                         <div style="margin-bottom: 16px;">
-                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">Venue</label>
+                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">{{ __('frontend.events_page.venue') }}</label>
                             <p style="font-size: 16px; font-weight: 500;">{{ $event->venue }}</p>
                         </div>
                     @endif
                     
                     @if($event->address)
                         <div style="margin-bottom: 16px;">
-                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">Address</label>
+                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">{{ __('frontend.events_page.address') }}</label>
                             <p style="font-size: 16px; font-weight: 500;">{{ $event->address }}</p>
                         </div>
                     @endif
                     
                     @if($event->city)
                         <div style="margin-bottom: 16px;">
-                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">City</label>
+                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">{{ __('admin.events.city') }}</label>
                             <p style="font-size: 16px; font-weight: 500;">{{ $event->city }}</p>
                         </div>
                     @endif
                     
                     @if($event->ticket_price)
                         <div style="margin-bottom: 20px;">
-                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">Ticket Price</label>
+                            <label style="font-size: 12px; color: var(--color-text-light); text-transform: uppercase; font-weight: 600;">{{ __('frontend.events_page.price') }}</label>
                             <p style="font-size: 24px; font-weight: 700; color: var(--primary-color);">${{ number_format($event->ticket_price, 2) }}</p>
                         </div>
                     @endif
                     
                     @if($event->ticket_url)
                         <a href="{{ $event->ticket_url }}" target="_blank" style="display: block; width: 100%; padding: 16px; background: var(--primary-color); color: white; text-align: center; border-radius: 8px; font-weight: 600; text-decoration: none; margin-top: 16px;">
-                            <i class="fas fa-ticket-alt"></i> Get Tickets
+                            <i class="fas fa-ticket-alt"></i> {{ __('frontend.events_page.buy_tickets') }}
                         </a>
                     @endif
                 </div>
                 
                 {{-- Share --}}
                 <div style="background: white; border-radius: 16px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
-                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Share Event</h3>
+                    <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">{{ __('frontend.articles.share') }}</h3>
                     <div style="display: flex; gap: 12px;">
                         <a href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url()->current()) }}" target="_blank" style="width: 44px; height: 44px; background: #1877f2; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; text-decoration: none;">
                             <i class="fab fa-facebook-f"></i>

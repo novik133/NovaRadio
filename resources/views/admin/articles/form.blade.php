@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', $article->id ? 'Edit Article' : 'Create Article')
+@section('title', $article->id ? __('admin.articles.edit') : __('admin.articles.create'))
 
 @section('content')
 <div class="page-header">
-    <h1>{{ $article->id ? 'Edit Article' : 'Create Article' }}</h1>
+    <h1>{{ $article->id ? __('admin.articles.edit') : __('admin.articles.create') }}</h1>
     <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Back
+        <i class="fas fa-arrow-left"></i> {{ __('admin.actions.back') }}
     </a>
 </div>
 
@@ -19,24 +19,24 @@
         
         <div class="form-row">
             <div class="form-group" style="flex: 2;">
-                <label>Title</label>
+                <label>{{ __('admin.articles.article_title') }}</label>
                 <input type="text" name="title" value="{{ old('title', $article->title) }}" required>
             </div>
             <div class="form-group">
-                <label>Status</label>
+                <label>{{ __('admin.articles.status') }}</label>
                 <select name="status">
-                    <option value="draft" {{ old('status', $article->status) == 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="published" {{ old('status', $article->status) == 'published' ? 'selected' : '' }}>Published</option>
-                    <option value="archived" {{ old('status', $article->status) == 'archived' ? 'selected' : '' }}>Archived</option>
+                    <option value="draft" {{ old('status', $article->status) == 'draft' ? 'selected' : '' }}>{{ __('admin.articles.draft') }}</option>
+                    <option value="published" {{ old('status', $article->status) == 'published' ? 'selected' : '' }}>{{ __('admin.articles.published') }}</option>
+                    <option value="archived" {{ old('status', $article->status) == 'archived' ? 'selected' : '' }}>{{ __('admin.articles.archived') }}</option>
                 </select>
             </div>
         </div>
         
         <div class="form-row">
             <div class="form-group">
-                <label>Category</label>
+                <label>{{ __('admin.articles.category') }}</label>
                 <select name="category_id">
-                    <option value="">No Category</option>
+                    <option value="">{{ __('admin.articles.no_category') }}</option>
                     @foreach($categories as $cat)
                         <option value="{{ $cat->id }}" {{ old('category_id', $article->category_id) == $cat->id ? 'selected' : '' }}>
                             {{ $cat->name }}
@@ -45,7 +45,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Published At</label>
+                <label>{{ __('admin.articles.published_at') }}</label>
                 <input type="datetime-local" name="published_at" 
                        value="{{ old('published_at', $article->published_at?->format('Y-m-d\TH:i')) }}">
             </div>
@@ -53,23 +53,23 @@
                 <label class="checkbox-label">
                     <input type="checkbox" name="is_featured" value="1" {{ old('is_featured', $article->is_featured) ? 'checked' : '' }}>
                     <span class="checkmark"></span>
-                    Featured Article
+                    {{ __('admin.articles.featured') }}
                 </label>
             </div>
         </div>
         
         <div class="form-group">
-            <label>Excerpt</label>
-            <textarea name="excerpt" rows="2" placeholder="Short summary (auto-generated if empty)">{{ old('excerpt', $article->excerpt) }}</textarea>
+            <label>{{ __('admin.articles.excerpt') }}</label>
+            <textarea name="excerpt" rows="2" placeholder="{{ __('admin.articles.excerpt_placeholder') }}">{{ old('excerpt', $article->excerpt) }}</textarea>
         </div>
         
         <div class="form-group">
-            <label>Content</label>
+            <label>{{ __('admin.articles.content') }}</label>
             <textarea name="content" class="rich-editor" rows="15" required>{{ old('content', $article->content) }}</textarea>
         </div>
         
         <div class="form-group">
-            <label>Featured Image</label>
+            <label>{{ __('admin.articles.featured_image') }}</label>
             <div class="image-picker">
                 <input type="hidden" name="featured_image" id="featured_image" 
                        value="{{ old('featured_image', $article->featured_image) }}">
@@ -77,17 +77,17 @@
                     @if($article->featured_image)
                         <img src="{{ asset($article->featured_image) }}" alt="Featured">
                     @else
-                        <div class="no-image"><i class="fas fa-image"></i> Click to select image</div>
+                        <div class="no-image"><i class="fas fa-image"></i> {{ __('admin.articles.click_to_select') }}</div>
                     @endif
                 </div>
                 <button type="button" class="btn btn-secondary btn-sm" onclick="openMediaPickerForImage()">
-                    <i class="fas fa-folder-open"></i> Browse Media
+                    <i class="fas fa-folder-open"></i> {{ __('admin.articles.browse_media') }}
                 </button>
             </div>
         </div>
         
         <div class="form-group">
-            <label>Tags</label>
+            <label>{{ __('admin.articles.tags') }}</label>
             <div class="tags-selector">
                 @foreach($tags as $tag)
                     <label class="tag-checkbox">
@@ -101,9 +101,9 @@
         
         <div style="display: flex; gap: 12px; margin-top: 24px;">
             <button type="submit" class="btn btn-primary">
-                <i class="fas fa-save"></i> {{ $article->id ? 'Update' : 'Create' }}
+                <i class="fas fa-save"></i> {{ $article->id ? __('admin.actions.update') : __('admin.actions.create') }}
             </button>
-            <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">Cancel</a>
+            <a href="{{ route('admin.articles.index') }}" class="btn btn-secondary">{{ __('admin.actions.cancel') }}</a>
         </div>
     </form>
 </div>

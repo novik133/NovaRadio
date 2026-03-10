@@ -1,11 +1,11 @@
 @extends('admin.layout')
 
-@section('title', 'Settings')
+@section('title', __('admin.settings.title'))
 
 @section('content')
 <div class="admin-header">
-    <h1><i class="fas fa-cog"></i> Settings</h1>
-    <p>Configure your website settings</p>
+    <h1><i class="fas fa-cog"></i> {{ __('admin.settings.title') }}</h1>
+    <p>{{ __('admin.settings.subtitle') }}</p>
 </div>
 
 @if(session('success'))
@@ -17,25 +17,25 @@
     
     <div class="settings-tabs">
         <button type="button" class="tab-btn active" data-tab="general">
-            <i class="fas fa-home"></i> General
+            <i class="fas fa-home"></i> {{ __('admin.settings.tab_general') }}
         </button>
         <button type="button" class="tab-btn" data-tab="contact">
-            <i class="fas fa-address-card"></i> Contact
+            <i class="fas fa-address-card"></i> {{ __('admin.settings.tab_contact') }}
         </button>
         <button type="button" class="tab-btn" data-tab="social">
-            <i class="fas fa-share-alt"></i> Social Media
+            <i class="fas fa-share-alt"></i> {{ __('admin.settings.tab_social') }}
         </button>
         <button type="button" class="tab-btn" data-tab="seo">
-            <i class="fas fa-search"></i> SEO
+            <i class="fas fa-search"></i> {{ __('admin.settings.tab_seo') }}
         </button>
         <button type="button" class="tab-btn" data-tab="appearance">
-            <i class="fas fa-palette"></i> Appearance
+            <i class="fas fa-palette"></i> {{ __('admin.settings.tab_appearance') }}
         </button>
         <button type="button" class="tab-btn" data-tab="streaming">
-            <i class="fas fa-broadcast-tower"></i> Streaming
+            <i class="fas fa-broadcast-tower"></i> {{ __('admin.settings.tab_streaming') }}
         </button>
         <button type="button" class="tab-btn" data-tab="advanced">
-            <i class="fas fa-sliders-h"></i> Advanced
+            <i class="fas fa-sliders-h"></i> {{ __('admin.settings.tab_advanced') }}
         </button>
     </div>
     
@@ -43,41 +43,43 @@
         {{-- General Tab --}}
         <div class="tab-pane active" id="general">
             <div class="form-section">
-                <h3>Website Information</h3>
+                <h3>{{ __('admin.settings.website_info') }}</h3>
                 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="site_name">Site Name</label>
+                        <label for="site_name">{{ __('admin.settings.site_name') }}</label>
                         <input type="text" id="site_name" name="site_name" 
                                value="{{ ($settings["site_name"] ?? null)?->value ?? 'NovaRadio' }}">
                     </div>
                     
                     <div class="form-group">
-                        <label for="site_tagline">Site Tagline</label>
+                        <label for="site_tagline">{{ __('admin.settings.site_tagline') }}</label>
                         <input type="text" id="site_tagline" name="site_tagline" 
                                value="{{ ($settings["site_tagline"] ?? null)?->value ?? 'Your Soundtrack to Life' }}">
                     </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="site_description">Site Description</label>
+                    <label for="site_description">{{ __('admin.settings.site_description') }}</label>
                     <textarea id="site_description" name="site_description" rows="3">{{ ($settings["site_description"] ?? null)?->value ?? '' }}</textarea>
-                    <small>Used in meta descriptions and about sections</small>
+                    <small>{{ __('admin.settings.description_hint') }}</small>
                 </div>
                 
                 <div class="form-row">
+                    @if(auth()->user()->isAdmin())
                     <div class="form-group">
-                        <label for="site_language">Default Language</label>
+                        <label for="site_language">{{ __('admin.settings.site_language') }}</label>
                         <select id="site_language" name="site_language">
                             <option value="en" {{ (($settings["site_language"] ?? null)?->value ?? 'en') == 'en' ? 'selected' : '' }}>English</option>
-                            <option value="pl" {{ (($settings["site_language"] ?? null)?->value ?? '') == 'pl' ? 'selected' : '' }}>Polish</option>
-                            <option value="de" {{ (($settings["site_language"] ?? null)?->value ?? '') == 'de' ? 'selected' : '' }}>German</option>
-                            <option value="es" {{ (($settings["site_language"] ?? null)?->value ?? '') == 'es' ? 'selected' : '' }}>Spanish</option>
+                            <option value="pl" {{ (($settings["site_language"] ?? null)?->value ?? '') == 'pl' ? 'selected' : '' }}>Polski</option>
+                            <option value="es" {{ (($settings["site_language"] ?? null)?->value ?? '') == 'es' ? 'selected' : '' }}>Español</option>
+                            <option value="fr" {{ (($settings["site_language"] ?? null)?->value ?? '') == 'fr' ? 'selected' : '' }}>Français</option>
                         </select>
                     </div>
+                    @endif
                     
                     <div class="form-group">
-                        <label for="timezone">Timezone</label>
+                        <label for="timezone">{{ __('admin.settings.timezone') }}</label>
                         <select id="timezone" name="timezone">
                             @foreach(['UTC', 'Europe/Warsaw', 'Europe/London', 'America/New_York', 'America/Los_Angeles', 'Asia/Tokyo'] as $tz)
                                 <option value="{{ $tz }}" {{ (($settings["timezone"] ?? null)?->value ?? 'UTC') == $tz ? 'selected' : '' }}>{{ $tz }}</option>
@@ -91,30 +93,30 @@
         {{-- Contact Tab --}}
         <div class="tab-pane" id="contact">
             <div class="form-section">
-                <h3>Contact Information</h3>
-                <p class="section-desc">This information is displayed in footer and legal pages</p>
+                <h3>{{ __('admin.settings.contact_info') }}</h3>
+                <p class="section-desc">{{ __('admin.settings.contact_desc') }}</p>
                 
                 <div class="form-group">
-                    <label for="admin_name">Administrator Name</label>
+                    <label for="admin_name">{{ __('admin.settings.admin_name') }}</label>
                     <input type="text" id="admin_name" name="admin_name" 
                            value="{{ ($settings["admin_name"] ?? null)?->value ?? '' }}">
-                    <small>Full name for legal documents</small>
+                    <small>{{ __('admin.settings.admin_name_hint') }}</small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="contact_email">Contact Email</label>
+                    <label for="contact_email">{{ __('admin.settings.contact_email') }}</label>
                     <input type="email" id="contact_email" name="contact_email" 
                            value="{{ ($settings["contact_email"] ?? null)?->value ?? '' }}">
                 </div>
                 
                 <div class="form-group">
-                    <label for="contact_phone">Contact Phone</label>
+                    <label for="contact_phone">{{ __('admin.settings.contact_phone') }}</label>
                     <input type="text" id="contact_phone" name="contact_phone" 
                            value="{{ ($settings["contact_phone"] ?? null)?->value ?? '' }}">
                 </div>
                 
                 <div class="form-group">
-                    <label for="contact_address">Address</label>
+                    <label for="contact_address">{{ __('admin.settings.contact_address') }}</label>
                     <textarea id="contact_address" name="contact_address" rows="3">{{ ($settings["contact_address"] ?? null)?->value ?? '' }}</textarea>
                 </div>
             </div>
@@ -123,42 +125,42 @@
         {{-- Social Tab --}}
         <div class="tab-pane" id="social">
             <div class="form-section">
-                <h3>Social Media Links</h3>
-                <p class="section-desc">Leave empty to hide from footer</p>
+                <h3>{{ __('admin.settings.social_links') }}</h3>
+                <p class="section-desc">{{ __('admin.settings.social_desc') }}</p>
                 
                 <div class="social-inputs">
                     <div class="form-group social-group">
-                        <label for="social_facebook"><i class="fab fa-facebook"></i> Facebook</label>
+                        <label for="social_facebook"><i class="fab fa-facebook"></i> {{ __('admin.settings.facebook') }}</label>
                         <input type="url" id="social_facebook" name="social_facebook" 
                                value="{{ ($settings["social_facebook"] ?? null)?->value ?? '' }}" placeholder="https://facebook.com/...">
                     </div>
                     
                     <div class="form-group social-group">
-                        <label for="social_twitter"><i class="fab fa-twitter"></i> Twitter / X</label>
+                        <label for="social_twitter"><i class="fab fa-twitter"></i> {{ __('admin.settings.twitter') }}</label>
                         <input type="url" id="social_twitter" name="social_twitter" 
                                value="{{ ($settings["social_twitter"] ?? null)?->value ?? '' }}" placeholder="https://twitter.com/...">
                     </div>
                     
                     <div class="form-group social-group">
-                        <label for="social_instagram"><i class="fab fa-instagram"></i> Instagram</label>
+                        <label for="social_instagram"><i class="fab fa-instagram"></i> {{ __('admin.settings.instagram') }}</label>
                         <input type="url" id="social_instagram" name="social_instagram" 
                                value="{{ ($settings["social_instagram"] ?? null)?->value ?? '' }}" placeholder="https://instagram.com/...">
                     </div>
                     
                     <div class="form-group social-group">
-                        <label for="social_youtube"><i class="fab fa-youtube"></i> YouTube</label>
+                        <label for="social_youtube"><i class="fab fa-youtube"></i> {{ __('admin.settings.youtube') }}</label>
                         <input type="url" id="social_youtube" name="social_youtube" 
                                value="{{ ($settings["social_youtube"] ?? null)?->value ?? '' }}" placeholder="https://youtube.com/...">
                     </div>
                     
                     <div class="form-group social-group">
-                        <label for="social_discord"><i class="fab fa-discord"></i> Discord</label>
+                        <label for="social_discord"><i class="fab fa-discord"></i> {{ __('admin.settings.discord') }}</label>
                         <input type="url" id="social_discord" name="social_discord" 
                                value="{{ ($settings["social_discord"] ?? null)?->value ?? '' }}" placeholder="https://discord.gg/...">
                     </div>
                     
                     <div class="form-group social-group">
-                        <label for="social_tiktok"><i class="fab fa-tiktok"></i> TikTok</label>
+                        <label for="social_tiktok"><i class="fab fa-tiktok"></i> {{ __('admin.settings.tiktok') }}</label>
                         <input type="url" id="social_tiktok" name="social_tiktok" 
                                value="{{ ($settings["social_tiktok"] ?? null)?->value ?? '' }}" placeholder="https://tiktok.com/@...">
                     </div>
@@ -169,30 +171,30 @@
         {{-- SEO Tab --}}
         <div class="tab-pane" id="seo">
             <div class="form-section">
-                <h3>Search Engine Optimization</h3>
+                <h3>{{ __('admin.settings.seo_settings') }}</h3>
                 
                 <div class="form-group">
-                    <label for="seo_meta_title">Default Meta Title</label>
+                    <label for="seo_meta_title">{{ __('admin.settings.meta_title') }}</label>
                     <input type="text" id="seo_meta_title" name="seo_meta_title" 
                            value="{{ ($settings["seo_meta_title"] ?? null)?->value ?? '' }}">
-                    <small>Recommended: 50-60 characters</small>
+                    <small>{{ __('admin.settings.meta_title_hint') }}</small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="seo_meta_description">Default Meta Description</label>
+                    <label for="seo_meta_description">{{ __('admin.settings.meta_description') }}</label>
                     <textarea id="seo_meta_description" name="seo_meta_description" rows="3">{{ ($settings["seo_meta_description"] ?? null)?->value ?? '' }}</textarea>
-                    <small>Recommended: 150-160 characters</small>
+                    <small>{{ __('admin.settings.meta_desc_hint') }}</small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="seo_keywords">Default Keywords</label>
+                    <label for="seo_keywords">{{ __('admin.settings.keywords') }}</label>
                     <input type="text" id="seo_keywords" name="seo_keywords" 
                            value="{{ ($settings["seo_keywords"] ?? null)?->value ?? '' }}">
-                    <small>Comma-separated keywords</small>
+                    <small>{{ __('admin.settings.keywords_hint') }}</small>
                 </div>
                 
                 <div class="form-group">
-                    <label for="google_analytics">Google Analytics ID</label>
+                    <label for="google_analytics">{{ __('admin.settings.google_analytics') }}</label>
                     <input type="text" id="google_analytics" name="google_analytics" 
                            value="{{ ($settings["google_analytics"] ?? null)?->value ?? '' }}" placeholder="G-XXXXXXXXXX">
                 </div>
@@ -202,46 +204,46 @@
         {{-- Appearance Tab --}}
         <div class="tab-pane" id="appearance">
             <div class="form-section">
-                <h3>Branding & Colors</h3>
+                <h3>{{ __('admin.settings.appearance_settings') }}</h3>
                 
                 <div class="logo-upload-section">
-                    <h4>Site Logos</h4>
+                    <h4>{{ __('admin.settings.logo') }}</h4>
                     
                     <div class="logo-upload-row">
                         <div class="logo-upload">
-                            <label>Light Logo (for dark backgrounds)</label>
+                            <label>{{ __('admin.settings.logo_light') }}</label>
                             <div class="logo-preview" id="preview-light">
                                 @if(($settings["logo_light"] ?? null)?->value)
                                     <img src="{{ asset($settings["logo_light"]?->value) }}" alt="Light Logo">
                                 @else
-                                    <div class="no-logo"><i class="fas fa-image"></i> No logo</div>
+                                    <div class="no-logo"><i class="fas fa-image"></i> {{ __('admin.settings.no_logo') }}</div>
                                 @endif
                             </div>
                             <input type="file" id="logo_light" accept="image/*" data-type="light">
                             <button type="button" class="btn-upload" onclick="document.getElementById('logo_light').click()">
-                                <i class="fas fa-upload"></i> Upload
+                                <i class="fas fa-upload"></i> {{ __('admin.settings.upload_btn') }}
                             </button>
                         </div>
                         
                         <div class="logo-upload">
-                            <label>Dark Logo (for light backgrounds)</label>
+                            <label>{{ __('admin.settings.logo_dark') }}</label>
                             <div class="logo-preview" id="preview-dark">
                                 @if(($settings["logo_dark"] ?? null)?->value)
                                     <img src="{{ asset($settings["logo_dark"]?->value) }}" alt="Dark Logo">
                                 @else
-                                    <div class="no-logo"><i class="fas fa-image"></i> No logo</div>
+                                    <div class="no-logo"><i class="fas fa-image"></i> {{ __('admin.settings.no_logo') }}</div>
                                 @endif
                             </div>
                             <input type="file" id="logo_dark" accept="image/*" data-type="dark">
                             <button type="button" class="btn-upload" onclick="document.getElementById('logo_dark').click()">
-                                <i class="fas fa-upload"></i> Upload
+                                <i class="fas fa-upload"></i> {{ __('admin.settings.upload_btn') }}
                             </button>
                         </div>
                     </div>
                 </div>
                 
                 <div class="favicon-section">
-                    <h4>Favicon</h4>
+                    <h4>{{ __('admin.settings.favicon') }}</h4>
                     <div class="favicon-upload">
                         <div class="favicon-preview" id="preview-favicon">
                             @if(($settings["favicon"] ?? null)?->value)
@@ -252,14 +254,14 @@
                         </div>
                         <input type="file" id="favicon" accept=".ico,.png,.svg">
                         <button type="button" class="btn-upload" onclick="document.getElementById('favicon').click()">
-                            <i class="fas fa-upload"></i> Upload Favicon
+                            <i class="fas fa-upload"></i> {{ __('admin.settings.upload_favicon') }}
                         </button>
-                        <small>Recommended: 32x32 or 64x64 px, ICO or PNG</small>
+                        <small>{{ __('admin.settings.favicon_hint') }}</small>
                     </div>
                 </div>
                 
                 <div class="hero-section" style="margin-top: 32px;">
-                    <h4>Homepage Hero Image</h4>
+                    <h4>{{ __('admin.settings.hero_image') }}</h4>
                     <div class="hero-upload" style="text-align: center;">
                         <div class="hero-preview" id="preview-hero" style="width: 100%; max-width: 600px; height: 200px; border: 2px dashed var(--border-color); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 16px auto; overflow: hidden; background: var(--bg-light);">
                             @if(($settings["hero_image"] ?? null)?->value)
@@ -270,18 +272,18 @@
                         </div>
                         <input type="file" id="hero_image" accept="image/*" style="display: none;">
                         <button type="button" class="btn-upload" onclick="document.getElementById('hero_image').click()">
-                            <i class="fas fa-upload"></i> Upload Hero Image
+                            <i class="fas fa-upload"></i> {{ __('admin.settings.upload_hero') }}
                         </button>
-                        <small style="display: block; margin-top: 8px;">Recommended: 1600x600 px, JPG or WEBP</small>
+                        <small style="display: block; margin-top: 8px;">{{ __('admin.settings.hero_hint') }}</small>
                     </div>
                 </div>
                 
                 <div class="color-section">
-                    <h4>Theme Colors</h4>
+                    <h4>{{ __('admin.settings.theme_colors') }}</h4>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="primary_color">Primary Color</label>
+                            <label for="primary_color">{{ __('admin.settings.primary_color') }}</label>
                             <div class="color-picker-wrapper">
                                 <input type="color" id="primary_color" name="primary_color" 
                                        value="{{ ($settings["primary_color"] ?? null)?->value ?? '#6366f1' }}">
@@ -290,7 +292,7 @@
                         </div>
                         
                         <div class="form-group">
-                            <label for="secondary_color">Secondary Color</label>
+                            <label for="secondary_color">{{ __('admin.settings.secondary_color') }}</label>
                             <div class="color-picker-wrapper">
                                 <input type="color" id="secondary_color" name="secondary_color" 
                                        value="{{ ($settings["secondary_color"] ?? null)?->value ?? '#8b5cf6' }}">
@@ -305,29 +307,29 @@
         {{-- Streaming Tab --}}
         <div class="tab-pane" id="streaming">
             <div class="form-section">
-                <h3>Radio Streaming</h3>
+                <h3>{{ __('admin.settings.streaming') }}</h3>
                 
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" name="azuracast_enabled" value="1" 
                                {{ (($settings["azuracast_enabled"] ?? null)?->value ?? '1') == '1' ? 'checked' : '' }}>
                         <span class="checkmark"></span>
-                        Enable AzuraCast Integration
+                        {{ __('admin.settings.azuracast_enabled') }}
                     </label>
                 </div>
                 
                 <div class="form-group">
-                    <label for="station_name">Station Name</label>
+                    <label for="station_name">{{ __('admin.settings.station_name') }}</label>
                     <input type="text" id="station_name" name="station_name" 
                            value="{{ ($settings["station_name"] ?? null)?->value ?? 'NovaRadio' }}">
                 </div>
                 
                 <div class="form-group">
-                    <label for="stream_url">Direct Stream URL (fallback)</label>
+                    <label for="stream_url">{{ __('admin.settings.stream_url') }}</label>
                     <input type="url" id="stream_url" name="stream_url" 
                            value="{{ ($settings["stream_url"] ?? null)?->value ?? '' }}" 
                            placeholder="https://your-stream.com/radio.mp3">
-                    <small>Used if AzuraCast is not available</small>
+                    <small>{{ __('admin.settings.stream_url_hint') }}</small>
                 </div>
                 
                 <div class="form-group checkbox-group">
@@ -335,7 +337,7 @@
                         <input type="checkbox" name="player_autoplay" value="1" 
                                {{ (($settings["player_autoplay"] ?? null)?->value ?? '0') == '1' ? 'checked' : '' }}>
                         <span class="checkmark"></span>
-                        Enable Autoplay (requires user interaction first)
+                        {{ __('admin.settings.player_autoplay') }}
                     </label>
                 </div>
             </div>
@@ -344,17 +346,17 @@
         {{-- Advanced Tab --}}
         <div class="tab-pane" id="advanced">
             <div class="form-section">
-                <h3>Advanced Settings</h3>
-                <p class="section-desc text-warning"><i class="fas fa-exclamation-triangle"></i> Caution: These settings affect site functionality</p>
+                <h3>{{ __('admin.settings.advanced_settings') }}</h3>
+                <p class="section-desc text-warning"><i class="fas fa-exclamation-triangle"></i> {{ __('admin.settings.advanced_warning') }}</p>
                 
                 <div class="form-group checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" name="maintenance_mode" value="1" 
                                {{ (($settings["maintenance_mode"] ?? null)?->value ?? '0') == '1' ? 'checked' : '' }}>
                         <span class="checkmark"></span>
-                        Maintenance Mode
+                        {{ __('admin.settings.maintenance_mode') }}
                     </label>
-                    <small>Show maintenance page to visitors (admins can still access)</small>
+                    <small>{{ __('admin.settings.maintenance_hint') }}</small>
                 </div>
                 
                 <div class="form-group checkbox-group">
@@ -362,7 +364,7 @@
                         <input type="checkbox" name="cache_enabled" value="1" 
                                {{ (($settings["cache_enabled"] ?? null)?->value ?? '1') == '1' ? 'checked' : '' }}>
                         <span class="checkmark"></span>
-                        Enable Cache
+                        {{ __('admin.settings.cache_enabled') }}
                     </label>
                 </div>
                 
@@ -371,9 +373,9 @@
                         <input type="checkbox" name="debug_mode" value="1" 
                                {{ (($settings["debug_mode"] ?? null)?->value ?? '0') == '1' ? 'checked' : '' }}>
                         <span class="checkmark"></span>
-                        Debug Mode
+                        {{ __('admin.settings.debug_mode') }}
                     </label>
-                    <small>Show detailed error messages (disable in production)</small>
+                    <small>{{ __('admin.settings.debug_hint') }}</small>
                 </div>
                 
                 <div class="form-group checkbox-group">
@@ -381,21 +383,21 @@
                         <input type="checkbox" name="registration_enabled" value="1" 
                                {{ (($settings["registration_enabled"] ?? null)?->value ?? '0') == '1' ? 'checked' : '' }}>
                         <span class="checkmark"></span>
-                        Enable User Registration
+                        {{ __('admin.settings.registration_enabled') }}
                     </label>
                 </div>
                 
                 <div class="cache-actions">
-                    <h4>Cache Management</h4>
+                    <h4>{{ __('admin.settings.cache_management') }}</h4>
                     <div class="action-buttons">
                         <a href="{{ route('admin.settings.clear-cache', 'config') }}" class="btn-action">
-                            <i class="fas fa-broom"></i> Clear Config Cache
+                            <i class="fas fa-broom"></i> {{ __('admin.settings.clear_config_cache') }}
                         </a>
                         <a href="{{ route('admin.settings.clear-cache', 'view') }}" class="btn-action">
-                            <i class="fas fa-eye-slash"></i> Clear View Cache
+                            <i class="fas fa-eye-slash"></i> {{ __('admin.settings.clear_view_cache') }}
                         </a>
                         <a href="{{ route('admin.settings.clear-cache', 'all') }}" class="btn-action">
-                            <i class="fas fa-trash-alt"></i> Clear All Cache
+                            <i class="fas fa-trash-alt"></i> {{ __('admin.settings.clear_all_cache') }}
                         </a>
                     </div>
                 </div>
@@ -405,7 +407,7 @@
     
     <div class="form-actions">
         <button type="submit" class="btn-save">
-            <i class="fas fa-save"></i> Save Settings
+            <i class="fas fa-save"></i> {{ __('admin.settings.save') }}
         </button>
     </div>
 </form>

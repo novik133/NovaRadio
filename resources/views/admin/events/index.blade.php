@@ -1,12 +1,12 @@
 @extends('admin.layout')
 
-@section('title', 'Events')
+@section('title', __('admin.events.title'))
 
 @section('content')
 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
-    <h2 style="font-size: 24px; font-weight: 700;">Events</h2>
+    <h2 style="font-size: 24px; font-weight: 700;">{{ __('admin.events.title') }}</h2>
     <a href="{{ route('admin.events.create') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Add Event
+        <i class="fas fa-plus"></i> {{ __('admin.events.create') }}
     </a>
 </div>
 
@@ -20,13 +20,13 @@
     <table>
         <thead>
             <tr>
-                <th>Image</th>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Venue</th>
-                <th>City</th>
-                <th>Status</th>
-                <th>Actions</th>
+                <th>{{ __('admin.events.image') }}</th>
+                <th>{{ __('admin.events.event_title') }}</th>
+                <th>{{ __('admin.updates.date') }}</th>
+                <th>{{ __('admin.events.venue') }}</th>
+                <th>{{ __('admin.events.city') }}</th>
+                <th>{{ __('admin.updates.status') }}</th>
+                <th>{{ __('admin.actions.actions') }}</th>
             </tr>
         </thead>
         <tbody>
@@ -64,7 +64,7 @@
                             };
                         @endphp
                         <span class="badge badge-{{ $badgeClass }}">
-                            {{ ucfirst($event->status) }}
+                            {{ __('admin.events.' . $event->status) }}
                         </span>
                     </td>
                     <td>
@@ -75,7 +75,7 @@
                             <a href="{{ route('admin.events.edit', $event) }}" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">
                                 <i class="fas fa-edit"></i>
                             </a>
-                            <form action="{{ route('admin.events.destroy', $event) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this event?');">
+                            <form action="{{ route('admin.events.destroy', $event) }}" method="POST" style="display: inline;" onsubmit="return confirm('{{ __('admin.actions.confirm_delete') }}');">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger" style="padding: 6px 12px; font-size: 12px;">
@@ -89,7 +89,7 @@
                 <tr>
                     <td colspan="7" style="text-align: center; padding: 40px; color: #64748b;">
                         <i class="fas fa-calendar-times" style="font-size: 32px; margin-bottom: 12px; display: block;"></i>
-                        No events found. <a href="{{ route('admin.events.create') }}" style="color: var(--primary-color);">Create one</a>
+                        {{ __('admin.events.no_events') }}
                     </td>
                 </tr>
             @endforelse
