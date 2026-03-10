@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Admin') - NovaRadio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
     <script>
@@ -39,13 +42,14 @@
     </script>
     <style>
         :root {
-            --primary-color: #6366f1;
-            --primary-dark: #4f46e5;
-            --bg-light: #f8fafc;
-            --bg-hover: #f1f5f9;
-            --border-color: #e2e8f0;
-            --text-color: #0f172a;
-            --text-muted: #64748b;
+            --primary-color: hsl(14, 100%, 50%);
+            --primary-dark: hsl(14, 100%, 45%);
+            --primary-light: hsl(14, 100%, 97%);
+            --bg-light: hsl(220, 14%, 96%);
+            --bg-hover: hsl(220, 14%, 93%);
+            --border-color: hsl(220, 13%, 91%);
+            --text-color: hsl(220, 20%, 14%);
+            --text-muted: hsl(220, 10%, 46%);
         }
         
         /* Toast Notifications */
@@ -477,11 +481,19 @@
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', system-ui, sans-serif; background: #f1f5f9; }
+        body { 
+            font-family: 'Inter', system-ui, sans-serif; 
+            background: hsl(0, 0%, 99%);
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Roboto Mono', monospace;
+        }
         
         /* Admin Header */
         .admin-header { 
-            background: #0f172a; 
+            background: var(--text-color);
             color: white; 
             padding: 0 24px; 
             height: 64px; 
@@ -491,8 +503,16 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .admin-header h1 { font-size: 20px; display: flex; align-items: center; gap: 12px; }
+        .admin-header h1 { 
+            font-size: 16px; 
+            font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
         
         .header-actions { 
             display: flex; 
@@ -507,17 +527,19 @@
             align-items: center;
             gap: 8px;
             padding: 6px 12px;
-            background: #fef3c7;
-            color: #92400e;
-            border-radius: 20px;
-            font-size: 13px;
+            background: hsl(45, 100%, 95%);
+            color: hsl(45, 100%, 30%);
+            border-radius: 6px;
+            font-size: 12px;
             font-weight: 500;
+            font-family: 'Roboto Mono', monospace;
             text-decoration: none;
             transition: all 0.2s;
+            border: 1px solid hsl(45, 100%, 85%);
         }
         
         .update-badge:hover {
-            background: #fde68a;
+            background: hsl(45, 100%, 90%);
         }
         
         .update-badge i {
@@ -547,8 +569,9 @@
         }
         
         .user-name {
-            font-size: 14px;
-            color: #94a3b8;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            font-family: 'Roboto Mono', monospace;
         }
         
         .admin-layout { display: flex; min-height: calc(100vh - 64px); }
@@ -579,7 +602,8 @@
             text-transform: uppercase;
             color: var(--text-muted);
             font-weight: 600;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
+            font-family: 'Roboto Mono', monospace;
         }
         
         .admin-sidebar a { 
@@ -595,8 +619,8 @@
         }
         
         .admin-sidebar a:hover, .admin-sidebar a.active { 
-            background: #f8fafc; 
-            color: #6366f1; 
+            background: var(--primary-light);
+            color: var(--primary-color); 
         }
         
         .admin-sidebar a.active::before {
@@ -622,12 +646,19 @@
         /* Cards */
         .card { 
             background: white; 
-            border-radius: 12px; 
+            border-radius: 8px; 
             padding: 24px; 
             margin-bottom: 24px; 
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
         }
-        .card h2 { font-size: 18px; margin-bottom: 20px; color: #0f172a; }
+        .card h2 { 
+            font-size: 18px; 
+            font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
+            margin-bottom: 20px; 
+            color: var(--text-color); 
+        }
         
         /* Buttons */
         .btn { 
@@ -635,52 +666,122 @@
             align-items: center; 
             gap: 8px; 
             padding: 10px 20px; 
-            border-radius: 8px; 
+            border-radius: 6px; 
             font-size: 14px; 
             font-weight: 500; 
+            font-family: 'Roboto Mono', monospace;
             text-decoration: none; 
             border: none; 
             cursor: pointer; 
             transition: all 0.2s; 
         }
-        .btn-primary { background: #6366f1; color: white; }
-        .btn-primary:hover { background: #4f46e5; }
+        .btn-primary { 
+            background: var(--primary-color); 
+            color: white; 
+        }
+        .btn-primary:hover { 
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px hsla(14, 100%, 50%, 0.3);
+        }
         .btn-danger { background: #ef4444; color: white; }
-        .btn-secondary { background: #f1f5f9; color: #475569; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-secondary { background: var(--bg-light); color: var(--text-color); border: 1px solid var(--border-color); }
+        .btn-secondary:hover { background: var(--bg-hover); }
         .btn-success { background: #22c55e; color: white; }
+        .btn-success:hover { background: #16a34a; }
         .btn-sm { padding: 6px 12px; font-size: 12px; }
         
         /* Alerts */
-        .alert { padding: 16px; border-radius: 8px; margin-bottom: 24px; }
-        .alert-success { background: #dcfce7; color: #166534; }
-        .alert-error { background: #fee2e2; color: #991b1b; }
-        .alert-warning { background: #fef3c7; color: #92400e; }
-        .alert-info { background: #dbeafe; color: #1e40af; }
+        .alert { 
+            padding: 14px 18px; 
+            border-radius: 6px; 
+            margin-bottom: 24px;
+            border-left: 3px solid;
+            font-size: 14px;
+        }
+        .alert-success { 
+            background: hsl(142, 76%, 96%); 
+            color: hsl(142, 71%, 25%);
+            border-left-color: #22c55e;
+        }
+        .alert-error { 
+            background: hsl(0, 86%, 97%); 
+            color: hsl(0, 72%, 38%);
+            border-left-color: #ef4444;
+        }
+        .alert-warning { 
+            background: hsl(45, 100%, 96%); 
+            color: hsl(45, 100%, 30%);
+            border-left-color: #f59e0b;
+        }
+        .alert-info { 
+            background: hsl(14, 100%, 97%); 
+            color: hsl(14, 100%, 35%);
+            border-left-color: var(--primary-color);
+        }
         
         /* Tables */
         table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 14px; }
-        th { background: #f8fafc; font-weight: 600; color: #475569; font-size: 12px; text-transform: uppercase; }
+        th, td { 
+            padding: 12px 16px; 
+            text-align: left; 
+            border-bottom: 1px solid var(--border-color); 
+            font-size: 14px; 
+        }
+        th { 
+            background: var(--bg-light); 
+            font-weight: 600; 
+            color: var(--text-color); 
+            font-size: 12px; 
+            text-transform: uppercase;
+            font-family: 'Roboto Mono', monospace;
+            letter-spacing: 0.05em;
+        }
         
         /* Badges */
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
-        .badge-published { background: #dcfce7; color: #166534; }
-        .badge-draft { background: #fef3c7; color: #92400e; }
+        .badge { 
+            display: inline-block; 
+            padding: 4px 10px; 
+            border-radius: 4px; 
+            font-size: 11px; 
+            font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-published { 
+            background: hsl(142, 76%, 96%); 
+            color: hsl(142, 71%, 25%); 
+        }
+        .badge-draft { 
+            background: hsl(45, 100%, 96%); 
+            color: hsl(45, 100%, 30%); 
+        }
         
         /* Forms */
         .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 6px; font-size: 14px; font-weight: 500; color: #374151; }
+        .form-group label { 
+            display: block; 
+            margin-bottom: 6px; 
+            font-size: 13px; 
+            font-weight: 500; 
+            font-family: 'Roboto Mono', monospace;
+            color: var(--text-color); 
+        }
         .form-group input, .form-group textarea, .form-group select { 
             width: 100%; 
             padding: 10px 14px; 
-            border: 1px solid #d1d5db; 
-            border-radius: 8px; 
-            font-size: 14px; 
+            border: 1px solid var(--border-color); 
+            border-radius: 6px; 
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
         }
-        .form-group input:focus, .form-group textarea:focus { 
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { 
             outline: none; 
-            border-color: #6366f1; 
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            border-color: var(--primary-color); 
+            box-shadow: 0 0 0 3px hsla(14, 100%, 50%, 0.1);
         }
         
         .form-row {
@@ -699,6 +800,8 @@
         
         .page-header h1 {
             font-size: 24px;
+            font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
             color: var(--text-color);
         }
         
@@ -733,7 +836,7 @@
 </head>
 <body>
     <header class="admin-header">
-        <h1><i class="fas fa-broadcast-tower"></i> {{ __('admin.sidebar.admin_panel') }}</h1>
+        <h1><i class="fas fa-broadcast-tower"></i> NovaRadio<span style="color: var(--primary-color);">CMS</span></h1>
         <div class="header-actions">
             {{-- Update Notification Badge --}}
             @php

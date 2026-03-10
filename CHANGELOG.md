@@ -4,6 +4,41 @@ All notable changes to NovaRadio project.
 
 ## [2.0.5] - 2026-03-10
 
+### Added
+- Helper functions for settings management (`setting()`, `settings()`, `theme_asset()`, `active_theme()`)
+- CheckInstallation middleware to automatically redirect to installer on fresh installations
+- Deployment scripts and comprehensive documentation (DEPLOYMENT.md, VPS-UPLOAD-INSTRUCTIONS.md)
+- Modern design system matching demo site (orange primary color `hsl(14, 100%, 50%)`, Roboto Mono + Inter fonts)
+- Automated deployment script (deploy-fix.sh)
+
+### Changed
+- **Design System Overhaul**: Updated installer, admin panel, and login page with new aesthetic
+  - Primary color changed from blue (#6366f1) to orange (hsl(14, 100%, 50%))
+  - Background changed from dark to light (hsl(0, 0%, 99%))
+  - Typography: Roboto Mono for headings, Inter for body text
+  - Consistent branding: NovaRadio**CMS** with orange accent
+  - Flat buttons, subtle shadows, rectangular badges
+- Improved SeoService to use helper functions and pass site variables (`siteName`, `siteTagline`) to views
+- Enhanced error handling in settings helpers to prevent 500 errors
+
+### Fixed
+- **Critical**: Fixed "Call to undefined function setting()" error on fresh installations
+- **Critical**: Fixed frontend 500 error when settings are not yet configured
+- Fixed missing `$isLive` variable in HomeController causing frontend crashes
+- Fixed missing `$siteName` and `$siteTagline` variables in theme layouts
+- Added proper error handling for database connection issues in helpers
+- Fixed SeoService using `Setting::get()` instead of helper `setting()`
+
+### Security
+- Added try-catch blocks in helper functions to prevent crashes from database errors
+- Improved middleware stack for better installation flow and security
+
+### Documentation
+- Added DEPLOYMENT.md with full deployment instructions
+- Added VPS-UPLOAD-INSTRUCTIONS.md for Plesk users
+- Added FIX-FRONTEND-500.md with troubleshooting guide
+- Added CHANGELOG-FIX.md with detailed fix information
+
 ### Bug Fixes
 - **Fixed 419 CSRF errors**: Proper session configuration
   - Fixed `config/session.php` with safe defaults (`secure` defaults to `false`, `domain` defaults to `null`)

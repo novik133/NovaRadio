@@ -7,7 +7,7 @@
     <meta name="description" content="{{ $seo_description ?? '' }}">
     <meta name="keywords" content="{{ $seo_keywords ?? '' }}">
     <meta name="author" content="NovaRadio">
-    <meta name="theme-color" content="#6366f1">
+    <meta name="theme-color" content="hsl(14, 100%, 50%)">
 
     <!-- Open Graph -->
     <meta property="og:title" content="{{ $seo_title ?? ($siteName ?? 'NovaRadio') }}">
@@ -29,7 +29,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -47,7 +47,7 @@
                 <div class="logo-icon">
                     <i class="fas fa-broadcast-tower"></i>
                 </div>
-                <span>{{ $siteName ?? 'NovaRadio' }}</span>
+                <span>{{ $siteName ?? 'NovaRadio' }}<span style="color: var(--color-primary);">CMS</span></span>
             </a>
 
             <nav class="nav-desktop">

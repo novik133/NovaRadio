@@ -1,19 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 :root {
-    --color-primary: #6366f1;
-    --color-primary-dark: #4f46e5;
-    --color-secondary: #ec4899;
+    --color-primary: hsl(14, 100%, 50%);
+    --color-primary-dark: hsl(14, 100%, 45%);
+    --color-primary-light: hsl(14, 100%, 97%);
+    --color-secondary: hsl(220, 14%, 96%);
     --color-accent: #06b6d4;
-    --color-bg: #ffffff;
-    --color-bg-alt: #f8fafc;
-    --color-bg-dark: #0f172a;
-    --color-text: #1e293b;
-    --color-text-muted: #64748b;
-    --color-border: #e2e8f0;
+    --color-bg: hsl(0, 0%, 99%);
+    --color-bg-alt: hsl(220, 14%, 96%);
+    --color-bg-dark: hsl(220, 20%, 14%);
+    --color-text: hsl(220, 20%, 14%);
+    --color-text-muted: hsl(220, 10%, 46%);
+    --color-border: hsl(220, 13%, 91%);
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --radius: 12px;
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 4px 12px 0 rgb(0 0 0 / 0.1);
+    --radius: 8px;
 }
 
 * {
@@ -32,6 +36,10 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-mono);
 }
 
 .container {
@@ -69,8 +77,9 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    font-size: 24px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: var(--font-mono);
     color: white;
     text-decoration: none;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -85,12 +94,18 @@ body {
 .logo-icon {
     width: 40px;
     height: 40px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    background: var(--color-primary-light);
+    border: 1px solid hsla(14, 100%, 50%, 0.2);
     border-radius: var(--radius);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--color-primary);
+}
+
+.site-header.scrolled .logo-icon {
+    background: var(--color-primary-light);
+    border-color: hsla(14, 100%, 50%, 0.2);
 }
 
 .nav-desktop {
@@ -103,7 +118,10 @@ body {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     transition: color 0.2s;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -230,10 +248,11 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 14px 28px;
+    padding: 12px 24px;
     border-radius: var(--radius);
-    font-weight: 600;
-    font-size: 16px;
+    font-weight: 500;
+    font-size: 14px;
+    font-family: var(--font-mono);
     text-decoration: none;
     transition: all 0.2s;
     border: none;
@@ -247,14 +266,14 @@ body {
 
 .btn-primary:hover {
     background: var(--color-primary-dark);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px hsla(14, 100%, 50%, 0.3);
 }
 
 .btn-secondary {
     background: white;
     color: var(--color-text);
-    border: 2px solid var(--color-border);
+    border: 1px solid var(--color-border);
 }
 
 .btn-secondary:hover {
@@ -289,7 +308,7 @@ body {
     width: 72px;
     height: 72px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    background: var(--color-primary);
     color: white;
     border: none;
     font-size: 28px;
@@ -302,7 +321,7 @@ body {
 
 .play-button:hover {
     transform: scale(1.05);
-    box-shadow: 0 10px 40px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 8px 24px hsla(14, 100%, 50%, 0.4);
 }
 
 .track-info {
@@ -364,10 +383,12 @@ body {
 }
 
 .section-title {
-    font-size: 36px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 600;
+    font-family: var(--font-mono);
     text-align: center;
     margin-bottom: 40px;
+    color: var(--color-text);
 }
 
 .tracks-list {
@@ -415,6 +436,8 @@ body {
 
 .track-name {
     font-weight: 600;
+    font-family: var(--font-mono);
+    font-size: 14px;
     color: var(--color-text);
     margin-bottom: 4px;
 }
@@ -457,19 +480,21 @@ body {
 .feature-icon {
     width: 64px;
     height: 64px;
-    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-    border-radius: 16px;
+    background: var(--color-primary-light);
+    border: 1px solid hsla(14, 100%, 50%, 0.2);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 24px;
-    color: white;
+    color: var(--color-primary);
     font-size: 28px;
 }
 
 .feature-card h3 {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
+    font-weight: 600;
+    font-family: var(--font-mono);
     margin-bottom: 12px;
 }
 
@@ -518,17 +543,20 @@ body {
     width: 40px;
     height: 40px;
     background: rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     text-decoration: none;
-    transition: background 0.2s;
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .footer-social a:hover {
     background: var(--color-primary);
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
 }
 
 .footer-title {
@@ -625,8 +653,9 @@ body {
 .cookie-icon {
     width: 64px;
     height: 64px;
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    border-radius: 16px;
+    background: var(--color-primary-light);
+    border: 1px solid hsla(14, 100%, 50%, 0.2);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -635,13 +664,14 @@ body {
 
 .cookie-icon i {
     font-size: 28px;
-    color: white;
+    color: var(--color-primary);
 }
 
 .cookie-header h3 {
-    font-size: 22px;
-    font-weight: 700;
-    color: #0f172a;
+    font-size: 20px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--color-text);
     margin-bottom: 12px;
 }
 

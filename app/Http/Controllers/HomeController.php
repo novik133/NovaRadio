@@ -25,6 +25,9 @@ class HomeController extends Controller
         $recentTracks = $this->azuraCast->getRecentTracks(5);
         $listeners = $this->azuraCast->getListenersCount();
         
+        // Check if stream is live
+        $isLive = !empty($nowPlaying) && isset($nowPlaying['now_playing']);
+        
         // Articles
         $featuredArticle = Article::published()
             ->featured()
@@ -62,6 +65,7 @@ class HomeController extends Controller
             'streamUrl',
             'recentTracks',
             'listeners',
+            'isLive',
             'featuredArticle',
             'recentArticles',
             'upcomingEvents',

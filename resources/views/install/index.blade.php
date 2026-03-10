@@ -6,22 +6,22 @@
     <title>{{ __('installer.title') }}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
-            --color-primary: #6366f1;
-            --color-primary-dark: #4f46e5;
-            --color-secondary: #ec4899;
-            --color-bg-dark: #0f172a;
-            --color-bg-card: #1e293b;
-            --color-bg-input: #334155;
-            --color-border: #475569;
-            --color-text: #f1f5f9;
-            --color-text-muted: #94a3b8;
+            --color-primary: hsl(14, 100%, 50%);
+            --color-primary-dark: hsl(14, 100%, 45%);
+            --color-secondary: hsl(220, 14%, 96%);
+            --color-bg-dark: hsl(0, 0%, 99%);
+            --color-bg-card: hsl(0, 0%, 100%);
+            --color-bg-input: hsl(220, 14%, 96%);
+            --color-border: hsl(220, 13%, 91%);
+            --color-text: hsl(220, 20%, 14%);
+            --color-text-muted: hsl(220, 10%, 46%);
             --color-success: #22c55e;
             --color-error: #ef4444;
-            --radius: 12px;
+            --radius: 8px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -32,6 +32,10 @@
             min-height: 100vh;
             color: var(--color-text);
             -webkit-font-smoothing: antialiased;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Roboto Mono', monospace;
         }
 
         .install-wrapper {
@@ -57,19 +61,25 @@
         .install-logo-icon {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            background: hsl(14, 100%, 97%);
             border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
+            color: var(--color-primary);
             font-size: 22px;
+            border: 1px solid hsl(14, 100%, 92%);
         }
 
         .install-logo span {
             font-size: 32px;
-            font-weight: 800;
-            color: white;
+            font-weight: 700;
+            color: var(--color-text);
+            font-family: 'Roboto Mono', monospace;
+        }
+        
+        .install-logo span .highlight {
+            color: var(--color-primary);
         }
 
         .install-header p {
@@ -103,6 +113,7 @@
             justify-content: center;
             font-size: 14px;
             font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
             background: var(--color-bg-input);
             color: var(--color-text-muted);
             border: 2px solid var(--color-border);
@@ -113,7 +124,7 @@
             background: var(--color-primary);
             border-color: var(--color-primary);
             color: white;
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 0 20px hsla(14, 100%, 50%, 0.3);
         }
 
         .step-dot.completed .step-num {
@@ -123,14 +134,17 @@
         }
 
         .step-label {
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 11px;
+            font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             color: var(--color-text-muted);
             display: none;
         }
 
         .step-dot.active .step-label {
-            color: white;
+            color: var(--color-text);
             display: inline;
         }
 
@@ -150,9 +164,9 @@
             max-width: 700px;
             width: 100%;
             background: var(--color-bg-card);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
 
@@ -161,16 +175,19 @@
         }
 
         .card-title {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 12px;
+            color: var(--color-text);
         }
 
         .card-title i {
             color: var(--color-primary);
+            font-size: 18px;
         }
 
         .card-subtitle {
@@ -190,7 +207,7 @@
 
         /* License */
         .license-box {
-            background: var(--color-bg-dark);
+            background: var(--color-bg-input);
             border: 1px solid var(--color-border);
             border-radius: var(--radius);
             padding: 24px;
@@ -201,7 +218,7 @@
             line-height: 1.8;
             color: var(--color-text-muted);
             white-space: pre-wrap;
-            font-family: 'Inter', monospace;
+            font-family: 'Roboto Mono', monospace;
         }
 
         .license-box::-webkit-scrollbar {
@@ -221,23 +238,25 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: var(--color-bg-dark);
+            background: var(--color-bg-input);
             border: 1px solid var(--color-border);
             border-radius: var(--radius);
             padding: 16px 20px;
         }
 
         .license-accept-text {
-            font-weight: 600;
-            font-size: 15px;
+            font-weight: 500;
+            font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
         }
 
         .license-accept-text small {
             display: block;
             color: var(--color-text-muted);
             font-weight: 400;
-            font-size: 13px;
+            font-size: 12px;
             margin-top: 2px;
+            font-family: 'Inter', sans-serif;
         }
 
         /* Switch Toggle */
@@ -299,9 +318,9 @@
             align-items: center;
             gap: 12px;
             padding: 12px 16px;
-            background: var(--color-bg-dark);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: var(--color-bg-card);
+            border-radius: var(--radius);
+            border: 1px solid var(--color-border);
         }
 
         .requirement-icon {
@@ -328,11 +347,13 @@
         .requirement-name {
             font-weight: 500;
             font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
         }
 
         .requirement-status {
             font-size: 12px;
             color: var(--color-text-muted);
+            font-family: 'Inter', sans-serif;
         }
 
         /* Form */
@@ -355,29 +376,31 @@
         .form-group label {
             font-size: 13px;
             font-weight: 500;
-            color: var(--color-text-muted);
+            color: var(--color-text);
+            font-family: 'Roboto Mono', monospace;
         }
 
         .form-group input,
         .form-group select {
-            padding: 12px 16px;
-            background: var(--color-bg-dark);
+            padding: 10px 14px;
+            background: var(--color-bg-card);
             border: 1px solid var(--color-border);
-            border-radius: 8px;
+            border-radius: var(--radius);
             font-size: 14px;
             color: var(--color-text);
-            font-family: inherit;
-            transition: border-color 0.2s;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
         }
 
         .form-group input::placeholder {
             color: var(--color-text-muted);
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            box-shadow: 0 0 0 3px hsla(14, 100%, 50%, 0.1);
         }
 
         .form-group small {
@@ -391,32 +414,33 @@
             justify-content: space-between;
             align-items: center;
             padding: 20px 32px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            background: rgba(0, 0, 0, 0.15);
+            border-top: 1px solid var(--color-border);
+            background: var(--color-secondary);
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            font-weight: 500;
             font-size: 14px;
+            font-family: 'Roboto Mono', monospace;
             cursor: pointer;
             border: none;
             transition: all 0.2s;
-            font-family: inherit;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--color-primary) 0%, #818cf8 100%);
+            background: var(--color-primary);
             color: white;
         }
 
         .btn-primary:hover {
+            background: var(--color-primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 4px 12px hsla(14, 100%, 50%, 0.3);
         }
 
         .btn-primary:disabled {
@@ -437,15 +461,16 @@
         }
 
         .btn-install {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            background: var(--color-primary);
             color: white;
-            padding: 14px 32px;
-            font-size: 15px;
+            padding: 12px 28px;
+            font-size: 14px;
         }
 
         .btn-install:hover {
+            background: var(--color-primary-dark);
             transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            box-shadow: 0 4px 12px hsla(14, 100%, 50%, 0.3);
         }
 
         .btn-install:disabled {
@@ -489,11 +514,12 @@
         }
 
         .section-divider span {
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 600;
+            font-family: 'Roboto Mono', monospace;
             color: var(--color-text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.05em;
             white-space: nowrap;
         }
 
@@ -543,7 +569,7 @@
                 <div class="install-logo-icon">
                     <i class="fas fa-broadcast-tower"></i>
                 </div>
-                <span>NovaRadio</span>
+                <span>NovaRadio<span class="highlight">CMS</span></span>
             </div>
             <p>{{ __('installer.title') }}</p>
         </div>
