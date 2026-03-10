@@ -1,6 +1,6 @@
 {
     "name": "novik133/novaradio",
-    "version": "2.0.4",
+    "version": "2.0.5",
     "description": "Modern Internet Radio CMS for AzuraCast",
     "type": "project",
     "keywords": ["radio", "cms", "azuracast", "streaming"],
